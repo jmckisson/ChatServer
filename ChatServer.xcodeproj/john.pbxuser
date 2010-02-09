@@ -1,0 +1,2158 @@
+// !$*UTF8*$!
+{
+	00E6828EFEC88D1A11DB9C8B /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = 130F8B98001BDF0A11CA292A /* java */;
+		activeTarget = 0A8B99D50B8F57BB003CD01B /* ChatServer */;
+		addToTargets = (
+		);
+		breakpoints = (
+		);
+		codeSenseManager = 52E751F00DA1364C00AB1DFC /* Code sense */;
+		executables = (
+			130F8B98001BDF0A11CA292A /* java */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXBookmarksDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBookmarksDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					200,
+					481.58349609375,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBookmarksDataSource_LocationID,
+					PBXBookmarksDataSource_NameID,
+					PBXBookmarksDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXErrorsWarningsDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXErrorsWarningsDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					300,
+					530.20849609375,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXErrorsWarningsDataSource_TypeID,
+					PBXErrorsWarningsDataSource_MessageID,
+					PBXErrorsWarningsDataSource_LocationID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXExecutablesDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXExecutablesDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					22,
+					300,
+					589,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXExecutablesDataSource_ActiveFlagID,
+					PBXExecutablesDataSource_NameID,
+					PBXExecutablesDataSource_CommentsID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					701,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFindDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFindDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					715,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFindDataSource_MessageID,
+					PBXFindDataSource_LocationID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXSymbolsDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXSymbolsDataSource_SymbolNameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					16,
+					200,
+					50,
+					612.20849609375,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXSymbolsDataSource_SymbolTypeIconID,
+					PBXSymbolsDataSource_SymbolNameID,
+					PBXSymbolsDataSource_SymbolTypeID,
+					PBXSymbolsDataSource_ReferenceNameID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.XCSCMDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					20,
+					648,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_SCM_ColumnID,
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					638,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 287437530;
+			PBXWorkspaceStateSaveDate = 287437530;
+		};
+		perUserProjectItems = {
+			5205434A0DCB9405001E3520 /* PBXTextBookmark */ = 5205434A0DCB9405001E3520 /* PBXTextBookmark */;
+			5205441A0DCBAC95001E3520 /* PBXTextBookmark */ = 5205441A0DCBAC95001E3520 /* PBXTextBookmark */;
+			520547200DD899AD001E3520 /* PBXTextBookmark */ = 520547200DD899AD001E3520 /* PBXTextBookmark */;
+			520547270DD899AD001E3520 /* PBXTextBookmark */ = 520547270DD899AD001E3520 /* PBXTextBookmark */;
+			520547910DD89DFC001E3520 /* PBXTextBookmark */ = 520547910DD89DFC001E3520 /* PBXTextBookmark */;
+			520547A80DD8A2DF001E3520 /* PBXTextBookmark */ = 520547A80DD8A2DF001E3520 /* PBXTextBookmark */;
+			520547DB0DD8A46C001E3520 /* PBXTextBookmark */ = 520547DB0DD8A46C001E3520 /* PBXTextBookmark */;
+			520547F20DD8A5E3001E3520 /* PBXTextBookmark */ = 520547F20DD8A5E3001E3520 /* PBXTextBookmark */;
+			520548B60DD9E785001E3520 /* PBXTextBookmark */ = 520548B60DD9E785001E3520 /* PBXTextBookmark */;
+			5205497E0DD9F60B001E3520 /* PBXTextBookmark */ = 5205497E0DD9F60B001E3520 /* PBXTextBookmark */;
+			52054A0A0DD9FF6A001E3520 /* PBXTextBookmark */ = 52054A0A0DD9FF6A001E3520 /* PBXTextBookmark */;
+			52054A0C0DD9FF6A001E3520 /* PBXTextBookmark */ = 52054A0C0DD9FF6A001E3520 /* PBXTextBookmark */;
+			52054A120DD9FF6A001E3520 /* PBXTextBookmark */ = 52054A120DD9FF6A001E3520 /* PBXTextBookmark */;
+			52054A760DDA28DD001E3520 /* PBXTextBookmark */ = 52054A760DDA28DD001E3520 /* PBXTextBookmark */;
+			52054A830DDA28DD001E3520 /* PBXTextBookmark */ = 52054A830DDA28DD001E3520 /* PBXTextBookmark */;
+			52054A970DDA28DD001E3520 /* PBXTextBookmark */ = 52054A970DDA28DD001E3520 /* PBXTextBookmark */;
+			52054AB30DDA2C09001E3520 /* PBXTextBookmark */ = 52054AB30DDA2C09001E3520 /* PBXTextBookmark */;
+			52054AE40DDA2DAC001E3520 /* PBXTextBookmark */ = 52054AE40DDA2DAC001E3520 /* PBXTextBookmark */;
+			52054AE50DDA2DAC001E3520 /* PBXTextBookmark */ = 52054AE50DDA2DAC001E3520 /* PBXTextBookmark */;
+			52054B150DDC8C82001E3520 /* PBXTextBookmark */ = 52054B150DDC8C82001E3520 /* PBXTextBookmark */;
+			52054B1C0DDC8C82001E3520 /* PBXTextBookmark */ = 52054B1C0DDC8C82001E3520 /* PBXTextBookmark */;
+			52054B9B0DDCB5A3001E3520 /* PBXTextBookmark */ = 52054B9B0DDCB5A3001E3520 /* PBXTextBookmark */;
+			52054BE20DDDF86D001E3520 /* PBXTextBookmark */ = 52054BE20DDDF86D001E3520 /* PBXTextBookmark */;
+			52054BFA0DDDF86D001E3520 /* PBXTextBookmark */ = 52054BFA0DDDF86D001E3520 /* PBXTextBookmark */;
+			52054C980DE3362F001E3520 /* PBXTextBookmark */ = 52054C980DE3362F001E3520 /* PBXTextBookmark */;
+			520808CE0DA41A61002B9D18 /* PBXTextBookmark */ = 520808CE0DA41A61002B9D18 /* PBXTextBookmark */;
+			520808D30DA41A61002B9D18 /* PBXTextBookmark */ = 520808D30DA41A61002B9D18 /* PBXTextBookmark */;
+			520808EF0DA41A61002B9D18 /* PBXTextBookmark */ = 520808EF0DA41A61002B9D18 /* PBXTextBookmark */;
+			520809A90DA43C11002B9D18 /* PBXTextBookmark */ = 520809A90DA43C11002B9D18 /* PBXTextBookmark */;
+			520A10380DC0FA1E007872D4 /* PBXTextBookmark */ = 520A10380DC0FA1E007872D4 /* PBXTextBookmark */;
+			520A103A0DC0FA1E007872D4 /* PBXTextBookmark */ = 520A103A0DC0FA1E007872D4 /* PBXTextBookmark */;
+			520A12820DC63BC8007872D4 /* PBXTextBookmark */ = 520A12820DC63BC8007872D4 /* PBXTextBookmark */;
+			520A13360DC7803F007872D4 /* PBXTextBookmark */ = 520A13360DC7803F007872D4 /* PBXTextBookmark */;
+			520A155D0DC8F98D007872D4 /* PBXTextBookmark */ = 520A155D0DC8F98D007872D4 /* PBXTextBookmark */;
+			520A15610DC8F98D007872D4 /* PBXTextBookmark */ = 520A15610DC8F98D007872D4 /* PBXTextBookmark */;
+			521A173E0E77057A00D4AECE /* PBXTextBookmark */ = 521A173E0E77057A00D4AECE /* PBXTextBookmark */;
+			521B78890DBFB03E000CE881 /* PBXTextBookmark */ = 521B78890DBFB03E000CE881 /* PBXTextBookmark */;
+			521B78EC0DBFC0A4000CE881 /* PBXTextBookmark */ = 521B78EC0DBFC0A4000CE881 /* PBXTextBookmark */;
+			521B798C0DC0D69B000CE881 /* PBXTextBookmark */ = 521B798C0DC0D69B000CE881 /* PBXTextBookmark */;
+			521B79B10DC0D738000CE881 /* PBXTextBookmark */ = 521B79B10DC0D738000CE881 /* PBXTextBookmark */;
+			521F63CF0E840FD800D79238 /* PBXTextBookmark */ = 521F63CF0E840FD800D79238 /* PBXTextBookmark */;
+			521F63D20E840FD800D79238 /* PBXTextBookmark */ = 521F63D20E840FD800D79238 /* PBXTextBookmark */;
+			521F63D30E840FD800D79238 /* PBXTextBookmark */ = 521F63D30E840FD800D79238 /* PBXTextBookmark */;
+			521F63D40E840FD800D79238 /* PBXTextBookmark */ = 521F63D40E840FD800D79238 /* PBXTextBookmark */;
+			521F63D50E840FD800D79238 /* PBXTextBookmark */ = 521F63D50E840FD800D79238 /* PBXTextBookmark */;
+			521F63D70E840FD800D79238 /* PBXTextBookmark */ = 521F63D70E840FD800D79238 /* PBXTextBookmark */;
+			523F560A10DAC0080079E118 /* PBXTextBookmark */ = 523F560A10DAC0080079E118 /* PBXTextBookmark */;
+			523F560C10DAC0080079E118 /* PBXTextBookmark */ = 523F560C10DAC0080079E118 /* PBXTextBookmark */;
+			523F560D10DAC0080079E118 /* PBXTextBookmark */ = 523F560D10DAC0080079E118 /* PBXTextBookmark */;
+			525C5AD10E4D29A400DA9225 /* PBXTextBookmark */ = 525C5AD10E4D29A400DA9225 /* PBXTextBookmark */;
+			525C5AD40E4D29A400DA9225 /* PBXTextBookmark */ = 525C5AD40E4D29A400DA9225 /* PBXTextBookmark */;
+			527264420DA522AE003D589B /* PBXTextBookmark */ = 527264420DA522AE003D589B /* PBXTextBookmark */;
+			5272657C0DA5347D003D589B /* PBXTextBookmark */ = 5272657C0DA5347D003D589B /* PBXTextBookmark */;
+			527265990DA5347D003D589B /* PBXTextBookmark */ = 527265990DA5347D003D589B /* PBXTextBookmark */;
+			527267590DA669DF003D589B /* PBXTextBookmark */ = 527267590DA669DF003D589B /* PBXTextBookmark */;
+			5272675B0DA669DF003D589B /* PBXTextBookmark */ = 5272675B0DA669DF003D589B /* PBXTextBookmark */;
+			5272675D0DA669DF003D589B /* PBXTextBookmark */ = 5272675D0DA669DF003D589B /* PBXTextBookmark */;
+			5272675F0DA669DF003D589B /* PBXTextBookmark */ = 5272675F0DA669DF003D589B /* PBXTextBookmark */;
+			5272693E0DA6BA2E003D589B /* PBXTextBookmark */ = 5272693E0DA6BA2E003D589B /* PBXTextBookmark */;
+			52726C120DB3E833003D589B /* PBXTextBookmark */ = 52726C120DB3E833003D589B /* PBXTextBookmark */;
+			52726C320DB3E833003D589B /* PBXTextBookmark */ = 52726C320DB3E833003D589B /* PBXTextBookmark */;
+			52726D050DB3F538003D589B /* PBXTextBookmark */ = 52726D050DB3F538003D589B /* PBXTextBookmark */;
+			52726E7A0DB50ECB003D589B /* PBXTextBookmark */ = 52726E7A0DB50ECB003D589B /* PBXTextBookmark */;
+			52726F680DB536CC003D589B /* PBXTextBookmark */ = 52726F680DB536CC003D589B /* PBXTextBookmark */;
+			52726FE60DB53D35003D589B /* PBXTextBookmark */ = 52726FE60DB53D35003D589B /* PBXTextBookmark */;
+			527271250DB658D7003D589B /* PBXTextBookmark */ = 527271250DB658D7003D589B /* PBXTextBookmark */;
+			527272AC0DB68C17003D589B /* PBXTextBookmark */ = 527272AC0DB68C17003D589B /* PBXTextBookmark */;
+			527273650DB69743003D589B /* PBXTextBookmark */ = 527273650DB69743003D589B /* PBXTextBookmark */;
+			527273710DB69743003D589B /* PBXTextBookmark */ = 527273710DB69743003D589B /* PBXTextBookmark */;
+			527273BF0DB69F77003D589B /* PBXTextBookmark */ = 527273BF0DB69F77003D589B /* PBXTextBookmark */;
+			527276900DB92CD2003D589B /* PBXTextBookmark */ = 527276900DB92CD2003D589B /* PBXTextBookmark */;
+			52751B12108634AD00D94955 /* PBXTextBookmark */ = 52751B12108634AD00D94955 /* PBXTextBookmark */;
+			527C9FDA1107A78900860A29 /* PBXTextBookmark */ = 527C9FDA1107A78900860A29 /* PBXTextBookmark */;
+			527C9FDB1107A78900860A29 /* PBXTextBookmark */ = 527C9FDB1107A78900860A29 /* PBXTextBookmark */;
+			527C9FDC1107A78900860A29 /* PBXTextBookmark */ = 527C9FDC1107A78900860A29 /* PBXTextBookmark */;
+			527C9FDE1107A78900860A29 /* PBXTextBookmark */ = 527C9FDE1107A78900860A29 /* PBXTextBookmark */;
+			527C9FE01107A78900860A29 /* PBXTextBookmark */ = 527C9FE01107A78900860A29 /* PBXTextBookmark */;
+			527C9FE21107A78900860A29 /* PBXTextBookmark */ = 527C9FE21107A78900860A29 /* PBXTextBookmark */;
+			527C9FE41107A78900860A29 /* PBXTextBookmark */ = 527C9FE41107A78900860A29 /* PBXTextBookmark */;
+			527C9FE51107A78900860A29 /* PBXTextBookmark */ = 527C9FE51107A78900860A29 /* PBXTextBookmark */;
+			527C9FE61107A78900860A29 /* PBXTextBookmark */ = 527C9FE61107A78900860A29 /* PBXTextBookmark */;
+			527C9FE71107A78900860A29 /* PBXTextBookmark */ = 527C9FE71107A78900860A29 /* PBXTextBookmark */;
+			527C9FE81107A78900860A29 /* PBXTextBookmark */ = 527C9FE81107A78900860A29 /* PBXTextBookmark */;
+			527C9FE91107A78900860A29 /* PBXTextBookmark */ = 527C9FE91107A78900860A29 /* PBXTextBookmark */;
+			527C9FEA1107A78900860A29 /* PBXTextBookmark */ = 527C9FEA1107A78900860A29 /* PBXTextBookmark */;
+			527C9FEB1107A78900860A29 /* PBXTextBookmark */ = 527C9FEB1107A78900860A29 /* PBXTextBookmark */;
+			527C9FF11107A78900860A29 /* PBXTextBookmark */ = 527C9FF11107A78900860A29 /* PBXTextBookmark */;
+			527C9FF31107A78900860A29 /* PBXTextBookmark */ = 527C9FF31107A78900860A29 /* PBXTextBookmark */;
+			527C9FF51107A78900860A29 /* PBXTextBookmark */ = 527C9FF51107A78900860A29 /* PBXTextBookmark */;
+			527C9FF71107A78900860A29 /* PBXTextBookmark */ = 527C9FF71107A78900860A29 /* PBXTextBookmark */;
+			527CA0011107A78900860A29 /* PBXTextBookmark */ = 527CA0011107A78900860A29 /* PBXTextBookmark */;
+			527CCAD00DB9588D001C9E44 /* PBXTextBookmark */ = 527CCAD00DB9588D001C9E44 /* PBXTextBookmark */;
+			528468781121FA9300138311 /* PBXTextBookmark */ = 528468781121FA9300138311 /* PBXTextBookmark */;
+			5285C92C0DCFAD2D00B9583B /* PBXTextBookmark */ = 5285C92C0DCFAD2D00B9583B /* PBXTextBookmark */;
+			5285C9340DCFAD2D00B9583B /* PBXTextBookmark */ = 5285C9340DCFAD2D00B9583B /* PBXTextBookmark */;
+			52A288B60E3F8E95008BE952 /* PBXTextBookmark */ = 52A288B60E3F8E95008BE952 /* PBXTextBookmark */;
+			52A37E130F45075D008A4A57 /* PBXTextBookmark */ = 52A37E130F45075D008A4A57 /* PBXTextBookmark */;
+			52A37E190F45075D008A4A57 /* PBXTextBookmark */ = 52A37E190F45075D008A4A57 /* PBXTextBookmark */;
+			52A37E1A0F45075D008A4A57 /* PBXTextBookmark */ = 52A37E1A0F45075D008A4A57 /* PBXTextBookmark */;
+			52B09EE20DB9392D004D4836 /* PBXTextBookmark */ = 52B09EE20DB9392D004D4836 /* PBXTextBookmark */;
+			52B09EE40DB9392D004D4836 /* PBXTextBookmark */ = 52B09EE40DB9392D004D4836 /* PBXTextBookmark */;
+			52BF76D910724C3E004FAAB2 /* PBXTextBookmark */ = 52BF76D910724C3E004FAAB2 /* PBXTextBookmark */;
+			52C023BB103C4DFD00164D05 /* PBXTextBookmark */ = 52C023BB103C4DFD00164D05 /* PBXTextBookmark */;
+			52E752570DA14DB900AB1DFC /* PBXTextBookmark */ = 52E752570DA14DB900AB1DFC /* PBXTextBookmark */;
+			52E7525B0DA14DB900AB1DFC /* PBXTextBookmark */ = 52E7525B0DA14DB900AB1DFC /* PBXTextBookmark */;
+			52E7529E0DA14DB900AB1DFC /* PBXTextBookmark */ = 52E7529E0DA14DB900AB1DFC /* PBXTextBookmark */;
+			52E7541F0DA16D2200AB1DFC /* PBXTextBookmark */ = 52E7541F0DA16D2200AB1DFC /* PBXTextBookmark */;
+			52E8CEA510F4EE5C0088E2FA /* PBXTextBookmark */ = 52E8CEA510F4EE5C0088E2FA /* PBXTextBookmark */;
+			52E8CEAE10F4EE5C0088E2FA /* PBXTextBookmark */ = 52E8CEAE10F4EE5C0088E2FA /* PBXTextBookmark */;
+			52E8D03810F50A600088E2FA /* PBXTextBookmark */ = 52E8D03810F50A600088E2FA /* PBXTextBookmark */;
+			52E8D05110F518070088E2FA /* PBXTextBookmark */ = 52E8D05110F518070088E2FA /* PBXTextBookmark */;
+			52F069F110F791D1006001E1 /* PBXTextBookmark */ = 52F069F110F791D1006001E1 /* PBXTextBookmark */;
+			52F069F310F791D1006001E1 /* PBXTextBookmark */ = 52F069F310F791D1006001E1 /* PBXTextBookmark */;
+			52F069F510F791D1006001E1 /* PBXTextBookmark */ = 52F069F510F791D1006001E1 /* PBXTextBookmark */;
+			52F069F710F791D1006001E1 /* PBXTextBookmark */ = 52F069F710F791D1006001E1 /* PBXTextBookmark */;
+			52F06A1B10F791D1006001E1 /* PBXTextBookmark */ = 52F06A1B10F791D1006001E1 /* PBXTextBookmark */;
+			52F06A9010F7955C006001E1 /* PBXTextBookmark */ = 52F06A9010F7955C006001E1 /* PBXTextBookmark */;
+			52F06A9210F7955C006001E1 /* PBXTextBookmark */ = 52F06A9210F7955C006001E1 /* PBXTextBookmark */;
+			52F06A9910F7955C006001E1 /* PBXTextBookmark */ = 52F06A9910F7955C006001E1 /* PBXTextBookmark */;
+			52F06AAA10F7B3DA006001E1 /* PBXTextBookmark */ = 52F06AAA10F7B3DA006001E1 /* PBXTextBookmark */;
+			52F06ABD10F7B52E006001E1 /* PBXTextBookmark */ = 52F06ABD10F7B52E006001E1 /* PBXTextBookmark */;
+			52F06ACB10FF7EB2006001E1 /* PBXTextBookmark */ = 52F06ACB10FF7EB2006001E1 /* PBXTextBookmark */;
+			52F06ACC10FF7EB2006001E1 /* PBXTextBookmark */ = 52F06ACC10FF7EB2006001E1 /* PBXTextBookmark */;
+		};
+		sourceControlManager = 52E751EF0DA1364C00AB1DFC /* Source Control */;
+		userBuildSettings = {
+		};
+	};
+	0A0DFDF50B94D28A00E4E714 /* java */ = {
+		isa = PBXFileReference;
+		explicitFileType = "compiled.mach-o.executable";
+		name = java;
+		path = /usr/bin/java;
+		sourceTree = "<absolute>";
+	};
+	0A8B99B20B8F56A4003CD01B /* build.xml */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {879, 1029}}";
+			sepNavSelRange = "{1405, 56}";
+			sepNavVisRange = "{300, 2129}";
+		};
+	};
+	0A8B99D50B8F57BB003CD01B /* ChatServer */ = {
+		activeExec = 0;
+	};
+	130F8B98001BDF0A11CA292A /* java */ = {
+		isa = PBXExecutable;
+		activeArgIndices = (
+			YES,
+		);
+		argumentStrings = (
+			"-jar dist/ChatServer.jar",
+		);
+		autoAttachOnCrash = 1;
+		breakpointsEnabled = 0;
+		configStateDict = {
+			"PBXLSLaunchAction-0" = {
+				PBXLSLaunchAction = 0;
+				PBXLSLaunchStartAction = 1;
+				PBXLSLaunchStdioStyle = 2;
+				PBXLSLaunchStyle = 0;
+				class = PBXLSRunLaunchConfig;
+				commandLineArgs = (
+				);
+				displayName = "Executable Runner";
+				environment = {
+				};
+				identifier = com.apple.Xcode.launch.runConfig;
+				remoteHostInfo = "";
+				startActionInfo = "";
+			};
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = JavaDebugging;
+		disassemblyDisplayState = 0;
+		dylibVariantSuffix = "";
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		launchableReference = 0A0DFDF50B94D28A00E4E714 /* java */;
+		libgmallocEnabled = 0;
+		name = java;
+		sourceDirectories = (
+		);
+		startupPath = "<<ProjectDirectory>>";
+	};
+	5205434A0DCB9405001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5205434B0DCB9405001E3520 /* CMDHelp.java */;
+		name = "CMDHelp.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1406;
+		vrLoc = 0;
+	};
+	5205434B0DCB9405001E3520 /* CMDHelp.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDHelp.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDHelp.java;
+		sourceTree = "<absolute>";
+	};
+	5205441A0DCBAC95001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5205441B0DCBAC95001E3520 /* CMDWriteLog.java */;
+		name = "CMDWriteLog.java: 16";
+		rLen = 0;
+		rLoc = 6970;
+		rType = 0;
+		vrLen = 1913;
+		vrLoc = 0;
+	};
+	5205441B0DCBAC95001E3520 /* CMDWriteLog.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDWriteLog.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDWriteLog.java;
+		sourceTree = "<absolute>";
+	};
+	520547200DD899AD001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A103B0DC0FA1E007872D4 /* BoardEntry.java */;
+		name = "BoardEntry.java: 46";
+		rLen = 0;
+		rLoc = 1070;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 0;
+	};
+	520547270DD899AD001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520547280DD899AD001E3520 /* LoggingOutputStream.java */;
+		name = "LoggingOutputStream.java: 58";
+		rLen = 0;
+		rLoc = 1248;
+		rType = 0;
+		vrLen = 1087;
+		vrLoc = 179;
+	};
+	520547280DD899AD001E3520 /* LoggingOutputStream.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = LoggingOutputStream.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/LoggingOutputStream.java;
+		sourceTree = "<absolute>";
+	};
+	520547910DD89DFC001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520547920DD89DFC001E3520 /* PluginManager.java */;
+		name = "PluginManager.java: 12";
+		rLen = 0;
+		rLoc = 2209;
+		rType = 0;
+		vrLen = 215;
+		vrLoc = 0;
+	};
+	520547920DD89DFC001E3520 /* PluginManager.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = PluginManager.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/plugin/PluginManager.java;
+		sourceTree = "<absolute>";
+	};
+	520547A80DD8A2DF001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A12830DC63BC8007872D4 /* Alchemy_Helper.java */;
+		name = "Alchemy_Helper.java: 28";
+		rLen = 0;
+		rLoc = 499;
+		rType = 0;
+		vrLen = 1249;
+		vrLoc = 0;
+	};
+	520547D20DD8A42D001E3520 /* CMDPlugins.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDPlugins.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDPlugins.java;
+		sourceTree = "<absolute>";
+	};
+	520547DB0DD8A46C001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520547D20DD8A42D001E3520 /* CMDPlugins.java */;
+		name = "CMDPlugins.java: 29";
+		rLen = 0;
+		rLoc = 617;
+		rType = 0;
+		vrLen = 1141;
+		vrLoc = 0;
+	};
+	520547F20DD8A5E3001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A10390DC0FA1E007872D4 /* Bulletin_Board.java */;
+		name = "Bulletin_Board.java: 213";
+		rLen = 0;
+		rLoc = 5484;
+		rType = 0;
+		vrLen = 1634;
+		vrLoc = 274;
+	};
+	520548B60DD9E785001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520548B70DD9E785001E3520 /* TelnetProtocol.java */;
+		name = "TelnetProtocol.java: 10";
+		rLen = 0;
+		rLoc = 287;
+		rType = 0;
+		vrLen = 220;
+		vrLoc = 0;
+	};
+	520548B70DD9E785001E3520 /* TelnetProtocol.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = TelnetProtocol.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/TelnetProtocol.java;
+		sourceTree = "<absolute>";
+	};
+	520549520DD9F485001E3520 /* CMDChatAll.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDChatAll.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDChatAll.java;
+		sourceTree = "<absolute>";
+	};
+	520549600DD9F485001E3520 /* CMDChatAll.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDChatAll.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDChatAll.java;
+		sourceTree = "<absolute>";
+	};
+	5205497E0DD9F60B001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520549520DD9F485001E3520 /* CMDChatAll.java */;
+		name = "CMDChatAll.java: 12";
+		rLen = 0;
+		rLoc = 253;
+		rType = 0;
+		vrLen = 258;
+		vrLoc = 0;
+	};
+	52054A0A0DD9FF6A001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054A0B0DD9FF6A001E3520 /* CMDSetLevel.java */;
+		name = "CMDSetLevel.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1121;
+		vrLoc = 0;
+	};
+	52054A0B0DD9FF6A001E3520 /* CMDSetLevel.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDSetLevel.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDSetLevel.java;
+		sourceTree = "<absolute>";
+	};
+	52054A0C0DD9FF6A001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 521B78ED0DBFC0A4000CE881 /* CMDSetPassword.java */;
+		name = "CMDSetPassword.java: 58";
+		rLen = 0;
+		rLoc = 1432;
+		rType = 0;
+		vrLen = 1430;
+		vrLoc = 214;
+	};
+	52054A120DD9FF6A001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054A130DD9FF6A001E3520 /* CMDSetLevel.java */;
+		name = "CMDSetLevel.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1121;
+		vrLoc = 0;
+	};
+	52054A130DD9FF6A001E3520 /* CMDSetLevel.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDSetLevel.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDSetLevel.java;
+		sourceTree = "<absolute>";
+	};
+	52054A760DDA28DD001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520808CF0DA41A61002B9D18 /* CMDChatPrivate.java */;
+		name = "CMDChatPrivate.java: 71";
+		rLen = 0;
+		rLoc = 1776;
+		rType = 0;
+		vrLen = 1406;
+		vrLoc = 540;
+	};
+	52054A830DDA28DD001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054A840DDA28DD001E3520 /* ServerStats.java */;
+		name = "ServerStats.java: 21";
+		rLen = 0;
+		rLoc = 543;
+		rType = 0;
+		vrLen = 352;
+		vrLoc = 0;
+	};
+	52054A840DDA28DD001E3520 /* ServerStats.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ServerStats.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ServerStats.java;
+		sourceTree = "<absolute>";
+	};
+	52054A970DDA28DD001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054A980DDA28DD001E3520 /* CMDStats.java */;
+		name = "CMDStats.java: 12";
+		rLen = 0;
+		rLoc = 249;
+		rType = 0;
+		vrLen = 254;
+		vrLoc = 0;
+	};
+	52054A980DDA28DD001E3520 /* CMDStats.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDStats.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDStats.java;
+		sourceTree = "<absolute>";
+	};
+	52054AB30DDA2C09001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 521B798D0DC0D69B000CE881 /* CMDMOTD.java */;
+		name = "CMDMOTD.java: 37";
+		rLen = 0;
+		rLoc = 782;
+		rType = 0;
+		vrLen = 1007;
+		vrLoc = 0;
+	};
+	52054ABE0DDA2C7C001E3520 /* CMDShutdown.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDShutdown.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDShutdown.java;
+		sourceTree = "<absolute>";
+	};
+	52054AE40DDA2DAC001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520549600DD9F485001E3520 /* CMDChatAll.java */;
+		name = "CMDChatAll.java: 40";
+		rLen = 0;
+		rLoc = 864;
+		rType = 0;
+		vrLen = 888;
+		vrLoc = 0;
+	};
+	52054AE50DDA2DAC001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054ABE0DDA2C7C001E3520 /* CMDShutdown.java */;
+		name = "CMDShutdown.java: 19";
+		rLen = 27;
+		rLoc = 386;
+		rType = 0;
+		vrLen = 1249;
+		vrLoc = 3;
+	};
+	52054B150DDC8C82001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726FE70DB53D35003D589B /* CMDKick.java */;
+		name = "CMDKick.java: 47";
+		rLen = 0;
+		rLoc = 1039;
+		rType = 0;
+		vrLen = 1304;
+		vrLoc = 355;
+	};
+	52054B1C0DDC8C82001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054B1D0DDC8C82001E3520 /* CMDForceJoin.java */;
+		name = "CMDForceJoin.java: 12";
+		rLen = 0;
+		rLoc = 2133;
+		rType = 0;
+		vrLen = 262;
+		vrLoc = 0;
+	};
+	52054B1D0DDC8C82001E3520 /* CMDForceJoin.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDForceJoin.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDForceJoin.java;
+		sourceTree = "<absolute>";
+	};
+	52054B9B0DDCB5A3001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527264430DA522AE003D589B /* CMDJoinRoom.java */;
+		name = "CMDJoinRoom.java: 55";
+		rLen = 0;
+		rLoc = 1401;
+		rType = 0;
+		vrLen = 1340;
+		vrLoc = 82;
+	};
+	52054BE20DDDF86D001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520809AA0DA43C11002B9D18 /* CMDCreateRoom.java */;
+		name = "CMDCreateRoom.java: 48";
+		rLen = 0;
+		rLoc = 1280;
+		rType = 0;
+		vrLen = 1458;
+		vrLoc = 84;
+	};
+	52054BFA0DDDF86D001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054BFB0DDDF86D001E3520 /* TemporaryChatAccount.java */;
+		name = "TemporaryChatAccount.java: 8";
+		rLen = 0;
+		rLoc = 180;
+		rType = 0;
+		vrLen = 241;
+		vrLoc = 0;
+	};
+	52054BFB0DDDF86D001E3520 /* TemporaryChatAccount.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = TemporaryChatAccount.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/TemporaryChatAccount.java;
+		sourceTree = "<absolute>";
+	};
+	52054C980DE3362F001E3520 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054B1D0DDC8C82001E3520 /* CMDForceJoin.java */;
+		name = "CMDForceJoin.java: 52";
+		rLen = 0;
+		rLoc = 1159;
+		rType = 0;
+		vrLen = 1522;
+		vrLoc = 532;
+	};
+	520808CE0DA41A61002B9D18 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520808CF0DA41A61002B9D18 /* CMDChatPrivate.java */;
+		name = "CMDChatPrivate.java: 10";
+		rLen = 0;
+		rLoc = 987;
+		rType = 0;
+		vrLen = 236;
+		vrLoc = 0;
+	};
+	520808CF0DA41A61002B9D18 /* CMDChatPrivate.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDChatPrivate.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDChatPrivate.java;
+		sourceTree = "<absolute>";
+	};
+	520808D30DA41A61002B9D18 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520808D40DA41A61002B9D18 /* Command.java */;
+		name = "Command.java: 11";
+		rLen = 17;
+		rLoc = 629;
+		rType = 0;
+		vrLen = 243;
+		vrLoc = 0;
+	};
+	520808D40DA41A61002B9D18 /* Command.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = Command.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/Command.java;
+		sourceTree = "<absolute>";
+	};
+	520808EF0DA41A61002B9D18 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520808F00DA41A61002B9D18 /* CMDWho.java */;
+		name = "CMDWho.java: 8";
+		rLen = 0;
+		rLoc = 1735;
+		rType = 0;
+		vrLen = 201;
+		vrLoc = 0;
+	};
+	520808F00DA41A61002B9D18 /* CMDWho.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDWho.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDWho.java;
+		sourceTree = "<absolute>";
+	};
+	520809A90DA43C11002B9D18 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520809AA0DA43C11002B9D18 /* CMDCreateRoom.java */;
+		name = "CMDCreateRoom.java: 13";
+		rLen = 0;
+		rLoc = 1562;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
+	520809AA0DA43C11002B9D18 /* CMDCreateRoom.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDCreateRoom.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDCreateRoom.java;
+		sourceTree = "<absolute>";
+	};
+	520A10380DC0FA1E007872D4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A10390DC0FA1E007872D4 /* Bulletin_Board.java */;
+		name = "Bulletin_Board.java: 8";
+		rLen = 0;
+		rLoc = 145;
+		rType = 0;
+		vrLen = 1394;
+		vrLoc = 0;
+	};
+	520A10390DC0FA1E007872D4 /* Bulletin_Board.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = Bulletin_Board.java;
+		path = /Users/john/Development/ChatServer/plugins/Bulletin_Board.java;
+		sourceTree = "<absolute>";
+	};
+	520A103A0DC0FA1E007872D4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A103B0DC0FA1E007872D4 /* BoardEntry.java */;
+		name = "BoardEntry.java: 7";
+		rLen = 0;
+		rLoc = 143;
+		rType = 0;
+		vrLen = 1137;
+		vrLoc = 0;
+	};
+	520A103B0DC0FA1E007872D4 /* BoardEntry.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = BoardEntry.java;
+		path = /Users/john/Development/ChatServer/plugins/BoardEntry.java;
+		sourceTree = "<absolute>";
+	};
+	520A12820DC63BC8007872D4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A12830DC63BC8007872D4 /* Alchemy_Helper.java */;
+		name = "Alchemy_Helper.java: 9";
+		rLen = 0;
+		rLoc = 6725;
+		rType = 0;
+		vrLen = 148;
+		vrLoc = 0;
+	};
+	520A12830DC63BC8007872D4 /* Alchemy_Helper.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = Alchemy_Helper.java;
+		path = /Users/john/Development/ChatServer/plugins/Alchemy_Helper.java;
+		sourceTree = "<absolute>";
+	};
+	520A131C0DC779DE007872D4 /* ChatServer.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatServer.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatServer.java;
+		sourceTree = "<absolute>";
+	};
+	520A13360DC7803F007872D4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A131C0DC779DE007872D4 /* ChatServer.java */;
+		name = "ChatServer.java: 252";
+		rLen = 0;
+		rLoc = 9797;
+		rType = 0;
+		vrLen = 1219;
+		vrLoc = 6220;
+	};
+	520A155D0DC8F98D007872D4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A155E0DC8F98D007872D4 /* ChatLogEntry.java */;
+		name = "ChatLogEntry.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 463;
+		vrLoc = 0;
+	};
+	520A155E0DC8F98D007872D4 /* ChatLogEntry.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatLogEntry.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatLogEntry.java;
+		sourceTree = "<absolute>";
+	};
+	520A15610DC8F98D007872D4 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A15620DC8F98D007872D4 /* CMDShutdown.java */;
+		name = "CMDShutdown.java: 10";
+		rLen = 0;
+		rLoc = 366;
+		rType = 0;
+		vrLen = 231;
+		vrLoc = 0;
+	};
+	520A15620DC8F98D007872D4 /* CMDShutdown.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDShutdown.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDShutdown.java;
+		sourceTree = "<absolute>";
+	};
+	521A173E0E77057A00D4AECE /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054BFB0DDDF86D001E3520 /* TemporaryChatAccount.java */;
+		name = "TemporaryChatAccount.java: 13";
+		rLen = 0;
+		rLoc = 297;
+		rType = 0;
+		vrLen = 304;
+		vrLoc = 0;
+	};
+	521A17590E77057A00D4AECE /* ChatRoom.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatRoom.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatRoom.java;
+		sourceTree = "<absolute>";
+	};
+	521B78890DBFB03E000CE881 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 521B788A0DBFB03E000CE881 /* CMDIgnore.java */;
+		name = "CMDIgnore.java: 20";
+		rLen = 0;
+		rLoc = 348;
+		rType = 0;
+		vrLen = 1153;
+		vrLoc = 0;
+	};
+	521B788A0DBFB03E000CE881 /* CMDIgnore.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDIgnore.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDIgnore.java;
+		sourceTree = "<absolute>";
+	};
+	521B78EC0DBFC0A4000CE881 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 521B78ED0DBFC0A4000CE881 /* CMDSetPassword.java */;
+		name = "CMDSetPassword.java: 12";
+		rLen = 0;
+		rLoc = 336;
+		rType = 0;
+		vrLen = 266;
+		vrLoc = 0;
+	};
+	521B78ED0DBFC0A4000CE881 /* CMDSetPassword.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDSetPassword.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDSetPassword.java;
+		sourceTree = "<absolute>";
+	};
+	521B798C0DC0D69B000CE881 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 521B798D0DC0D69B000CE881 /* CMDMOTD.java */;
+		name = "CMDMOTD.java: 14";
+		rLen = 0;
+		rLoc = 294;
+		rType = 0;
+		vrLen = 254;
+		vrLoc = 0;
+	};
+	521B798D0DC0D69B000CE881 /* CMDMOTD.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDMOTD.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDMOTD.java;
+		sourceTree = "<absolute>";
+	};
+	521B79B10DC0D738000CE881 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E754200DA16D2200AB1DFC /* ChatServer.1 */;
+		name = "ChatServer.1: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2303;
+		vrLoc = 0;
+	};
+	521F63CF0E840FD800D79238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272675C0DA669DF003D589B /* ChatProtocolFactory.java */;
+		name = "ChatProtocolFactory.java: 42";
+		rLen = 0;
+		rLoc = 927;
+		rType = 0;
+		vrLen = 910;
+		vrLoc = 50;
+	};
+	521F63D20E840FD800D79238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520547920DD89DFC001E3520 /* PluginManager.java */;
+		name = "PluginManager.java: 180";
+		rLen = 0;
+		rLoc = 4544;
+		rType = 0;
+		vrLen = 1226;
+		vrLoc = 616;
+	};
+	521F63D30E840FD800D79238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52B09EE50DB9392D004D4836 /* ChatPlugin.java */;
+		name = "ChatPlugin.java: 16";
+		rLen = 0;
+		rLoc = 261;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
+	521F63D40E840FD800D79238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054A840DDA28DD001E3520 /* ServerStats.java */;
+		name = "ServerStats.java: 3";
+		rLen = 0;
+		rLoc = 38;
+		rType = 0;
+		vrLen = 546;
+		vrLoc = 0;
+	};
+	521F63D50E840FD800D79238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520547280DD899AD001E3520 /* LoggingOutputStream.java */;
+		name = "LoggingOutputStream.java: 29";
+		rLen = 0;
+		rLoc = 652;
+		rType = 0;
+		vrLen = 1091;
+		vrLoc = 0;
+	};
+	521F63D70E840FD800D79238 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 521A17590E77057A00D4AECE /* ChatRoom.java */;
+		name = "ChatRoom.java: 178";
+		rLen = 0;
+		rLoc = 4322;
+		rType = 0;
+		vrLen = 882;
+		vrLoc = 0;
+	};
+	523F560A10DAC0080079E118 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527273660DB69743003D589B /* JCrypt.java */;
+		name = "JCrypt.java: 7";
+		rLen = 0;
+		rLoc = 226;
+		rType = 0;
+		vrLen = 2338;
+		vrLoc = 0;
+	};
+	523F560C10DAC0080079E118 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726F690DB536CC003D589B /* CMDDelete.java */;
+		name = "CMDDelete.java: 55";
+		rLen = 0;
+		rLoc = 1330;
+		rType = 0;
+		vrLen = 1500;
+		vrLoc = 0;
+	};
+	523F560D10DAC0080079E118 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726DB90DB4F800003D589B /* CMDAuth.java */;
+		name = "CMDAuth.java: 37";
+		rLen = 0;
+		rLoc = 902;
+		rType = 0;
+		vrLen = 1429;
+		vrLoc = 20;
+	};
+	524CAB8F0F7C1CE000D01EC2 /* StdOutErrLevel.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = StdOutErrLevel.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/StdOutErrLevel.java;
+		sourceTree = "<absolute>";
+	};
+	525C5AD10E4D29A400DA9225 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520808F00DA41A61002B9D18 /* CMDWho.java */;
+		name = "CMDWho.java: 26";
+		rLen = 749;
+		rLoc = 812;
+		rType = 0;
+		vrLen = 1542;
+		vrLoc = 197;
+	};
+	525C5AD40E4D29A400DA9225 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527271260DB658D7003D589B /* ChatPrefs.java */;
+		name = "ChatPrefs.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1176;
+		vrLoc = 0;
+	};
+	527264420DA522AE003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527264430DA522AE003D589B /* CMDJoinRoom.java */;
+		name = "CMDJoinRoom.java: 13";
+		rLen = 0;
+		rLoc = 1422;
+		rType = 0;
+		vrLen = 259;
+		vrLoc = 0;
+	};
+	527264430DA522AE003D589B /* CMDJoinRoom.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDJoinRoom.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDJoinRoom.java;
+		sourceTree = "<absolute>";
+	};
+	5272657C0DA5347D003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272657D0DA5347D003D589B /* ChatAccount.java */;
+		name = "ChatAccount.java: 14";
+		rLen = 0;
+		rLoc = 2848;
+		rType = 0;
+		vrLen = 255;
+		vrLoc = 0;
+	};
+	5272657D0DA5347D003D589B /* ChatAccount.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatAccount.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatAccount.java;
+		sourceTree = "<absolute>";
+	};
+	527265990DA5347D003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272659A0DA5347D003D589B /* AccountManager.java */;
+		name = "AccountManager.java: 24";
+		rLen = 0;
+		rLoc = 4836;
+		rType = 0;
+		vrLen = 456;
+		vrLoc = 0;
+	};
+	5272659A0DA5347D003D589B /* AccountManager.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = AccountManager.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/AccountManager.java;
+		sourceTree = "<absolute>";
+	};
+	527267590DA669DF003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272675A0DA669DF003D589B /* ChatProtocol.java */;
+		name = "ChatProtocol.java: 13";
+		rLen = 0;
+		rLoc = 526;
+		rType = 0;
+		vrLen = 1035;
+		vrLoc = 0;
+	};
+	5272675A0DA669DF003D589B /* ChatProtocol.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatProtocol.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/ChatProtocol.java;
+		sourceTree = "<absolute>";
+	};
+	5272675B0DA669DF003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272675C0DA669DF003D589B /* ChatProtocolFactory.java */;
+		name = "ChatProtocolFactory.java: 12";
+		rLen = 0;
+		rLoc = 258;
+		rType = 0;
+		vrLen = 820;
+		vrLoc = 0;
+	};
+	5272675C0DA669DF003D589B /* ChatProtocolFactory.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatProtocolFactory.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/ChatProtocolFactory.java;
+		sourceTree = "<absolute>";
+	};
+	5272675D0DA669DF003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272675E0DA669DF003D589B /* MudMasterProtocol.java */;
+		name = "MudMasterProtocol.java: 17";
+		rLen = 0;
+		rLoc = 350;
+		rType = 0;
+		vrLen = 1143;
+		vrLoc = 0;
+	};
+	5272675E0DA669DF003D589B /* MudMasterProtocol.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = MudMasterProtocol.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/MudMasterProtocol.java;
+		sourceTree = "<absolute>";
+	};
+	5272675F0DA669DF003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527267600DA669DF003D589B /* ZChatProtocol.java */;
+		name = "ZChatProtocol.java: 12";
+		rLen = 0;
+		rLoc = 346;
+		rType = 0;
+		vrLen = 804;
+		vrLoc = 0;
+	};
+	527267600DA669DF003D589B /* ZChatProtocol.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ZChatProtocol.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/ZChatProtocol.java;
+		sourceTree = "<absolute>";
+	};
+	5272693E0DA6BA2E003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272693F0DA6BA2E003D589B /* ANSIColor.java */;
+		name = "ANSIColor.java: 10";
+		rLen = 0;
+		rLoc = 194;
+		rType = 0;
+		vrLen = 933;
+		vrLoc = 0;
+	};
+	5272693F0DA6BA2E003D589B /* ANSIColor.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ANSIColor.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ANSIColor.java;
+		sourceTree = "<absolute>";
+	};
+	52726C120DB3E833003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726C130DB3E833003D589B /* CMDAdd.java */;
+		name = "CMDAdd.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 166;
+		vrLoc = 0;
+	};
+	52726C130DB3E833003D589B /* CMDAdd.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDAdd.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDAdd.java;
+		sourceTree = "<absolute>";
+	};
+	52726C320DB3E833003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726C330DB3E833003D589B /* ChatLogFormatter.java */;
+		name = "ChatLogFormatter.java: 7";
+		rLen = 0;
+		rLoc = 149;
+		rType = 0;
+		vrLen = 1536;
+		vrLoc = 0;
+	};
+	52726C330DB3E833003D589B /* ChatLogFormatter.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatLogFormatter.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatLogFormatter.java;
+		sourceTree = "<absolute>";
+	};
+	52726D050DB3F538003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726D060DB3F538003D589B /* CMDPassword.java */;
+		name = "CMDPassword.java: 12";
+		rLen = 0;
+		rLoc = 829;
+		rType = 0;
+		vrLen = 234;
+		vrLoc = 0;
+	};
+	52726D060DB3F538003D589B /* CMDPassword.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDPassword.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDPassword.java;
+		sourceTree = "<absolute>";
+	};
+	52726DB90DB4F800003D589B /* CMDAuth.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDAuth.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDAuth.java;
+		sourceTree = "<absolute>";
+	};
+	52726E7A0DB50ECB003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726DB90DB4F800003D589B /* CMDAuth.java */;
+		name = "CMDAuth.java: 27";
+		rLen = 0;
+		rLoc = 1869;
+		rType = 0;
+		vrLen = 1376;
+		vrLoc = 0;
+	};
+	52726F680DB536CC003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726F690DB536CC003D589B /* CMDDelete.java */;
+		name = "CMDDelete.java: 10";
+		rLen = 0;
+		rLoc = 1632;
+		rType = 0;
+		vrLen = 256;
+		vrLoc = 0;
+	};
+	52726F690DB536CC003D589B /* CMDDelete.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDDelete.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDDelete.java;
+		sourceTree = "<absolute>";
+	};
+	52726FE60DB53D35003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726FE70DB53D35003D589B /* CMDKick.java */;
+		name = "CMDKick.java: 10";
+		rLen = 0;
+		rLoc = 1644;
+		rType = 0;
+		vrLen = 223;
+		vrLoc = 0;
+	};
+	52726FE70DB53D35003D589B /* CMDKick.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDKick.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDKick.java;
+		sourceTree = "<absolute>";
+	};
+	527271250DB658D7003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527271260DB658D7003D589B /* ChatPrefs.java */;
+		name = "ChatPrefs.java: 13";
+		rLen = 0;
+		rLoc = 231;
+		rType = 0;
+		vrLen = 227;
+		vrLoc = 0;
+	};
+	527271260DB658D7003D589B /* ChatPrefs.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatPrefs.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatPrefs.java;
+		sourceTree = "<absolute>";
+	};
+	527272AC0DB68C17003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527272AD0DB68C17003D589B /* CMDAccounts.java */;
+		name = "CMDAccounts.java: 8";
+		rLen = 0;
+		rLoc = 319;
+		rType = 0;
+		vrLen = 185;
+		vrLoc = 0;
+	};
+	527272AD0DB68C17003D589B /* CMDAccounts.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDAccounts.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDAccounts.java;
+		sourceTree = "<absolute>";
+	};
+	527273650DB69743003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527273660DB69743003D589B /* JCrypt.java */;
+		name = "JCrypt.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1932;
+		vrLoc = 0;
+	};
+	527273660DB69743003D589B /* JCrypt.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = JCrypt.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/JCrypt.java;
+		sourceTree = "<absolute>";
+	};
+	527273710DB69743003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527273720DB69743003D589B /* ChatLog.java */;
+		name = "ChatLog.java: 14";
+		rLen = 0;
+		rLoc = 544;
+		rType = 0;
+		vrLen = 224;
+		vrLoc = 0;
+	};
+	527273720DB69743003D589B /* ChatLog.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatLog.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatLog.java;
+		sourceTree = "<absolute>";
+	};
+	527273BF0DB69F77003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527273C00DB69F77003D589B /* CMDLog.java */;
+		name = "CMDLog.java: 13";
+		rLen = 0;
+		rLoc = 2356;
+		rType = 0;
+		vrLen = 250;
+		vrLoc = 0;
+	};
+	527273C00DB69F77003D589B /* CMDLog.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDLog.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDLog.java;
+		sourceTree = "<absolute>";
+	};
+	527275DE0DB91CE3003D589B /* CommandEntry.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CommandEntry.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CommandEntry.java;
+		sourceTree = "<absolute>";
+	};
+	527276900DB92CD2003D589B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527275DE0DB91CE3003D589B /* CommandEntry.java */;
+		name = "CommandEntry.java: 20";
+		rLen = 0;
+		rLoc = 348;
+		rType = 0;
+		vrLen = 348;
+		vrLoc = 0;
+	};
+	52751B12108634AD00D94955 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52BF76DD10724C3E004FAAB2 /* CMDHelp.java */;
+		name = "CMDHelp.java: 51";
+		rLen = 273;
+		rLoc = 1195;
+		rType = 0;
+		vrLen = 1412;
+		vrLoc = 176;
+	};
+	527C9FDA1107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52F06AD210FF7EB2006001E1 /* ChatHandshake.java */;
+		name = "ChatHandshake.java: 30";
+		rLen = 0;
+		rLoc = 766;
+		rType = 0;
+		vrLen = 1493;
+		vrLoc = 278;
+	};
+	527C9FDB1107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272675A0DA669DF003D589B /* ChatProtocol.java */;
+		name = "ChatProtocol.java: 141";
+		rLen = 33;
+		rLoc = 2686;
+		rType = 0;
+		vrLen = 1252;
+		vrLoc = 2724;
+	};
+	527C9FDC1107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FDD1107A78900860A29 /* ColorLine.cpp */;
+		name = "ColorLine.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1218;
+		vrLoc = 2761;
+	};
+	527C9FDD1107A78900860A29 /* ColorLine.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = ColorLine.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/ColorLine.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FDE1107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FDF1107A78900860A29 /* MudSocket.cpp */;
+		name = "MudSocket.cpp: 83";
+		rLen = 19;
+		rLoc = 2854;
+		rType = 0;
+		vrLen = 1257;
+		vrLoc = 2090;
+	};
+	527C9FDF1107A78900860A29 /* MudSocket.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = MudSocket.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/MudSocket.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FE01107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FE11107A78900860A29 /* NewWindowView.cpp */;
+		name = "NewWindowView.cpp: 1074";
+		rLen = 9;
+		rLoc = 28061;
+		rType = 0;
+		vrLen = 1579;
+		vrLoc = 27338;
+	};
+	527C9FE11107A78900860A29 /* NewWindowView.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = NewWindowView.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/NewWindowView.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FE21107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FE31107A78900860A29 /* AnsiParser.cpp */;
+		name = "AnsiParser.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1420;
+		vrLoc = 7915;
+	};
+	527C9FE31107A78900860A29 /* AnsiParser.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = AnsiParser.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/AnsiParser.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FE41107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527273720DB69743003D589B /* ChatLog.java */;
+		name = "ChatLog.java: 2";
+		rLen = 0;
+		rLoc = 19;
+		rType = 0;
+		vrLen = 932;
+		vrLoc = 0;
+	};
+	527C9FE51107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A155E0DC8F98D007872D4 /* ChatLogEntry.java */;
+		name = "ChatLogEntry.java: 7";
+		rLen = 0;
+		rLoc = 145;
+		rType = 0;
+		vrLen = 463;
+		vrLoc = 0;
+	};
+	527C9FE61107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726C330DB3E833003D589B /* ChatLogFormatter.java */;
+		name = "ChatLogFormatter.java: 19";
+		rLen = 0;
+		rLoc = 523;
+		rType = 0;
+		vrLen = 1626;
+		vrLoc = 341;
+	};
+	527C9FE71107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527273C00DB69F77003D589B /* CMDLog.java */;
+		name = "CMDLog.java: 43";
+		rLen = 0;
+		rLoc = 1037;
+		rType = 0;
+		vrLen = 1316;
+		vrLoc = 0;
+	};
+	527C9FE81107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527275DE0DB91CE3003D589B /* CommandEntry.java */;
+		name = "CommandEntry.java: 10";
+		rLen = 165;
+		rLoc = 183;
+		rType = 0;
+		vrLen = 348;
+		vrLoc = 0;
+	};
+	527C9FE91107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520808D40DA41A61002B9D18 /* Command.java */;
+		name = "Command.java: 8";
+		rLen = 0;
+		rLoc = 175;
+		rType = 0;
+		vrLen = 647;
+		vrLoc = 0;
+	};
+	527C9FEA1107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520A131C0DC779DE007872D4 /* ChatServer.java */;
+		name = "ChatServer.java: 140";
+		rLen = 0;
+		rLoc = 4236;
+		rType = 0;
+		vrLen = 2175;
+		vrLoc = 944;
+	};
+	527C9FEB1107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5205441B0DCBAC95001E3520 /* CMDWriteLog.java */;
+		name = "CMDWriteLog.java: 107";
+		rLen = 0;
+		rLoc = 2528;
+		rType = 0;
+		vrLen = 1301;
+		vrLoc = 1715;
+	};
+	527C9FF11107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FF21107A78900860A29 /* ColorLine.cpp */;
+		name = "ColorLine.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1218;
+		vrLoc = 2761;
+	};
+	527C9FF21107A78900860A29 /* ColorLine.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = ColorLine.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/ColorLine.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FF31107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FF41107A78900860A29 /* MudSocket.cpp */;
+		name = "MudSocket.cpp: 83";
+		rLen = 19;
+		rLoc = 2854;
+		rType = 0;
+		vrLen = 1257;
+		vrLoc = 2090;
+	};
+	527C9FF41107A78900860A29 /* MudSocket.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = MudSocket.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/MudSocket.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FF51107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FF61107A78900860A29 /* NewWindowView.cpp */;
+		name = "NewWindowView.cpp: 1074";
+		rLen = 9;
+		rLoc = 28061;
+		rType = 0;
+		vrLen = 1579;
+		vrLoc = 27338;
+	};
+	527C9FF61107A78900860A29 /* NewWindowView.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = NewWindowView.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/NewWindowView.cpp;
+		sourceTree = "<absolute>";
+	};
+	527C9FF71107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527C9FF81107A78900860A29 /* AnsiParser.cpp */;
+		name = "AnsiParser.cpp: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1420;
+		vrLoc = 7915;
+	};
+	527C9FF81107A78900860A29 /* AnsiParser.cpp */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.cpp.cpp;
+		name = AnsiParser.cpp;
+		path = /Users/john/Development/MudMaster/MudMaster/Client/AnsiParser.cpp;
+		sourceTree = "<absolute>";
+	};
+	527CA0011107A78900860A29 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527CA0021107A78900860A29 /* ANSIColor.java */;
+		name = "ANSIColor.java: 2";
+		rLen = 0;
+		rLoc = 21;
+		rType = 0;
+		vrLen = 1201;
+		vrLoc = 0;
+	};
+	527CA0021107A78900860A29 /* ANSIColor.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ANSIColor.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ANSIColor.java;
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {879, 716}}";
+			sepNavSelRange = "{21, 0}";
+			sepNavVisRange = "{0, 1201}";
+		};
+	};
+	527CCAD00DB9588D001C9E44 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527CCAD10DB9588D001C9E44 /* CMDPlugins.java */;
+		name = "CMDPlugins.java: 13";
+		rLen = 0;
+		rLoc = 1138;
+		rType = 0;
+		vrLen = 254;
+		vrLoc = 0;
+	};
+	527CCAD10DB9588D001C9E44 /* CMDPlugins.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDPlugins.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDPlugins.java;
+		sourceTree = "<absolute>";
+	};
+	528468781121FA9300138311 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 528468791121FA9300138311 /* ANSIColor.java */;
+		name = "ANSIColor.java: 2";
+		rLen = 0;
+		rLoc = 21;
+		rType = 0;
+		vrLen = 1201;
+		vrLoc = 0;
+	};
+	528468791121FA9300138311 /* ANSIColor.java */ = {
+		isa = PBXFileReference;
+		name = ANSIColor.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ANSIColor.java;
+		sourceTree = "<absolute>";
+	};
+	528524F80F32434100DEAFFD /* AccountManager.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = AccountManager.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/AccountManager.java;
+		sourceTree = "<absolute>";
+	};
+	5285C92C0DCFAD2D00B9583B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5285C92D0DCFAD2D00B9583B /* CMDCompact.java */;
+		name = "CMDCompact.java: 37";
+		rLen = 0;
+		rLoc = 693;
+		rType = 0;
+		vrLen = 717;
+		vrLoc = 0;
+	};
+	5285C92D0DCFAD2D00B9583B /* CMDCompact.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDCompact.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDCompact.java;
+		sourceTree = "<absolute>";
+	};
+	5285C9340DCFAD2D00B9583B /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5285C9350DCFAD2D00B9583B /* CMDCompact.java */;
+		name = "CMDCompact.java: 12";
+		rLen = 0;
+		rLoc = 248;
+		rType = 0;
+		vrLen = 253;
+		vrLoc = 0;
+	};
+	5285C9350DCFAD2D00B9583B /* CMDCompact.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDCompact.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDCompact.java;
+		sourceTree = "<absolute>";
+	};
+	52A288B60E3F8E95008BE952 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52A288B70E3F8E95008BE952 /* StdOutErrLevel.java */;
+		name = "StdOutErrLevel.java: 8";
+		rLen = 1381;
+		rLoc = 147;
+		rType = 0;
+		vrLen = 1384;
+		vrLoc = 144;
+	};
+	52A288B70E3F8E95008BE952 /* StdOutErrLevel.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = StdOutErrLevel.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/StdOutErrLevel.java;
+		sourceTree = "<absolute>";
+	};
+	52A37E130F45075D008A4A57 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 528524F80F32434100DEAFFD /* AccountManager.java */;
+		name = "AccountManager.java: 94";
+		rLen = 0;
+		rLoc = 2075;
+		rType = 0;
+		vrLen = 1041;
+		vrLoc = 0;
+	};
+	52A37E190F45075D008A4A57 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52054A980DDA28DD001E3520 /* CMDStats.java */;
+		name = "CMDStats.java: 40";
+		rLen = 0;
+		rLoc = 1022;
+		rType = 0;
+		vrLen = 1287;
+		vrLoc = 0;
+	};
+	52A37E1A0F45075D008A4A57 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527272AD0DB68C17003D589B /* CMDAccounts.java */;
+		name = "CMDAccounts.java: 21";
+		rLen = 0;
+		rLoc = 559;
+		rType = 0;
+		vrLen = 1238;
+		vrLoc = 0;
+	};
+	52B09EE20DB9392D004D4836 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52B09EE30DB9392D004D4836 /* ChatPluginClassLoader.java */;
+		name = "ChatPluginClassLoader.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1754;
+		vrLoc = 0;
+	};
+	52B09EE30DB9392D004D4836 /* ChatPluginClassLoader.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatPluginClassLoader.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/plugin/ChatPluginClassLoader.java;
+		sourceTree = "<absolute>";
+	};
+	52B09EE40DB9392D004D4836 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52B09EE50DB9392D004D4836 /* ChatPlugin.java */;
+		name = "ChatPlugin.java: 16";
+		rLen = 0;
+		rLoc = 261;
+		rType = 0;
+		vrLen = 261;
+		vrLoc = 0;
+	};
+	52B09EE50DB9392D004D4836 /* ChatPlugin.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatPlugin.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/plugin/ChatPlugin.java;
+		sourceTree = "<absolute>";
+	};
+	52BF76D910724C3E004FAAB2 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52C63FD110691F7A00BA9CFC /* ChatPluginClassLoader.java */;
+		name = "ChatPluginClassLoader.java: 214";
+		rLen = 0;
+		rLoc = 6729;
+		rType = 0;
+		vrLen = 1874;
+		vrLoc = 5817;
+	};
+	52BF76DD10724C3E004FAAB2 /* CMDHelp.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = CMDHelp.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/commands/CMDHelp.java;
+		sourceTree = "<absolute>";
+	};
+	52C023BB103C4DFD00164D05 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 524CAB8F0F7C1CE000D01EC2 /* StdOutErrLevel.java */;
+		name = "StdOutErrLevel.java: 34";
+		rLen = 0;
+		rLoc = 844;
+		rType = 0;
+		vrLen = 939;
+		vrLoc = 3;
+	};
+	52C63FD110691F7A00BA9CFC /* ChatPluginClassLoader.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatPluginClassLoader.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/plugin/ChatPluginClassLoader.java;
+		sourceTree = "<absolute>";
+	};
+	52E751EF0DA1364C00AB1DFC /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+	};
+	52E751F00DA1364C00AB1DFC /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	52E752570DA14DB900AB1DFC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E752580DA14DB900AB1DFC /* ChatClient.java */;
+		name = "ChatClient.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 201;
+		vrLoc = 0;
+	};
+	52E752580DA14DB900AB1DFC /* ChatClient.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatClient.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatClient.java;
+		sourceTree = "<absolute>";
+	};
+	52E7525B0DA14DB900AB1DFC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0A8B99B20B8F56A4003CD01B /* build.xml */;
+		name = "build.xml: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1804;
+		vrLoc = 0;
+	};
+	52E7529E0DA14DB900AB1DFC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E7529F0DA14DB900AB1DFC /* ChatRoom.java */;
+		name = "ChatRoom.java: 13";
+		rLen = 0;
+		rLoc = 1908;
+		rType = 0;
+		vrLen = 240;
+		vrLoc = 0;
+	};
+	52E7529F0DA14DB900AB1DFC /* ChatRoom.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatRoom.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/ChatRoom.java;
+		sourceTree = "<absolute>";
+	};
+	52E7541F0DA16D2200AB1DFC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E754200DA16D2200AB1DFC /* ChatServer.1 */;
+		name = "ChatServer.1: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 2224;
+		vrLoc = 0;
+	};
+	52E754200DA16D2200AB1DFC /* ChatServer.1 */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = text.man;
+		name = ChatServer.1;
+		path = /Users/john/Development/ChatServer/resources/ChatServer.1;
+		sourceTree = "<absolute>";
+	};
+	52E8CEA510F4EE5C0088E2FA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52726C130DB3E833003D589B /* CMDAdd.java */;
+		name = "CMDAdd.java: 7";
+		rLen = 0;
+		rLoc = 139;
+		rType = 0;
+		vrLen = 1322;
+		vrLoc = 0;
+	};
+	52E8CEAE10F4EE5C0088E2FA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E8CEAF10F4EE5C0088E2FA /* TelnetServer.java */;
+		name = "TelnetServer.java: 15";
+		rLen = 46;
+		rLoc = 330;
+		rType = 0;
+		vrLen = 1171;
+		vrLoc = 0;
+	};
+	52E8CEAF10F4EE5C0088E2FA /* TelnetServer.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = TelnetServer.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/TelnetServer.java;
+		sourceTree = "<absolute>";
+	};
+	52E8D00E10F4F3270088E2FA /* TelnetPipelineFactory.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = TelnetPipelineFactory.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/TelnetPipelineFactory.java;
+		sourceTree = "<absolute>";
+	};
+	52E8D03810F50A600088E2FA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E8D00E10F4F3270088E2FA /* TelnetPipelineFactory.java */;
+		name = "TelnetPipelineFactory.java: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1014;
+		vrLoc = 0;
+	};
+	52E8D05110F518070088E2FA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E8D05210F518070088E2FA /* ChatProtocolDecoder.java */;
+		name = "ChatProtocolDecoder.java: 23";
+		rLen = 0;
+		rLoc = 1577;
+		rType = 0;
+		vrLen = 546;
+		vrLoc = 0;
+	};
+	52E8D05210F518070088E2FA /* ChatProtocolDecoder.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatProtocolDecoder.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/ChatProtocolDecoder.java;
+		sourceTree = "<absolute>";
+	};
+	52E8D07110F650220088E2FA /* ChatProtocolDecoder.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatProtocolDecoder.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/ChatProtocolDecoder.java;
+		sourceTree = "<absolute>";
+	};
+	52F069F110F791D1006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 520548B70DD9E785001E3520 /* TelnetProtocol.java */;
+		name = "TelnetProtocol.java: 76";
+		rLen = 0;
+		rLoc = 1519;
+		rType = 0;
+		vrLen = 1076;
+		vrLoc = 569;
+	};
+	52F069F310F791D1006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 527267600DA669DF003D589B /* ZChatProtocol.java */;
+		name = "ZChatProtocol.java: 50";
+		rLen = 16;
+		rLoc = 921;
+		rType = 0;
+		vrLen = 1185;
+		vrLoc = 447;
+	};
+	52F069F510F791D1006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272657D0DA5347D003D589B /* ChatAccount.java */;
+		name = "ChatAccount.java: 28";
+		rLen = 0;
+		rLoc = 540;
+		rType = 0;
+		vrLen = 1048;
+		vrLoc = 0;
+	};
+	52F069F710F791D1006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 5272675E0DA669DF003D589B /* MudMasterProtocol.java */;
+		name = "MudMasterProtocol.java: 36";
+		rLen = 28;
+		rLoc = 637;
+		rType = 0;
+		vrLen = 1131;
+		vrLoc = 258;
+	};
+	52F06A1B10F791D1006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52F06A1C10F791D1006001E1 /* ChatHandshake.java */;
+		name = "ChatHandshake.java: 8";
+		rLen = 0;
+		rLoc = 277;
+		rType = 0;
+		vrLen = 209;
+		vrLoc = 0;
+	};
+	52F06A1C10F791D1006001E1 /* ChatHandshake.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatHandshake.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/ChatHandshake.java;
+		sourceTree = "<absolute>";
+	};
+	52F06A4810F79287006001E1 /* TelnetServer.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = TelnetServer.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/TelnetServer.java;
+		sourceTree = "<absolute>";
+	};
+	52F06A9010F7955C006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 0A8B99B20B8F56A4003CD01B /* build.xml */;
+		name = "build.xml: 33";
+		rLen = 56;
+		rLoc = 1405;
+		rType = 0;
+		vrLen = 1998;
+		vrLoc = 300;
+	};
+	52F06A9210F7955C006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52F06A9310F7955C006001E1 /* ChatCommand.java */;
+		name = "ChatCommand.java: 34";
+		rLen = 0;
+		rLoc = 659;
+		rType = 0;
+		vrLen = 792;
+		vrLoc = 0;
+	};
+	52F06A9310F7955C006001E1 /* ChatCommand.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatCommand.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/ChatCommand.java;
+		sourceTree = "<absolute>";
+	};
+	52F06A9910F7955C006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52F06A9A10F7955C006001E1 /* ChatCommand.java */;
+		name = "ChatCommand.java: 11";
+		rLen = 0;
+		rLoc = 202;
+		rType = 0;
+		vrLen = 207;
+		vrLoc = 0;
+	};
+	52F06A9A10F7955C006001E1 /* ChatCommand.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatCommand.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/protocol/ChatCommand.java;
+		sourceTree = "<absolute>";
+	};
+	52F06AAA10F7B3DA006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E752580DA14DB900AB1DFC /* ChatClient.java */;
+		name = "ChatClient.java: 204";
+		rLen = 0;
+		rLoc = 4374;
+		rType = 0;
+		vrLen = 995;
+		vrLoc = 4081;
+	};
+	52F06ABD10F7B52E006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E8D07110F650220088E2FA /* ChatProtocolDecoder.java */;
+		name = "ChatProtocolDecoder.java: 25";
+		rLen = 31;
+		rLoc = 773;
+		rType = 0;
+		vrLen = 1607;
+		vrLoc = 50;
+	};
+	52F06ACB10FF7EB2006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52F06A4810F79287006001E1 /* TelnetServer.java */;
+		name = "TelnetServer.java: 29";
+		rLen = 0;
+		rLoc = 840;
+		rType = 0;
+		vrLen = 1126;
+		vrLoc = 0;
+	};
+	52F06ACC10FF7EB2006001E1 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 52E8D00E10F4F3270088E2FA /* TelnetPipelineFactory.java */;
+		name = "TelnetPipelineFactory.java: 27";
+		rLen = 0;
+		rLoc = 857;
+		rType = 0;
+		vrLen = 939;
+		vrLoc = 0;
+	};
+	52F06AD210FF7EB2006001E1 /* ChatHandshake.java */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.java;
+		name = ChatHandshake.java;
+		path = /Users/john/Development/ChatServer/src/com/presence/chat/socket/ChatHandshake.java;
+		sourceTree = "<absolute>";
+	};
+}

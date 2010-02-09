@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ChatServer" default="install" basedir=".">
+	<property name="src" location="src"/> <!-- java source folder -->
+	<property name="bin" location="bin"/> <!-- intermediate build products -->
+	<property name="jars" location="jars"/> <!-- jar files -->
+	<property name="lib" location="lib"/> <!-- local libraries linked against -->
+	<property name="dist" location="dist"/> <!-- build product location -->
+	<property name="resources" location="resources"/> <!-- location of general java resources -->
+	<property name="resources_macosx" location="resources_macosx"/> <!-- location of Mac OS X specific resources -->
+	<property name="compile.debug" value="true"/>
+	<property name="jarfile" location="${dist}/${ant.project.name}.jar"/>
+
+	<!-- lib directory should contain any pre-built jar files needed to build the project -->
+	<fileset id="lib.jars" dir="${lib}">
+		<include name="**/*.jar"/>
+	</fileset>
+
+	<path id="lib.path">
+		<fileset refid="lib.jars"/>
+	</path>
+
+	<!-- Initialization target, for any prelimary setup needed to build -->
+	<target name="init" description="Preparation">
+		<mkdir dir="${src}"/>
+		<mkdir dir="${lib}"/>
+	</target>
+
+	<target name="compile" depends="init" description="Compile code">
+		<mkdir dir="${bin}"/>
+		<javac deprecation="on" srcdir="${src}" destdir="${bin}"
+			   source="1.5" target="1.5"
+			   includeAntRuntime="no"
+			   classpathref="lib.path" debug="${compile.debug}">
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Build jar">
+		<property name="version.num" value="1.00"/>
+		<buildnumber file="build.num"/>
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd HH:mm:ss" />
+		</tstamp>
+		
+		<manifest file="MANIFEST.MF">
+			<attribute name="Built-By" value="${user.name}"/>
+			<attribute name="Main-Class" value="com.presence.chat.ChatServer"/>
+			<attribute name="Implementation-Version" value="b${build.number}"/>
+			<attribute name="Built-Date" value="${TODAY}"/>
+		</manifest>
+	
+		<mkdir dir="${jars}"/>
+		<jar jarfile="${jars}/${ant.project.name}.jar" basedir="${bin}" manifest="MANIFEST.MF">
+			<!-- Inject resources -->
+			<fileset dir="${resources}/"/>
+			<!-- Merge library jars into final jar file -->
+			<zipgroupfileset refid="lib.jars"/>
+		</jar>
+	</target>
+	
+    <target name="install" depends="jar" description="Put all the pieces together in the dist directory">
+		<mkdir dir="${dist}"/>
+		<!-- Copy jars -->
+		<copy toDir="${dist}">
+			<fileset dir="${jars}">
+				<include name="*.jar"/>
+			</fileset>			
+		</copy>
+    </target>
+
+
+    <target name="run" depends="install" description="Run the tool">
+		<java dir="${dist}" jar="${jarfile}" fork="true" failonerror="true">
+		</java>
+	</target>
+	
+    <target name="clean" description="Remove build and dist directories">
+        <delete dir="${bin}"/>
+        <delete dir="${jars}"/>
+        <delete file="${jarfile}"/>
+    </target>
+</project>
