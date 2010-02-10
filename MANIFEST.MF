@@ -3,6 +3,6 @@ Ant-Version: Apache Ant 1.7.1
 Created-By: 14.3-b01-101 (Apple Inc.)
 Built-By: john
 Main-Class: com.presence.chat.ChatServer
-Implementation-Version: b328
-Built-Date: 2010-02-09 14:45:36
+Implementation-Version: b357
+Built-Date: 2010-02-10 13:28:43
 

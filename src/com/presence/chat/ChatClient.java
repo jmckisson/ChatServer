@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.Timer;
 
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.*;
 
 import com.presence.chat.protocol.*;
@@ -70,8 +71,14 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
 	
-	public ChatClient() {
+	public ChatClient(String name, String ip) {
 		state = STATE_DISCONNECTED;
+		//Logger.getLogger("global").info("new ChatClient: " + name + "("+ip+")");
+		myName = name;
+		address = ip;
+		
+		//Add to global client list
+		ChatServer.getClients().add(this);
 	}
 	
 	
@@ -83,26 +90,30 @@ public class ChatClient extends SimpleChannelHandler {
 		super.handleUpstream(ctx, e);
 	}
 
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		
-		myChannel = e.getChannel();
-		
-		//Add to global client list
-		ChatServer.getClients().add(this);
-	}
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
 		lastActivity = System.currentTimeMillis();
 		
-		String message = (String)e.getMessage();
+		//Grab command byte and message	
+		Object[] obj = (Object[])e.getMessage();	
+		ChatCommand cmd = (ChatCommand)obj[0];
+		String message = (String)obj[1];
+		
+		switch (cmd) {
+			case TEXT_ONE:
+				//Client needs to be able to chat their password while unauthenticated
+				ChatServer.processCommand(this, message);
+				
+				break;
+				
+			case VERSION:
+				setVersion(message);
+				break;
+		}
 		
 		if (!authenticated)
 			checkAuth();
-		
-		//Grab command byte
-		ChatCommand cmd = (ChatCommand)ctx.getAttachment();
 		
 		switch (cmd) {
 			case TEXT_ALL:
@@ -110,18 +121,6 @@ public class ChatClient extends SimpleChannelHandler {
 				if (authenticated)
 					forwardToRoom(message);
 					
-				break;
-				
-			case TEXT_ONE:
-
-				//Client needs to be able to chat their password while unauthenticated
-				ChatServer.processCommand(this, message);
-				
-				break;
-				
-			case VERSION:
-			
-				setVersion(message);
 				break;
 				
 			case NAME_CHANGE:
@@ -145,6 +144,7 @@ public class ChatClient extends SimpleChannelHandler {
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", e.getCause());
+		e.getCause().printStackTrace();
 		e.getChannel().close();
 		
 		disconnect();
@@ -206,9 +206,8 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	void setVersion(String ver) {
 		version = new String(ver);
-	}
+ 	}
 
-	
 	
 	/*
 	 * Handle data incoming from the socket
@@ -351,6 +350,14 @@ public class ChatClient extends SimpleChannelHandler {
 		protocol.sendVersion();
 	}
 	
+	public void setProtocol(ChatProtocol prot) {
+		protocol = prot;
+	}
+	
+	public void setSocket(Channel sock) {
+		myChannel = sock;
+	}
+	
 	
 	void initSnoopLog() {
 		snoopLog = new ChatLog(10000);
@@ -403,9 +410,11 @@ public class ChatClient extends SimpleChannelHandler {
 		isGagged = val;
 	}
 	
-	public void connect(String name) {
+	/*
+	public void setName(String name) {
 		myName = name;
 	}
+	*/
 
 	
 	public void setName(String newName) {

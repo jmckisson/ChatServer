@@ -39,7 +39,7 @@ public abstract class ChatProtocol {
 	static final byte CHAT_SNOOP_DATA = 31;
 	static final byte CHAT_SNOOP_COLOR = 32;
 	
-	static final byte CHAT_END_OF_COMMAND = (byte)255;
+	public static final byte CHAT_END_OF_COMMAND = (byte)255;
 
 	int state;
 	

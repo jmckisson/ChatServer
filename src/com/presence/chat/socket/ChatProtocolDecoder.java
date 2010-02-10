@@ -9,6 +9,7 @@ package com.presence.chat.socket;
 
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.logging.*;
 
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
@@ -49,14 +50,19 @@ public class ChatProtocolDecoder extends OneToOneDecoder {
 		
 		ChannelBuffer buf = (ChannelBuffer)msg;
 		
+		//int bytes = buf.readableBytes();
+				
 		//Grab command byte
 		byte cmd = buf.readByte();
 		
-		Map<String, Object> cData = (Map<String, Object>)ctx.getAttachment();
+		//Logger.getLogger("global").info(String.format("bytes: %d, decoded cmd: %x", bytes, cmd));
 		
-		cData.put("command", ChatCommand.getCommand(cmd));
+		Object[] obj = new Object[2];
 		
-		return buf.slice(buf.readerIndex(), buf.readableBytes() - 1).toString(charsetName);
+		obj[0] = ChatCommand.getCommand(cmd);
+		obj[1] = buf.slice(buf.readerIndex(), buf.readableBytes() - 1).toString(charsetName);
+		
+		return obj;
 	}
 
 }

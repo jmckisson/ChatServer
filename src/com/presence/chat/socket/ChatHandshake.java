@@ -9,9 +9,13 @@ package com.presence.chat.socket;
 
 import java.util.logging.*;
 
+import org.jboss.netty.buffer.*;
 import org.jboss.netty.channel.*;
+import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 
 import com.presence.chat.ChatClient;
+import com.presence.chat.ChatPrefs;
+import com.presence.chat.protocol.*;
 
 @ChannelPipelineCoverage("one")
 public class ChatHandshake extends SimpleChannelUpstreamHandler {
@@ -36,14 +40,18 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 		ChannelPipeline pipeline = ctx.getPipeline();
 		
 		String str = (String)e.getMessage();
+				
+		String[] nameAndIP = null;
 		
 		if (str.contains(":")) {
 			String[] result = str.split(":");
 			
 			if (result[0].equals("CHAT")) {
-			
+						
 				//Insert MudMaster protocol handler into the pipeline
 				pipeline.replace("decoder", "protocol", new ChatProtocolDecoder());
+				
+				nameAndIP = result[1].split("\n");
 				
 			} else if (result[0].equals("ZCHAT")) {
 			
@@ -54,9 +62,29 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				return;
 			}
 			
-			pipeline.replace("handshake", "client", new ChatClient());
+			ChannelBuffer endOfCommand = ChannelBuffers.buffer(1);
+			endOfCommand.writeByte(ChatProtocol.CHAT_END_OF_COMMAND);
+			
+			pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, endOfCommand));
+			
+			if (nameAndIP == null) {
+				nameAndIP = new String[2];
+				nameAndIP[0] = "Woops";
+				nameAndIP[1] = "Something broke";
+			}
+			
+			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
+			
+			pipeline.replace("handshake", "client", client);
 			
 			ctx.setAttachment(new String(result[1]));
+			
+			client.setSocket(e.getChannel());
+			client.setProtocol(new MudMasterProtocol(client));
+			
+			//Send connect response
+			e.getChannel().write(String.format("YES:%s\n", ChatPrefs.getName()));
+			
 
 		}
 		
@@ -66,6 +94,8 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", e.getCause());
 		e.getChannel().close();
+		
+		e.getCause().printStackTrace();
 		
 		//disconnect();
 	}

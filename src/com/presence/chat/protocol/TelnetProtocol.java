@@ -30,7 +30,7 @@ public class TelnetProtocol extends ChatProtocol {
 	public void processHandshake(String str) {
 	
 		//This just sets the chatname
-		myClient.connect(str.trim());
+		myClient.setName(str.trim());
 	}
 	
 
