@@ -1,0 +1,12 @@
+jMudServer, by Humera
+
+To run:
+1) Copy ChatServer.jar to a directory
+2) Create a directory named 'log' at the same level as the Jar file
+3) Use the command 'java -jar ChatServer.jar -p <port>' to launch the server
+4) Connect via chat!
+
+Note:
+The server will create a file called accounts.xml in the same directory as the Jar.
+If this file does not exist, the first person to connect will authenticate as a
+Super Admin.
