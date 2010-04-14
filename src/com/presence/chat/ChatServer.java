@@ -259,12 +259,9 @@ public class ChatServer {
 		if (sock != null) {
 			
 			sock.close();
-			
-
-			clients.remove(sock);
 		}
 		
-		Logger.getLogger("global").info(String.format("%s disconnected", client.getName()));
+		clients.remove(client);
 	}
 
 	/*
@@ -310,24 +307,6 @@ public class ChatServer {
 	public static ServerStats getStats() {
 		return instance.stats;
 	}
-	
-	
-	/*
-	 * Return a string representation of the bytes in the global buffer
-	 */
-	/*
-	public static String bufToString() {
-		byte[] bbuf = new byte[BUF.remaining()];
-		BUF.get(bbuf);
-		return new String(bbuf);
-	}
-	
-	public static byte[] buffer() {
-		byte[] b = new byte[BUF.remaining()];
-		BUF.get(b);
-		return b;
-	}
-	*/
 	
 	
 	/**

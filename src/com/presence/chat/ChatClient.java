@@ -28,10 +28,6 @@ import static com.presence.chat.protocol.ChatCommand.*;
 public class ChatClient extends SimpleChannelHandler {
 	private static final Logger log = Logger.getLogger("global");
 	
-	static final int STATE_DISCONNECTED = 0;
-	static final int STATE_AUTHENTICATING = 1;
-	static final int STATE_CONNECTED = 2;
-	
 	static final byte CHAT_NAME_CHANGE = 1;
 	static final byte CHAT_TEXT_EVERYBODY = 4;
 	static final byte CHAT_TEXT_PERSONAL = 5;
@@ -42,8 +38,6 @@ public class ChatClient extends SimpleChannelHandler {
 	static final byte CHAT_SNOOP_COLOR = 32;
 	
 	static final byte CHAT_END_OF_COMMAND = (byte)255;
-
-	int state;
 
 	ChatProtocol protocol = null;
 	Channel myChannel = null;
@@ -72,7 +66,6 @@ public class ChatClient extends SimpleChannelHandler {
 	static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
 	
 	public ChatClient(String name, String ip) {
-		state = STATE_DISCONNECTED;
 		//Logger.getLogger("global").info("new ChatClient: " + name + "("+ip+")");
 		myName = name;
 		address = ip;
@@ -149,6 +142,13 @@ public class ChatClient extends SimpleChannelHandler {
 		
 		disconnect();
 	}
+	
+	@Override
+	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {	
+		disconnect();
+		
+		super.channelClosed(ctx, e);
+	}
 
 	
 	public boolean isAuthenticated() {
@@ -207,24 +207,6 @@ public class ChatClient extends SimpleChannelHandler {
 	void setVersion(String ver) {
 		version = new String(ver);
  	}
-
-	
-	/*
-	 * Handle data incoming from the socket
-	 */
-	public void processIncomingData(String msg) {
-		if (protocol == null) {
-			initProtocol(msg);
-			
-			//Start authentication process
-			checkAuth();
-			
-			return;
-		}
-		
-		//Protocol delegates back to self
-		protocol.processIncomingData(msg);
-	}
 	
 	
 	/**
@@ -335,20 +317,7 @@ public class ChatClient extends SimpleChannelHandler {
 		
 		log.info(String.format("%s has disconnected", myName));
 	}
-	
-	
-	/*
-	 * Create a new ChatProtocol instance based on the handshake received by the client.
-	 * checkAuth is called directly after.
-	 */
-	void initProtocol(String str) {
-		protocol = ChatProtocolFactory.initProtocol(this, str);
-	
-		//Auto accept for now
-		protocol.sendConnectResponse();
-		
-		protocol.sendVersion();
-	}
+
 	
 	public void setProtocol(ChatProtocol prot) {
 		protocol = prot;

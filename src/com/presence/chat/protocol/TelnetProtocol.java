@@ -35,7 +35,6 @@ public class TelnetProtocol extends ChatProtocol {
 	
 
 	public void sendConnectResponse() {
-		state = STATE_CONNECTED;
 	}
 	
 	public void sendVersion() {}

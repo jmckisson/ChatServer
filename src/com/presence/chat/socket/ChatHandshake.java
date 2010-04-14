@@ -14,7 +14,6 @@ import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 
 import com.presence.chat.ChatClient;
-import com.presence.chat.ChatPrefs;
 import com.presence.chat.protocol.*;
 
 @ChannelPipelineCoverage("one")
@@ -58,7 +57,7 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				//Insert ZChat protocol handler into the pipeline
 			
 			} else {
-				System.out.println("ChatProtocolFactory: Unknown Incoming Chat Protocol!");
+				System.out.println("Unknown Incoming Chat Protocol!");
 				return;
 			}
 			
@@ -76,16 +75,18 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
 			
 			pipeline.replace("handshake", "client", client);
-			
-			ctx.setAttachment(new String(result[1]));
-			
+						
 			client.setSocket(e.getChannel());
-			client.setProtocol(new MudMasterProtocol(client));
 			
-			//Send connect response
-			e.getChannel().write(String.format("YES:%s\n", ChatPrefs.getName()));
+			ChatProtocol protocol = new MudMasterProtocol(client);
 			
-
+			client.setProtocol(protocol);
+			
+			protocol.sendConnectResponse();
+			protocol.sendVersion();
+			
+		} else {
+			//Use Telnet protocol
 		}
 		
 	}

@@ -8,6 +8,7 @@
 package com.presence.chat.commands;
 
 import java.util.*;
+import java.util.logging.*;
 
 import com.presence.chat.*;
 import com.presence.chat.protocol.*;
@@ -30,6 +31,13 @@ public class CMDWho implements Command {
 		for (Iterator<ChatClient> it = ChatServer.getClients().iterator() ; it.hasNext() ;) {
 			ChatClient c = it.next();
 			
+			ChatAccount account = c.getAccount();
+			if (account == null) {
+				//A client can have a null account if it has not yet been authenticated
+				Logger.getLogger("global").warning("Client object has null Account, still authenticating?");
+				continue;
+			}
+			
 			ChatRoom room = c.getRoom();
 			String roomName = "null";
 			if (room != null)
@@ -38,7 +46,9 @@ public class CMDWho implements Command {
 			ChatProtocol prot = c.getProtocol();
 			String protName = (prot != null ? prot.toString() : "null");
 			
-			strBuf.append(String.format(TEMPLATE, GRN, c.getName(), String.format("%s (%s)", c.getAccount().getName(), c.getAccount().getLevel()), CYN, roomName, YEL, c.getAddr(), protName));
+			
+			
+			strBuf.append(String.format(TEMPLATE, GRN, c.getName(), String.format("%s (%s)", account.getName(), account.getLevel()), CYN, roomName, YEL, c.getAddr(), protName));
 		}
 		
 		sender.sendChat(strBuf.toString());
