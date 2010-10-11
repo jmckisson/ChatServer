@@ -523,14 +523,25 @@ public class ChatServer {
 		
 		ChatLogFormatter clf = new ChatLogFormatter();
 		
-		// log file max size 10K, 3 rolling files, append-on-open
-        Handler fileHandler = new FileHandler("log/syslog%g.log", 10000, 6, true);
-        fileHandler.setFormatter(clf);
-		log.addHandler(fileHandler);
-		
 		Handler consoleHandler = new ConsoleHandler();
 		consoleHandler.setFormatter(clf);
 		log.addHandler(consoleHandler);
+		
+		
+		//Make sure log directory exists
+		boolean diskLog = false;
+		try {
+			diskLog = new File("log/").mkdir();
+		} catch (SecurityException e) {
+			log.warning("Permission denied trying to create log directory");
+		}
+		
+		if (diskLog) {
+			// log file max size 10K, 6 rolling files, append-on-open
+			Handler fileHandler = new FileHandler("log/syslog%g.log", 10000, 6, true);
+			fileHandler.setFormatter(clf);
+			log.addHandler(fileHandler);
+		}
 		
 		//Redirect stdout and stderr to our logger
         System.setOut(new PrintStream(new LoggingOutputStream(log, StdOutErrLevel.STDOUT), true));
@@ -538,16 +549,6 @@ public class ChatServer {
 		
 		//Parse arguments
 		parseArgs(args);
-		
-		// now show stderr stack trace going to logger
-		/*
-        try {
-            throw new RuntimeException("Test");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		*/
-
 		
 		try {
 			new ChatServer();
