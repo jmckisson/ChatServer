@@ -56,7 +56,7 @@ public class CMDSetLevel implements Command {
 		int senderLvl = sender.getAccount().getLevel();
 		
 		//Make sure we're not trying to set the lvl of a user with higher level
-		if (newLvl < 0 || newLvl > 5 || ac.getLevel() > senderLvl || newLvl >= senderLvl) {
+		if (newLvl < 0 || newLvl > 5 || ac.getLevel() > senderLvl || newLvl > senderLvl) {
 			sender.sendChat("You cannot do that!");
 			Logger.getLogger("global").info(String.format("%s(%d) attempted to change level for %s(%d) to %d",
 				sender.getName(), senderLvl, lvlArgs[0], ac.getLevel(), newLvl));

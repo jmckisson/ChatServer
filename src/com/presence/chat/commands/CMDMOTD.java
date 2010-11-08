@@ -32,6 +32,16 @@ public class CMDMOTD implements Command {
 		}
 		
 		String motd = args[1].replace("%n", "\n");
+		motd = motd.replace("&k", BLK);
+		motd = motd.replace("&r", RED);
+		motd = motd.replace("&g", GRN);
+		motd = motd.replace("&y", YEL);
+		motd = motd.replace("&b", BLU);
+		motd = motd.replace("&m", MAG);
+		motd = motd.replace("&c", CYN);
+		motd = motd.replace("&w", WHT);
+		motd = motd.replace("&N", NRM);
+		motd = motd.replace("&B", BLD);
 
 		//Otherwise we're ok to set the motd
 		ChatPrefs.setMOTD(motd);

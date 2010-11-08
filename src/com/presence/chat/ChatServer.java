@@ -531,7 +531,9 @@ public class ChatServer {
 		//Make sure log directory exists
 		boolean diskLog = false;
 		try {
-			diskLog = new File("log/").mkdir();
+			File logDir = new File("log/");
+			if (logDir.exists() || logDir.mkdir())
+				diskLog = true;
 		} catch (SecurityException e) {
 			log.warning("Permission denied trying to create log directory");
 		}

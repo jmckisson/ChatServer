@@ -28,7 +28,7 @@ public class ChatLogFormatter extends java.util.logging.Formatter {
 	public static final String NUL = "";
 
 	public ChatLogFormatter() {
-		dateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
+		dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
 	}
 
 	public String format(LogRecord rec) {

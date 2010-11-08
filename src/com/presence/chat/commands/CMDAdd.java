@@ -58,7 +58,7 @@ public class CMDAdd implements Command {
 		if (addArgs.length == 3) {
 			try {
 				int l = Integer.parseInt(addArgs[2]);
-				if (l >= 0 && l <= 5)
+				if (l >= 0 && l <= 6)
 					level = l;
 			} catch (NumberFormatException e) {}
 		}

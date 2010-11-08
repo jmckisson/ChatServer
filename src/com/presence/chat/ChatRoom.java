@@ -34,7 +34,7 @@ public class ChatRoom {
 		
 		people = new Vector<ChatClient>();
 		
-		roomLog = new ChatLog();
+		roomLog = new ChatLog(roomName);
 		
 		if (!name.equals("main"))
 			ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s] has been created",

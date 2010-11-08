@@ -329,7 +329,7 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	
 	void initSnoopLog() {
-		snoopLog = new ChatLog(10000);
+		snoopLog = new ChatLog(10000, "snoop");
 	}
 	
 	
@@ -362,7 +362,7 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	public ChatLog getMessageLog() {
 		if (messageLog == null)
-			messageLog = new ChatLog(50);
+			messageLog = new ChatLog(50, myName);
 			
 		return messageLog;
 	}

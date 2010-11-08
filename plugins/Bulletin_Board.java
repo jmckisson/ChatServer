@@ -24,7 +24,7 @@ import static com.presence.chat.ANSIColor.*;
 
 public class Bulletin_Board implements ChatPlugin {
 	
-	static final Pattern postPattern = Pattern.compile("^'([A-Za-z!?,#@ ]+)' (.*)$");
+	static final Pattern postPattern = Pattern.compile("^\"([A-Za-z!?,#@& ]+)\" (.*)$");
 	
 	static final String FILEPATH = "board.xml";
 	
@@ -37,7 +37,10 @@ public class Bulletin_Board implements ChatPlugin {
 		xs.useAttributeFor(BoardEntry.class, "author");
 		xs.useAttributeFor(BoardEntry.class, "date");
 	
-		ChatServer.addCommand("board", new CMDBoard(), 1);
+		//add global commands read/post/remove etc
+		ChatServer.addCommand("post", new CMDPost(), 1);
+		ChatServer.addCommand("read", new CMDRead(), 1);
+		ChatServer.addCommand("remove", new CMDRemove(), 1);
 		
 		try {
 			loadEntries();
@@ -54,8 +57,8 @@ public class Bulletin_Board implements ChatPlugin {
 	static Vector<BoardEntry> entries;
 	
 	static final String HEADER =	String.format("%s                              %s BULLETIN BOARD\n" +
-									"%s[ %s# %s][   %sDate   %s][       %sAuthor%s][%sSubject                                      %s]\n" + 
-									"%s ---  ----------  -------------  ---------------------------------------------%s",
+									"%s[ %s# %s][       %sDate       %s][       %sAuthor%s][%sSubject                                                            %s]\n" + 
+									"%s ---  ------------------  -------------  -------------------------------------------------------------------%s",
 									WHT, ChatPrefs.getName().toUpperCase(), BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, RED);
 	
 	
@@ -155,132 +158,141 @@ public class Bulletin_Board implements ChatPlugin {
 		return HEADER;
 	}
 	
+	static void showBoard(ChatClient sender) {
+		//TODO: Change this to a StringBuilder
+		String outStr = String.format("\n%s\n", getHeader());
+		
+		Iterator<BoardEntry> it = entries.iterator();
+		
+		while (it.hasNext()) {
+			BoardEntry entry = it.next();
+		
+			outStr = String.format("%s%s\n", outStr, entry.getHeader());
+		}
+		
+		sender.sendChat(outStr);
+	}
 	
-	class CMDBoard implements Command {
+	class CMDPost implements Command {
+		public String help() { return "Pose a message to the Bulletin Board"; }
+		
+		public String usage() { return String.format(ChatServer.USAGE_STRING, "post \"title\" message"); }
+	
+		public boolean execute(ChatClient sender, String[] args) {
+			if (args.length < 2) {	//Command has no arguments, just list the board entries to the client
+				sender.sendChat(usage());
+				showBoard(sender);
+				return true;
+			}
+		
+			Matcher matcher = postPattern.matcher(args[1]);
+				
+			String subject = null, content = null;
+			
+			if (matcher.find()) {
+				subject = matcher.group(1);
+				content = matcher.group(2);
 
+			} else {
+				sender.sendChat("Invalid Syntax");
+				sender.sendChat(usage());
+			}
+			
+			if (subject != null && content != null) {
+				BoardEntry entry = new BoardEntry(sender, subject, content);
+				addEntry(entry);
+				saveEntries();
+				
+				ChatServer.echo(String.format("%s[%s%s%s] %s%s%s posts a note on the board",
+					RED, WHT, ChatPrefs.getName(), RED, WHT, sender.getName(), RED));
+			}
+			
+			return true;
+		}
+	}
+	
+	class CMDRead implements Command {
+		public String help() { return "Read a message on the Bulletin Board"; }
+		
+		public String usage() { return String.format(ChatServer.USAGE_STRING, "read [#]"); }
+	
+		//args[1] is the argument after the actual command
 		public boolean execute(ChatClient sender, String[] args) {
 			if (args.length < 2) {	//Command has no arguments, just list the board entries to the client
 				showBoard(sender);
 				return true;
 			}
-			
-			String[] boardArgs = args[1].split(" ", 2);	//Split off first argument (read/post/remove)
-			
-			if (boardArgs.length <= 1) {
+							
+			//TODO: if not a number, argument is a keyword
+			int idx = 0;
+			try {
+				idx = Integer.parseInt(args[1]) - 1;
+			} catch (NumberFormatException e) {
 				sender.sendChat(usage());
-				return true;
 			}
 			
-			String cmd = boardArgs[0].toLowerCase();
-			
-			if (cmd.equals("post")) {	//Post command requires postPattern to be matched
+			if (idx >= 0 && idx < entries.size()) {
+				BoardEntry entry = entries.get(idx);
 				
-				Matcher matcher = postPattern.matcher(boardArgs[1]);
+				StringBuilder strBuf = new StringBuilder(getHeader() + "\n");
 				
-				String subject = null, content = null;
+				strBuf.append(entry.getHeader() + "\n");
+				strBuf.append(NRM + "\n" + entry.getContent() + "\n");
 				
-				if (matcher.find()) {
-					subject = matcher.group(1);
-					content = matcher.group(2);
-
-				} else
-					sender.sendChat("Invalid Syntax");
-				
-				if (subject != null && content != null) {
-					BoardEntry entry = new BoardEntry(sender, subject, content);
-					addEntry(entry);
-					saveEntries();
-					
-					ChatServer.echo(String.format("%s[%s%s%s] %s%s%s posts a note on the board",
-						RED, WHT, ChatPrefs.getName(), RED, WHT, sender.getName(), RED));
-				}
-			
-			} else if (cmd.equals("read")) {	//Read command requires a number
-				//TODO: if not a number, argument is a keyword
-				
-				int idx = 0;
-				try {
-					idx = Integer.parseInt(boardArgs[1]) - 1;
-				} catch (NumberFormatException e) {
-					sender.sendChat("Invalid Syntax");
-				}
-				
-				if (idx >= 0 && idx < entries.size()) {
-					BoardEntry entry = entries.get(idx);
-					
-					StringBuilder strBuf = new StringBuilder(getHeader() + "\n");
-					
-					strBuf.append(entry.getHeader() + "\n");
-					strBuf.append(NRM + "\n" + entry.getContent() + "\n");
-					
-					sender.sendChat(strBuf.toString());
-					
-				} else {
-					sender.sendChat("There is no post at that index!");
-				}
-				
-			
-			} else if (cmd.equals("remove")) {	//Remove command requires a number
-				//We can remove someones post if we are the author, or if we're level 5
-				
-				int idx = 0;
-				try {
-					idx = Integer.parseInt(boardArgs[1]) - 1;
-				} catch (NumberFormatException e) {
-					sender.sendChat("Invalid Syntax");
-				}
-				
-				if (idx >= 0 && idx < entries.size()) {
-					BoardEntry entry = entries.get(idx);
-					
-					ChatAccount senderAccount = sender.getAccount();
-
-					if (senderAccount.getName().equals(entry.getAuthor()) || senderAccount.getLevel() == 5) {
-						entries.remove(entry);
-						saveEntries();
-						
-						ChatServer.echo(String.format("%s[%s%s%s] %s%s%s removes a note from the board",
-							RED, WHT, ChatPrefs.getName(), RED, WHT, sender.getName(), RED));
-					
-					} else {
-						sender.sendChat("You are not allowed to do that!");
-					}
-					
-				} else {
-					sender.sendChat("There is no post at that index!");
-				}
-				
+				sender.sendChat(strBuf.toString());
 				
 			} else {
-				sender.sendChat("Invalid Syntax, board post 'subject' message");
+				sender.sendChat("There is no post at that index!");
 			}
-			
 			return true;
 		}
 		
 		
-		public String help() {
-			return "Interact with the Bulletin Board";
-		}
-		
-		public String usage() {
-			return String.format(ChatServer.USAGE_STRING, "board [read <#> | post '<title>' <msg> | remove <#>]");
-		}
-		
-		void showBoard(ChatClient sender) {
-			//TODO: Change this to a StringBuilder
-			String outStr = String.format("\n%s\n", getHeader());
-			
-			Iterator<BoardEntry> it = entries.iterator();
-			
-			while (it.hasNext()) {
-				BoardEntry entry = it.next();
-			
-				outStr = String.format("%s%s\n", outStr, entry.getHeader());
-			}
-			
-			sender.sendChat(outStr);
-		}
+
 	}
 	
+	class CMDRemove implements Command {
+		public String help() { return "Remove a message from the Bulletin Board"; }
+		
+		public String usage() { return String.format(ChatServer.USAGE_STRING, "remove [#]"); }
+		
+		public boolean execute(ChatClient sender, String[] args) {
+			//We can remove someones post if we are the author, or if we're level 5
+			
+			if (args.length < 2) {	//Command has no arguments, just list the board entries to the client
+				sender.sendChat(usage());
+				showBoard(sender);
+				return true;
+			}
+						
+			int idx = 0;
+			try {
+				idx = Integer.parseInt(args[1]) - 1;
+			} catch (NumberFormatException e) {
+				sender.sendChat("Invalid Syntax");
+				sender.sendChat(usage());
+			}
+			
+			if (idx >= 0 && idx < entries.size()) {
+				BoardEntry entry = entries.get(idx);
+				
+				ChatAccount senderAccount = sender.getAccount();
+
+				if (senderAccount.getName().equals(entry.getAuthor()) || senderAccount.getLevel() == 5) {
+					entries.remove(entry);
+					saveEntries();
+					
+					ChatServer.echo(String.format("%s[%s%s%s] %s%s%s removes a note from the board",
+						RED, WHT, ChatPrefs.getName(), RED, WHT, sender.getName(), RED));
+				
+				} else {
+					sender.sendChat("You are not allowed to do that!");
+				}
+				
+			} else {
+				sender.sendChat("There is no post at that index!");
+			}
+			return true;
+		}
+	}
 }
