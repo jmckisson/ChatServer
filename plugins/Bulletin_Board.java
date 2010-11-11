@@ -57,8 +57,8 @@ public class Bulletin_Board implements ChatPlugin {
 	static Vector<BoardEntry> entries;
 	
 	static final String HEADER =	String.format("%s                              %s BULLETIN BOARD\n" +
-									"%s[ %s# %s][       %sDate       %s][       %sAuthor%s][%sSubject                                                            %s]\n" + 
-									"%s ---  ------------------  -------------  -------------------------------------------------------------------%s",
+									"%s[ %s# %s][   %sDate   %s][       %sAuthor%s][%sSubject                                                            %s]\n" + 
+									"%s ---  ----------  -------------  -------------------------------------------------------------------%s",
 									WHT, ChatPrefs.getName().toUpperCase(), BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, RED);
 	
 	
@@ -236,7 +236,7 @@ public class Bulletin_Board implements ChatPlugin {
 				
 				StringBuilder strBuf = new StringBuilder(getHeader() + "\n");
 				
-				strBuf.append(entry.getHeader() + "\n");
+				strBuf.append(entry.getLongDateHeader() + "\n");
 				strBuf.append(NRM + "\n" + entry.getContent() + "\n");
 				
 				sender.sendChat(strBuf.toString());
