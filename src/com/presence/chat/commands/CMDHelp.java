@@ -67,6 +67,6 @@ public class CMDHelp implements Command {
 	
 	
 	public String help() {
-		return "";
+		return "Display help information for commands";
 	}
 }

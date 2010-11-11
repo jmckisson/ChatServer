@@ -40,6 +40,7 @@ public class ChatPrefs {
 	}
 	
 	public static void setName(String name) {
+		ChatServer.USAGE_STRING = ChatPrefs.getName() + " chats to you, 'Usage: /chat " + ChatPrefs.getName() + " %s'";
 		prefs.put(PREF_NAME, name);
 	}
 	

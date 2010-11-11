@@ -120,6 +120,10 @@ public abstract class ChatProtocol {
 		chatCmdToSocket(CHAT_TEXT_EVERYBODY, msg);
 	}
 	
+	public void sendNameChange(String name) {
+		chatCmdToSocket(CHAT_NAME_CHANGE, name);
+	}
+	
 	/*
 	 */
 	public void sendConnectResponse() {

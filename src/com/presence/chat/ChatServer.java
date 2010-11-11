@@ -63,7 +63,8 @@ public class ChatServer {
 		//setip Enable/reset ipauth feature
 		
 		//Level 2 commands
-		commands.put("ignore",		new CommandEntry(new CMDIgnore(), 2));
+		commands.put("ignore",	new CommandEntry(new CMDIgnore(), 2));
+		commands.put("listen",	new CommandEntry(new CMDListen(), 2));
 		//commands.put("gca",		new CMDGlobalChatAll());
 		
 		//Level 3 commands
@@ -86,6 +87,7 @@ public class ChatServer {
 		//Level 5 commands
 		commands.put("accounts",new CommandEntry(new CMDAccounts(), 5));
 		commands.put("del",		new CommandEntry(new CMDDelete(), 5));
+		commands.put("setname", new CommandEntry(new CMDSetName(), 5));
 		commands.put("shutdown",new CommandEntry(new CMDShutdown(), 5));
 		//commands.put("wl",		new CommandEntry(new CMDWriteLog(), 5));
 	}

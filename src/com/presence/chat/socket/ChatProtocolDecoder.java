@@ -15,7 +15,7 @@ import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineCoverage;
+//import org.jboss.netty.channel.ChannelHandler.*;
 import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 import org.jboss.netty.handler.codec.frame.Delimiters;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
@@ -23,10 +23,12 @@ import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 
 import com.presence.chat.protocol.ChatCommand;
 
-@ChannelPipelineCoverage("all")
+//@ChannelPipelineCoverage("all")
+@org.jboss.netty.channel.ChannelHandler.Sharable
 public class ChatProtocolDecoder extends OneToOneDecoder {
 
 	private final String charsetName;
+	private final Charset charset;
 	
 	private byte currentCommand;
 
@@ -38,6 +40,7 @@ public class ChatProtocolDecoder extends OneToOneDecoder {
 		if (charset == null) {
 			throw new NullPointerException("charset");
 		}
+		this.charset = charset;
 		charsetName = charset.name();
 	}
 
@@ -60,7 +63,12 @@ public class ChatProtocolDecoder extends OneToOneDecoder {
 		Object[] obj = new Object[2];
 		
 		obj[0] = ChatCommand.getCommand(cmd);
-		obj[1] = buf.slice(buf.readerIndex(), buf.readableBytes() - 1).toString(charsetName);
+		
+		obj[1] = buf.toString(buf.readerIndex(), buf.readableBytes() - 1, charset);
+		//obj[1] = buf.slice().toString();
+		//obj[1] = buf.slice(buf.readerIndex(), buf.readableBytes() - 1).toString(charsetName);
+		
+		buf.clear();
 		
 		return obj;
 	}

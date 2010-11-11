@@ -138,9 +138,7 @@ public class ChatClient extends SimpleChannelHandler {
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", e.getCause());
 		e.getCause().printStackTrace();
-		e.getChannel().close();
-		
-		disconnect();
+		//e.getChannel().close();
 	}
 	
 	@Override
@@ -552,7 +550,7 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	
 	public void sendChatAll(String str) {
-		protocol.sendChatAll(str);
+		protocol.sendChatAll(str+NRM);
 	}
 	
 	public void sendChat(String str) {
@@ -560,6 +558,10 @@ public class ChatClient extends SimpleChannelHandler {
 			protocol.sendChat(str);
 		else
 			log.warning(String.format("Protocol null when trying to chat to %s", myName));
+	}
+	
+	public void sendNameChange(String name) {
+		protocol.sendNameChange(name);
 	}
 	
 	

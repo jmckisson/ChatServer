@@ -53,7 +53,14 @@
 			isa = PBXProject;
 			buildConfigurationList = 0AE31F6908BBAC2E002AF232 /* Build configuration list for PBXProject "ChatServer" */;
 			compatibilityVersion = "Xcode 3.0";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 00E6828FFEC88D1A11DB9C8B;
 			productRefGroup = 00E6828FFEC88D1A11DB9C8B;
 			projectDirPath = "";

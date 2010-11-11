@@ -11,12 +11,14 @@ import java.util.logging.*;
 
 import org.jboss.netty.buffer.*;
 import org.jboss.netty.channel.*;
+
 import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 
 import com.presence.chat.ChatClient;
 import com.presence.chat.protocol.*;
 
-@ChannelPipelineCoverage("one")
+//@ChannelPipelineCoverage("one")
+//@ChannelHandler.Sharable("one")
 public class ChatHandshake extends SimpleChannelUpstreamHandler {
 
 	@Override
