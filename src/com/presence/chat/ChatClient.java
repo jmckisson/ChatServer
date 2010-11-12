@@ -50,6 +50,9 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	Timer authTimer = null;
 	
+	MessageEvent lastEvent = null;
+	ExceptionEvent exception = null;
+	
 	String myName;
 	String address;
 	String version;
@@ -86,6 +89,7 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+		lastEvent = e;
 		lastActivity = System.currentTimeMillis();
 		
 		//Grab command byte and message	
@@ -138,7 +142,15 @@ public class ChatClient extends SimpleChannelHandler {
 	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
 		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", e.getCause());
 		e.getCause().printStackTrace();
-		//e.getChannel().close();
+		exception = e;
+		
+		Object[] obj = (Object[])lastEvent.getMessage();
+		String str = (String)obj[1];
+		System.out.println(str);
+		ChannelBuffer buf = (ChannelBuffer)obj[2];
+		while (buf.readable()) {
+			System.out.print(buf.readByte() + " ");
+		}
 	}
 	
 	@Override
@@ -308,9 +320,15 @@ public class ChatClient extends SimpleChannelHandler {
 		ChatServer.disconnectClient(this);
 		
 		if (authenticated) {
+			String exceptionString = "";
+			if (exception != null) {
+				String cause = exception.getCause().getLocalizedMessage();
+				exceptionString = String.format(" %s(%s%s%s)", YEL, RED, cause.substring(cause.lastIndexOf('.')), YEL);
+			}
+		
 			//Let other ppl know someone disconnected
-			ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has left the server",
-				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED));
+			ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has left the server%s",
+				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, exceptionString));
 		}
 		
 		log.info(String.format("%s has disconnected", myName));

@@ -255,7 +255,7 @@ public class ChatServer {
 	/**
 	 * Closes a clients socket, removes them from the client list, and logs their disconnect
 	 */
-	static void disconnectClient(ChatClient client) {
+	static public void disconnectClient(ChatClient client) {
 		Channel sock = client.getSocket();
 		
 		if (sock != null) {
@@ -542,7 +542,7 @@ public class ChatServer {
 		
 		if (diskLog) {
 			// log file max size 10K, 6 rolling files, append-on-open
-			Handler fileHandler = new FileHandler("log/syslog%g.log", 10000, 6, true);
+			Handler fileHandler = new FileHandler("log/syslog%g.log", 10000000, 6, true);
 			fileHandler.setFormatter(clf);
 			log.addHandler(fileHandler);
 		}
