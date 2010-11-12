@@ -12,6 +12,7 @@ import java.util.Vector;
 import java.util.logging.*;
 
 import com.presence.chat.*;
+import com.webobjects.foundation.*;
 
 import static com.presence.chat.ANSIColor.*;
 
@@ -43,6 +44,9 @@ public class ChatRoom {
 				RED, WHT, ChatPrefs.getName(), RED, name), null);
 				
 		ChatServer.getStats().rooms++;
+		
+		//RoomCreate hook
+		NSNotificationCenter.defaultCenter().postNotification("RoomCreate", getName());
 	}
 	
 	public Vector<ChatClient> getListeners() {
@@ -110,6 +114,9 @@ public class ChatRoom {
 			
 		//Add dude to this room
 		people.add(person);
+		
+		//RoomJoin hook
+		NSNotificationCenter.defaultCenter().postNotification("RoomJoin", person.getName() + ":" + getName());
 	}
 	
 	
@@ -127,6 +134,8 @@ public class ChatRoom {
 		
 		people.remove(person);
 		
+		//RoomLeave hook
+		NSNotificationCenter.defaultCenter().postNotification("RoomLeave", person.getName() + ":" + getName());
 		
 		//This needs to act on the users previous room
 		if (destroyable && people.size() == 0) {
@@ -136,6 +145,9 @@ public class ChatRoom {
 			
 			ChatServer.getRooms().remove(name);
 			listeners.clear();
+			
+			//RoomDestroy hook
+			NSNotificationCenter.defaultCenter().postNotification("RoomDestroy", getName());
 		}
 		
 		
@@ -207,10 +219,13 @@ public class ChatRoom {
 	
 		roomLog.addEntry(msg);
 		
+		ChatAccount ac = (from != null ? from.getAccount() : null);
+		String accountName = (ac != null ? ac.getName() : ChatPrefs.getName());
+		
+		String hookMsg = accountName + ":" + name + ":" + msg.replaceAll("\u001b\\[[0-9;]+m", "");
+		
 		//Probably need to add carriage returns back in
 		msg = "\n" + msg;
-		
-		ChatAccount ac = (from != null ? from.getAccount() : null);
 		
 		Iterator<ChatClient> it = people.iterator();
 		
@@ -221,7 +236,7 @@ public class ChatRoom {
 				continue;
 				
 			//If the client has the sending account in their gag list, dont send them anything
-			if (ac != null && client.getAccount().hasGagged(ac.getName()))
+			if (ac != null && client.getAccount().hasGagged(accountName))
 				continue;
 			
 			client.sendChatAll(msg);
@@ -241,6 +256,9 @@ public class ChatRoom {
 			
 			client.sendChatAll(msg);
 		}
+	
+		//ChatAll hook
+		NSNotificationCenter.defaultCenter().postNotification("ChatAll", hookMsg);
 	}
 	
 	
