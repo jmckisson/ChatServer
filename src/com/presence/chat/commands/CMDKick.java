@@ -57,7 +57,7 @@ public class CMDKick implements Command {
 		
 			c.sendChat(String.format("You have been kicked [%s] by %s!", kickMsg, sender.getName()));
 			
-			c.disconnect();
+			ChatServer.disconnectClient(c);
 			
 			//Global echo
 			ChatServer.echo(String.format("%s[%s%s%s] %s has been kicked [%s%s%s] by %s!", RED, WHT, ChatPrefs.getName(), RED, kickArgs[0], YEL, kickMsg, RED, sender.getName()));
