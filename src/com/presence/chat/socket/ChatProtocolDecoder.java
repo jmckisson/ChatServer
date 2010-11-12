@@ -24,7 +24,7 @@ import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
 import com.presence.chat.protocol.ChatCommand;
 
 //@ChannelPipelineCoverage("all")
-@org.jboss.netty.channel.ChannelHandler.Sharable
+//@org.jboss.netty.channel.ChannelHandler.Sharable
 public class ChatProtocolDecoder extends OneToOneDecoder {
 
 	private final String charsetName;

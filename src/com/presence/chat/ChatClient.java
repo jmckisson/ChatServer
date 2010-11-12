@@ -25,28 +25,21 @@ import com.presence.chat.protocol.*;
 import static com.presence.chat.ANSIColor.*;
 import static com.presence.chat.protocol.ChatCommand.*;
 
-public class ChatClient extends SimpleChannelHandler {
+//public class ChatClient extends SimpleChannelHandler {
+public class ChatClient extends SimpleChannelUpstreamHandler {
 	private static final Logger log = Logger.getLogger("global");
 	
-	static final byte CHAT_NAME_CHANGE = 1;
-	static final byte CHAT_TEXT_EVERYBODY = 4;
-	static final byte CHAT_TEXT_PERSONAL = 5;
-	static final byte CHAT_VERSION = 19;
-	
-	static final byte CHAT_SNOOP = 30;
-	static final byte CHAT_SNOOP_DATA = 31;
-	static final byte CHAT_SNOOP_COLOR = 32;
-	
-	static final byte CHAT_END_OF_COMMAND = (byte)255;
-
 	ChatProtocol protocol = null;
 	Channel myChannel = null;
 	ChatRoom myRoom = null;
 	
 	ChatAccount myAccount = null;
 	
-	ChatLog snoopLog = null;
 	ChatLog messageLog = null;
+	StringBuilder snoopLog = null;
+	
+	boolean snooping = false;
+	List<ChatClient> snoopers = null;
 	
 	Timer authTimer = null;
 	
@@ -66,8 +59,6 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	public long lastActivity;
 	
-	static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
-	
 	public ChatClient(String name, String ip) {
 		//Logger.getLogger("global").info("new ChatClient: " + name + "("+ip+")");
 		myName = name;
@@ -77,7 +68,7 @@ public class ChatClient extends SimpleChannelHandler {
 		ChatServer.getClients().add(this);
 	}
 	
-	
+	/*
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
 		if (e instanceof ChannelStateEvent) {
@@ -85,6 +76,19 @@ public class ChatClient extends SimpleChannelHandler {
 		}
 		super.handleUpstream(ctx, e);
 	}
+	*/
+	
+	/*
+	@Override
+	public void handleDownstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
+
+		if (e instanceof MessageEvent) {
+			Logger.getLogger("global").info("Writing:: " + e);
+		}
+
+		super.handleDownstream(ctx, e);
+	}
+	*/
 
 	
 	@Override
@@ -130,9 +134,11 @@ public class ChatClient extends SimpleChannelHandler {
 				break;
 				
 			case SNOOP_DATA:
-			
-				logSnoopedData(message);
+				handleSnoopData(message);
+				break;
 				
+			case PING_REQUEST:
+				handlePingRequest(message);
 				break;
 		}
 		
@@ -148,9 +154,12 @@ public class ChatClient extends SimpleChannelHandler {
 		String str = (String)obj[1];
 		System.out.println(str);
 		ChannelBuffer buf = (ChannelBuffer)obj[2];
+		String msg = "";
 		while (buf.readable()) {
-			System.out.print(buf.readByte() + " ");
+			msg += buf.readByte() + " ";
 		}
+		System.out.println(msg);
+		ChatServer.getStats().exceptions++;
 	}
 	
 	@Override
@@ -323,7 +332,8 @@ public class ChatClient extends SimpleChannelHandler {
 			String exceptionString = "";
 			if (exception != null) {
 				String cause = exception.getCause().getLocalizedMessage();
-				exceptionString = String.format(" %s(%s%s%s)", YEL, RED, cause.substring(cause.lastIndexOf('.')), YEL);
+				System.out.println(cause);
+				exceptionString = String.format(" %s(%s%s%s)", YEL, RED, exception.getCause().getMessage(), YEL);
 			}
 		
 			//Let other ppl know someone disconnected
@@ -342,12 +352,6 @@ public class ChatClient extends SimpleChannelHandler {
 	public void setSocket(Channel sock) {
 		myChannel = sock;
 	}
-	
-	
-	void initSnoopLog() {
-		snoopLog = new ChatLog(10000, "snoop");
-	}
-	
 	
 	public ChatAccount getAccount() {
 		return myAccount;
@@ -378,7 +382,7 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	public ChatLog getMessageLog() {
 		if (messageLog == null)
-			messageLog = new ChatLog(50, myName);
+			messageLog = new ChatLog(500, myName);
 			
 		return messageLog;
 	}
@@ -487,7 +491,7 @@ public class ChatClient extends SimpleChannelHandler {
 	}
 	
 	
-	/*
+	/**
 	 * Forward the received string to everyone in my room except myself
 	 */
 	public void forwardToRoom(String msg) {
@@ -519,51 +523,32 @@ public class ChatClient extends SimpleChannelHandler {
 		
 			return;
 		}
-			
-		//String msg = protocol.getContent();
 		
-		//Trim carriage returns
-		matcher.reset(msg);
-		
-		if (matcher.find())
-			msg = matcher.group(1);
-			
-		//printStringBytes(msg);
-		
-		//Prepend name tag if we're trying to spoof someone
-		//WOW, this code is retarded!
-		int toffset = 0;
-		
-		String test = msg.toLowerCase().trim();
-	
-		//printStringBytes(test);
-		
-		while (toffset < test.length()) {
-			
-			//System.out.println("testing toffset " + toffset);
-			//Trim off a possible remaining color codes
-			char testChar = test.charAt(toffset);
-			if (testChar == '[' || testChar == (char)27) {
-				//System.out.println("found [");
-				int mIdx = test.indexOf('m', toffset);
-				//System.out.println("m idx = " + mIdx);
-				toffset = mIdx + 1;
-				//test = test.substring(mIdx + 1);
-
-			} else {
-				break;
-			}
-		}
-		
-		//printStringBytes(test);
-
-		if (!test.startsWith(myName.toLowerCase(), toffset))
-			msg = String.format("%s(%s%s%s)%s%s", YEL, RED, myName, YEL, RED, msg);
-		
+		msg = spoofCheck(msg);
 		
 		myRoom.echo(msg, this, this);
 		
 		ChatServer.getStats().chats++;
+	}
+
+	//Matcher to trim carriage returns
+	static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
+	/**
+	 *  Prepend a name tag if they're trying to spoof someone
+	 */
+	private String spoofCheck(String msg) {
+	
+		String msgNoANSI = msg.replaceAll("\u001b\\[[0-9;]+m", "");
+	
+		matcher.reset(msgNoANSI);	//Trim carriage returns
+		
+		if (matcher.find())
+			msgNoANSI = matcher.group(1).toLowerCase();
+					
+		if (!msgNoANSI.startsWith(myName.toLowerCase()))
+			return String.format("%s(%s%s%s)%s%s", YEL, RED, myName, YEL, RED, msg);
+		else
+			return msg;
 	}
 	
 	
@@ -582,8 +567,73 @@ public class ChatClient extends SimpleChannelHandler {
 		protocol.sendNameChange(name);
 	}
 	
+	public void startSnoop(ChatClient client) {
 	
-	public void logSnoopedData(String str) {
+		if (snoopers == null)
+			snoopers = new LinkedList<ChatClient>();
+	
+		if (snoopers.contains(client))
+			client.sendChat(String.format("%s chats to you, 'You're already snooping %s!'", ChatPrefs.getName(), myName));
+		else {
+			snoopers.add(client);
+			
+			client.sendChat(String.format("%s[%s%s%s] You have started snooping [%s%s%s], but they may still need to enable snooping by the server", RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED));
+			sendChat(String.format("%s[%s%s%s] You are now being snooped by [%s%s%s]", RED, WHT, ChatPrefs.getName(), RED, WHT, client.getName(), RED));
+		}
+	
+		if (snooping)
+			return;
 		
+		protocol.startSnoop();
+	}
+	
+	public void stopSnoop(ChatClient client) {
+		if (!snoopers.contains(client))
+			client.sendChat(String.format("%s chats to you, 'You're not snooping them!'", ChatPrefs.getName()));
+		else {
+			snoopers.remove(client);
+			client.sendChat(String.format("%s[%s%s%s] You have stopped snooping [%s%s%s]", RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED));
+			sendChat(String.format("%s[%s%s%s] You are no longer being snooped by [%s%s%s]", RED, WHT, ChatPrefs.getName(), RED, WHT, client.getName(), RED));
+		}
+	}
+	
+	
+	void handleSnoopData(String str) {
+		//if (snoopLog == null)
+		//	snoopLog = new StringBuilder();
+		
+		StringBuilder strBuf = new StringBuilder();
+		
+		byte[] data = str.getBytes();
+		int len = data.length;
+
+		//Skip over fore and back colors
+		for (int idx = 4; idx < len; idx++) {
+			byte c = data[idx];
+			
+			if (c == '\r')
+				continue;
+			
+			strBuf.append(c);
+		}
+		
+		if (strBuf.length() > 0) {
+			//snoopLog.append(strBuf);
+			sendSnoopData(strBuf.toString());
+		}
+	}
+	
+	private void sendSnoopData(String str) {
+		if (snoopers == null || snoopers.size() == 0)
+			return;
+			
+		for (ChatClient c : snoopers) {
+			c.sendChatAll(str);
+		}
+	}
+	
+	void handlePingRequest(String msg) {
+		Logger.getLogger("global").info(myName + " PING Response");
+		protocol.sendPingResponse(msg);
 	}
 }

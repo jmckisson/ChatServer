@@ -18,6 +18,7 @@ public class ServerStats {
 	public int pchats;
 	public int rooms;
 	public int cmds;
+	public int exceptions;
 	
 	public ServerStats() {
 		startTime = System.currentTimeMillis();
@@ -29,6 +30,7 @@ public class ServerStats {
 		pchats = 0;
 		rooms = 0;
 		cmds = 0;
+		exceptions = 0;
 	}
 
 }

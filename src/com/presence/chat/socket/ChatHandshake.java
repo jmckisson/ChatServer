@@ -17,10 +17,12 @@ import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 import com.presence.chat.ChatClient;
 import com.presence.chat.protocol.*;
 
+import static com.presence.chat.protocol.ChatCommand.*;
+
 //@ChannelPipelineCoverage("one")
-//@ChannelHandler.Sharable("one")
 public class ChatHandshake extends SimpleChannelUpstreamHandler {
 
+	/*
 	@Override
 	public void handleUpstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
 		if (e instanceof ChannelStateEvent) {
@@ -28,12 +30,15 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 		}
 		super.handleUpstream(ctx, e);
 	}
+	*/
 
+	/*
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		
 		Logger.getLogger("global").info(e.toString());
 	}
+	*/
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
@@ -64,7 +69,7 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 			}
 			
 			ChannelBuffer endOfCommand = ChannelBuffers.buffer(1);
-			endOfCommand.writeByte(ChatProtocol.CHAT_END_OF_COMMAND);
+			endOfCommand.writeByte(END.commandByte());
 			
 			pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, endOfCommand));
 			

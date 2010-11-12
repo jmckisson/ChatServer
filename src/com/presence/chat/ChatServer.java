@@ -48,7 +48,6 @@ public class ChatServer {
 		commands.put("compact", new CommandEntry(new CMDCompact(), 0));
 		commands.put("help",	new CommandEntry(new CMDHelp(), 0));
 		commands.put("join",	new CommandEntry(new CMDJoinRoom(), 0));
-		//commands.put("plog",	new CMDPersonalLog());
 		commands.put("log",		new CommandEntry(new CMDLog(), 0));
 		commands.put("motd",	new CommandEntry(new CMDMOTD(), 0));
 		commands.put("plugins",	new CommandEntry(new CMDPlugins(), 0));
@@ -59,6 +58,7 @@ public class ChatServer {
 		//Level 1 commands
 		commands.put("ccreate",	new CommandEntry(new CMDCreateRoom(), 1));
 		commands.put("chpw",	new CommandEntry(new CMDPassword(), 1));
+		commands.put("plog",	new CommandEntry(new CMDMessageLog(), 1));
 		//info Get detailed info on a user
 		//setip Enable/reset ipauth feature
 		
@@ -68,15 +68,15 @@ public class ChatServer {
 		//commands.put("gca",		new CMDGlobalChatAll());
 		
 		//Level 3 commands
+		commands.put("add",		new CommandEntry(new CMDAdd(), 3));
 		commands.put("auth",	new CommandEntry(new CMDAuth(), 3));
 		commands.put("fjoin",	new CommandEntry(new CMDForceJoin(), 3));
 		commands.put("silent",	new CommandEntry(new CMDSilent(), 3));
+		commands.put("snoop",	new CommandEntry(new CMDSnoop(), 3));
 		//remove Force removal of a channel
 		
 		//Level 4 commands
-		commands.put("add",		new CommandEntry(new CMDAdd(), 4));
 		commands.put("kick",	new CommandEntry(new CMDKick(), 4));
-		
 		commands.put("setlvl",	new CommandEntry(new CMDSetLevel(), 4));
 		commands.put("setpw",	new CommandEntry(new CMDSetPassword(), 4));
 		//ban Ban a username or IP address

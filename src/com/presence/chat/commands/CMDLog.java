@@ -27,7 +27,7 @@ public class CMDLog implements Command {
 	}
 	
 	public String usage() {
-		return String.format(ChatServer.USAGE_STRING, "log [<#>]");
+		return String.format(ChatServer.USAGE_STRING, "log [<#>|<grep> [<#>]]");
 	}
 
 
@@ -36,51 +36,50 @@ public class CMDLog implements Command {
 		//Get log for the current room
 		ChatLog roomLog = sender.getRoom().getLog();
 		
+		String strBuf = getLog(roomLog, sender, args);
+		
+		if (strBuf.length() > 0)
+			sender.sendChat(strBuf);
+		
+		return true;
+	}
+	
+	protected String getLog(ChatLog theLog, ChatClient sender, String[] args) {
 		StringBuilder strBuf = new StringBuilder();
 		
 		int length;
 		String grepStr = null;
 		
 		if (args.length == 2) {
-			int val;
-			try {
-				val = Integer.parseInt(args[1]);
-			} catch (NumberFormatException e) {
-				val = 20;
+			String[] logArgs = args[1].split(" ", 2);
+			
+			int val = 20;
+			
+			if (logArgs.length == 2)
+				grepStr = logArgs[0].toLowerCase();
 				
-				//Treat args[1] as a search string
-				grepStr = args[1].toLowerCase();
-			}
+			try { val = Integer.parseInt(logArgs[0]); } catch (NumberFormatException e) {}
 		
-			length = Math.min(val, roomLog.size());
+			length = Math.min(val, theLog.size());
 		} else
-			length = Math.min(20, roomLog.size());
+			length = Math.min(20, theLog.size());
 		
+		ListIterator<ChatLogEntry> it = theLog.entryIterator(theLog.size());
 		
-		//Matcher matcher = Pattern.compile(grepStr).matcher("");
-		//System.out.printf("'%s'\n", matcher.pattern());
-		
-		ListIterator<ChatLogEntry> it = roomLog.entryIterator(length);
-		
-		while (it.hasPrevious()) {
+		while (it.hasPrevious() && length > 0) {
 			ChatLogEntry entry = it.previous();
 			
-			String msg = entry.getMessage();
+			String msg = entry.getStrippedMessage();
+			
+			//System.out.println("checking for: '" + grepStr + "' in: '" + msg + "'");
 			
 			if (grepStr == null || (grepStr != null && msg.toLowerCase().contains(grepStr))) {
 			
-			//if (grepStr != null) {
-				//matcher.reset(msg);
-			
-				//if (matcher.matches())
-				//if (msg.toLowerCase().contains(grepStr))
-					strBuf.append(String.format(TEMPLATE, df.format(entry.getDate()), msg));
-				//else
-				//	continue;
+				strBuf.append(String.format(TEMPLATE, df.format(entry.getDate()), entry.getMessage()));
+				length--;
 			
 			} else
 				continue;
-				//strBuf.append(String.format(TEMPLATE, df.format(entry.getDate()), msg));
 			
 			//Break into multiple chats if the message gets long
 			if (strBuf.length() >= 4000) {
@@ -89,9 +88,6 @@ public class CMDLog implements Command {
 			}
 		}
 		
-		if (strBuf.length() > 0)
-			sender.sendChat(strBuf.toString());
-		
-		return true;
+		return strBuf.toString();
 	}
 }

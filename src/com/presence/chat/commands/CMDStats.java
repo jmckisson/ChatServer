@@ -43,7 +43,16 @@ public class CMDStats implements Command {
 									"Rooms: %d\n" + 
 									"Name Changes: %d\n" + 
 									"Kicks: %d",
-									uptimeHrs, stats.cmds, stats.connects, stats.chats, stats.pchats, stats.rooms, stats.namechanges, stats.kicks));
+									"Socket Exceptions: %d",
+									uptimeHrs,
+									stats.cmds,
+									stats.connects,
+									stats.chats,
+									stats.pchats,
+									stats.rooms,
+									stats.namechanges,
+									stats.kicks,
+									stats.exceptions));
 		
 
 		

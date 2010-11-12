@@ -27,4 +27,8 @@ public class ChatLogEntry {
 	public String getMessage() {
 		return message;
 	}
+	
+	public String getStrippedMessage() {
+		return message.replaceAll("\u001b\\[[0-9;]+m", "");
+	}
 }
