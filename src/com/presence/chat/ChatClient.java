@@ -527,6 +527,9 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		msg = spoofCheck(msg);
 		
 		msg = msg.replaceFirst("\n", "");
+		int lastCR = msg.lastIndexOf("\n");
+		if (lastCR >= msg.length() - 5)	//If we end in a CR or CR<color>, get rid of the CR
+			msg = msg.substring(0, lastCR);
 		
 		myRoom.echo(msg, this, this);
 		

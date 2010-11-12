@@ -229,7 +229,7 @@ public class ChatRoom {
 		String hookMsg = accountName + ":" + name + ":" + msg.replaceAll("\u001b\\[[0-9;]+m", "");
 		
 		//Probably need to add carriage returns back in
-		//msg = "\n" + msg;
+		msg = "\n" + msg;
 		
 		Iterator<ChatClient> it = people.iterator();
 		
