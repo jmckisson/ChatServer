@@ -526,6 +526,8 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		
 		msg = spoofCheck(msg);
 		
+		msg = msg.replaceFirst("\n", "");
+		
 		myRoom.echo(msg, this, this);
 		
 		ChatServer.getStats().chats++;
@@ -538,12 +540,12 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	 */
 	private String spoofCheck(String msg) {
 	
-		String msgNoANSI = msg.replaceAll("\u001b\\[[0-9;]+m", "");
+		String msgNoANSI = msg.replaceAll("\u001b\\[[0-9;]+m", "").trim().toLowerCase();
 	
-		matcher.reset(msgNoANSI);	//Trim carriage returns
+		//matcher.reset(msgNoANSI);	//Trim carriage returns
 		
-		if (matcher.find())
-			msgNoANSI = matcher.group(1).toLowerCase();
+		//if (matcher.find())
+		//	msgNoANSI = matcher.group(1).toLowerCase();
 					
 		if (!msgNoANSI.startsWith(myName.toLowerCase()))
 			return String.format("%s(%s%s%s)%s%s", YEL, RED, myName, YEL, RED, msg);
@@ -605,8 +607,15 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		StringBuilder strBuf = new StringBuilder();
 		
 		byte[] data = str.getBytes();
-		int len = data.length;
+		int len = data.length - 4;
+		String line = new String(data, 4, len);
+		
+		String[] lines = line.replaceAll("\r", "").split("\n");
+		
+		for (String l : lines)
+			strBuf.append(">>" + l);
 
+		/*
 		//Skip over fore and back colors
 		for (int idx = 4; idx < len; idx++) {
 			byte c = data[idx];
@@ -616,6 +625,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			
 			strBuf.append(c);
 		}
+		*/
 		
 		if (strBuf.length() > 0) {
 			//snoopLog.append(strBuf);

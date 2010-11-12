@@ -36,7 +36,7 @@ public class ChatLog {
 	}
 	
 	public void addEntry(String msg) {
-		entries.addFirst(new ChatLogEntry(msg));
+		entries.addLast(new ChatLogEntry(msg));
 		
 		//strip ansi from the logfile
 		msg = msg.replaceAll("\u001b\\[[0-9;]+m", "");
@@ -49,6 +49,10 @@ public class ChatLog {
 	
 	public int size() {
 		return entries.size();
+	}
+	
+	public LinkedList<ChatLogEntry> getEntries() {
+		return entries;
 	}
 	
 	public ListIterator<ChatLogEntry> entryIterator(int idx) {

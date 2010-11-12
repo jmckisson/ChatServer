@@ -8,7 +8,7 @@
 package com.presence.chat.commands;
 
 import java.text.DateFormat;
-import java.util.ListIterator;
+import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -64,18 +64,20 @@ public class CMDLog implements Command {
 		} else
 			length = Math.min(20, theLog.size());
 		
-		ListIterator<ChatLogEntry> it = theLog.entryIterator(theLog.size());
+		Iterator<ChatLogEntry> it = theLog.getEntries().descendingIterator();
 		
-		while (it.hasPrevious() && length > 0) {
-			ChatLogEntry entry = it.previous();
+		boolean compact = sender.getAccount().isCompact();
+				
+		while (it.hasNext() && length > 0) {
+			ChatLogEntry entry = it.next();
 			
 			String msg = entry.getStrippedMessage();
 			
 			//System.out.println("checking for: '" + grepStr + "' in: '" + msg + "'");
 			
 			if (grepStr == null || (grepStr != null && msg.toLowerCase().contains(grepStr))) {
-			
-				strBuf.append(String.format(TEMPLATE, df.format(entry.getDate()), entry.getMessage()));
+				strBuf.insert(0, String.format(TEMPLATE, df.format(entry.getDate()), entry.getMessage()) + (compact ? "" : "\n"));
+				
 				length--;
 			
 			} else
