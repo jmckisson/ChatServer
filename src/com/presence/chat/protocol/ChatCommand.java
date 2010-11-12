@@ -12,6 +12,8 @@ public enum ChatCommand {
 	TEXT_ALL(4),
 	TEXT_ONE(5),
 	VERSION(19),
+	PING_REQUEST(26),
+	PING_RESPONSE(27),
 	SNOOP(30),
 	SNOOP_DATA(31),
 	SNOOP_COLOR(32),
@@ -26,6 +28,10 @@ public enum ChatCommand {
 			return TEXT_ONE;
 		else if (cmd == 19)
 			return VERSION;
+		else if (cmd == 26)
+			return PING_REQUEST;
+		else if (cmd == 27)
+			return PING_RESPONSE;
 		else if (cmd == 30)
 			return SNOOP;
 		else if (cmd == 31)

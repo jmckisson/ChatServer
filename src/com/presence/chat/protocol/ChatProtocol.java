@@ -13,24 +13,14 @@ import org.jboss.netty.channel.Channel;
 import com.presence.chat.*;
 
 import static com.presence.chat.ANSIColor.*;
+import static com.presence.chat.protocol.ChatCommand.*;
 
 public abstract class ChatProtocol {	
 	Channel sock;
 	ChatClient myClient;
 	String content;
 	String version;
-	
-	static final byte CHAT_NAME_CHANGE = 1;
-	static final byte CHAT_TEXT_EVERYBODY = 4;
-	static final byte CHAT_TEXT_PERSONAL = 5;
-	static final byte CHAT_VERSION = 19;
-	
-	static final byte CHAT_SNOOP = 30;
-	static final byte CHAT_SNOOP_DATA = 31;
-	static final byte CHAT_SNOOP_COLOR = 32;
-	
-	public static final byte CHAT_END_OF_COMMAND = (byte)255;
-	
+		
 	public ChatProtocol(ChatClient client) {
 		this.sock = client.getSocket();
 		myClient = client;
@@ -77,7 +67,7 @@ public abstract class ChatProtocol {
 		
 		buf.writeByte(cmd);
 		buf.writeBytes(bytes);
-		buf.writeByte(CHAT_END_OF_COMMAND);
+		buf.writeByte(END.commandByte());
 		
 		if (!sock.isOpen())
 			return;
@@ -91,7 +81,7 @@ public abstract class ChatProtocol {
 
 	
 	public void sendVersion() {
-		chatCmdToSocket(CHAT_VERSION, ChatServer.VERSION);
+		chatCmdToSocket(VERSION.commandByte(), ChatServer.VERSION);
 	}
 	
 	void setVersion() {
@@ -108,7 +98,7 @@ public abstract class ChatProtocol {
 	
 	
 	public void sendChat(String msg) {
-		chatCmdToSocket(CHAT_TEXT_PERSONAL, msg);
+		chatCmdToSocket(TEXT_ONE.commandByte(), msg);
 	}
 	
 	/*
@@ -117,11 +107,11 @@ public abstract class ChatProtocol {
 	public void sendChatAll(String msg) {
 		//String outString = String.format("%c%s%c", 4, msg, 255);
 		
-		chatCmdToSocket(CHAT_TEXT_EVERYBODY, msg);
+		chatCmdToSocket(TEXT_ALL.commandByte(), msg);
 	}
 	
 	public void sendNameChange(String name) {
-		chatCmdToSocket(CHAT_NAME_CHANGE, name);
+		chatCmdToSocket(NAME_CHANGE.commandByte(), name);
 	}
 	
 	/*
@@ -130,5 +120,13 @@ public abstract class ChatProtocol {
 		String str = String.format("YES:%s\n", ChatPrefs.getName());
 		
 		sendToSocket(str);
+	}
+	
+	public void sendPingResponse(String msg) {
+		chatCmdToSocket(PING_RESPONSE.commandByte(), msg);
+	}
+	
+	public void startSnoop() {
+		chatCmdToSocket(SNOOP.commandByte(), "");
 	}
 }
