@@ -174,7 +174,7 @@ public class Bulletin_Board implements ChatPlugin {
 	}
 	
 	class CMDPost implements Command {
-		public String help() { return "Pose a message to the Bulletin Board"; }
+		public String help() { return "Post a message to the Bulletin Board"; }
 		
 		public String usage() { return String.format(ChatServer.USAGE_STRING, "post \"title\" message"); }
 	
