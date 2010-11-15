@@ -60,11 +60,13 @@ public class ChatProtocolDecoder extends OneToOneDecoder {
 		//Grab command byte
 		byte cmd = buf.readByte();
 		
-		//Logger.getLogger("global").info(String.format("bytes: %d, decoded cmd: %x", bytes, cmd));
-		
 		obj[0] = ChatCommand.getCommand(cmd);
 		
-		obj[1] = buf.toString(buf.readerIndex(), buf.readableBytes() - 1, charset);
+		int readable = buf.readableBytes();
+		
+		obj[1] = buf.toString(buf.readerIndex(), readable/* - 1*/, charset);
+		
+		//Logger.getLogger("global").info(String.format("bytes: %d, decoded cmd: %x, last %x", readable, cmd, buf.readByte()));
 		
 		return obj;
 	}

@@ -71,7 +71,7 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 			ChannelBuffer endOfCommand = ChannelBuffers.buffer(1);
 			endOfCommand.writeByte(END.commandByte());
 			
-			pipeline.addLast("framer", new DelimiterBasedFrameDecoder(8192, endOfCommand));
+			pipeline.addBefore("protocol", "framer", new DelimiterBasedFrameDecoder(32000, endOfCommand));
 			
 			if (nameAndIP == null) {
 				nameAndIP = new String[2];
