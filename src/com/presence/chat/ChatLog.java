@@ -35,8 +35,11 @@ public class ChatLog {
 		maxSize = MAX_SIZE;
 	}
 	
-	public void addEntry(String msg) {
-		entries.addLast(new ChatLogEntry(msg));
+	/**
+	 * Returns ANSI stripped message
+	 */
+	public String addEntry(String msg) {
+		entries.addFirst(new ChatLogEntry(msg));
 		
 		//strip ansi from the logfile
 		msg = msg.replaceAll("\u001b\\[[0-9;]+m", "");
@@ -45,6 +48,8 @@ public class ChatLog {
 
 		if (entries.size() > maxSize)
 			entries.removeLast();
+			
+		return msg;
 	}
 	
 	public int size() {
