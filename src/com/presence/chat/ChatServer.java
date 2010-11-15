@@ -319,7 +319,7 @@ public class ChatServer {
 	 * @param myClient Client that sent the personal msg
 	 * @param content Contents of the msg
 	 */
-	static final Matcher matcherChatPrivate = Pattern.compile("^(.*) chats to you, '(.*)'$").matcher("");
+	static final Matcher matcherChatPrivate = Pattern.compile("^(.*) chats to you, '(.*)'").matcher("");
 	 
 	public static void processCommand(ChatClient client, String content) {
 		
