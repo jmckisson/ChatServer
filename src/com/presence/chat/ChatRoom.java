@@ -109,7 +109,7 @@ public class ChatRoom {
 		
 		//Notify the room that a new person has joined
 		if (echo)
-			echo(String.format("%s[%s%s%s] %s%s%s has joined the room", RED, WHT, ChatPrefs.getName(), RED, WHT, person.getName(), RED), null);
+			echo(String.format("%s[%s%s%s][%s%s%s] %s%s%s has joined the room", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED, WHT, person.getName(), RED), null);
 		
 		//Notify person
 		person.sendChat(String.format("%s[%s%s%s] You have joined room [%s%s%s]", RED, WHT, ChatPrefs.getName(), RED, WHT, name, RED));
@@ -145,7 +145,7 @@ public class ChatRoom {
 		if (destroyable && people.size() == 0) {
 			//Notify people in main room that this room has been destroyed
 			
-			ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s] has been destroyed", RED, WHT, ChatPrefs.getName(), RED, name), null);
+			ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s%s%s] has been destroyed", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED), null);
 			
 			ChatServer.getRooms().remove(name);
 			listeners.clear();
@@ -156,7 +156,7 @@ public class ChatRoom {
 		
 		
 		//Notify the room that a person has left
-		echo(String.format("%s[%s%s%s] %s%s%s has left the room", RED, WHT, ChatPrefs.getName(), RED, WHT, person.getName(), RED), null);
+		echo(String.format("%s[%s%s%s][%s%s%s] %s%s%s has left the room", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED, WHT, person.getName(), RED), null);
 		
 		//System.out.printf("ChatRoom[%s]:: addPerson: %s leaves!\n", name, person.getName());
 	}
@@ -221,15 +221,15 @@ public class ChatRoom {
 			return;
 		}
 	
-		roomLog.addEntry(msg);
+		String msgNoANSI = roomLog.addEntry(msg);
 		
 		ChatAccount ac = (from != null ? from.getAccount() : null);
 		String accountName = (ac != null ? ac.getName() : ChatPrefs.getName());
 		
-		String hookMsg = accountName + ":" + name + ":" + msg.replaceAll("\u001b\\[[0-9;]+m", "");
+		String hookMsg = accountName + ":" + name + ":" + msgNoANSI;
 		
 		//Probably need to add carriage returns back in
-		msg = "\n" + msg;
+		//msg = "\n" + msg;
 		
 		Iterator<ChatClient> it = people.iterator();
 		
@@ -258,7 +258,8 @@ public class ChatRoom {
 			if (ac != null && client.getAccount().hasGagged(ac.getName()))
 				continue;
 			
-			client.sendChatAll(msg);
+			client.sendChatAll(String.format("%s[%s%s%s] %s", RED, YEL, name, RED, msg));
+			//client.sendChatAll(msg);
 		}
 	
 		//ChatAll hook

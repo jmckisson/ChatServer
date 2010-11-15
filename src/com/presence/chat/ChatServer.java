@@ -72,7 +72,7 @@ public class ChatServer {
 		commands.put("auth",	new CommandEntry(new CMDAuth(), 3));
 		commands.put("fjoin",	new CommandEntry(new CMDForceJoin(), 3));
 		commands.put("silent",	new CommandEntry(new CMDSilent(), 3));
-		commands.put("snoop",	new CommandEntry(new CMDSnoop(), 3));
+		//commands.put("snoop",	new CommandEntry(new CMDSnoop(), 3));
 		//remove Force removal of a channel
 		
 		//Level 4 commands
@@ -444,6 +444,7 @@ public class ChatServer {
 	 * Echo a message to everyone in all rooms
 	 * @param msg Message to be displayed
 	 */
+	/*
 	public static void echo(String msg) {
 		Enumeration<ChatRoom> e = rooms.elements();
 		
@@ -452,6 +453,16 @@ public class ChatServer {
 			
 			room.echo(msg, null);
 		}
+	}
+	*/
+	
+	public static void echo(String msg) {
+		
+		for (ChatClient c : clients) {
+			c.sendChatAll(msg);
+		}
+		
+		Logger.getLogger("global").info(msg.replaceAll("\u001b\\[[0-9;]+m", ""));
 	}
 	
 	
