@@ -29,22 +29,18 @@ public class CMDStats implements Command {
 	 * @param args Command arguments, args[0] is the command sent, args[1] is the remainder of the string, if any.
 	 */
 	public boolean execute(ChatClient sender, String[] args) {
-		StringBuilder strBuf = new StringBuilder();
-		
 		ServerStats stats = ChatServer.getStats();
 		
-		float uptimeHrs = (System.currentTimeMillis() - stats.startTime) / 1000.0f / 60.0f / 60.0f;
-		
-		strBuf.append(String.format("Uptime: %f hrs\n" +
+		String str = String.format("Uptime: %.3f hrs\n" +
 									"Commands: %d\n" + 
 									"Connects: %d\n" + 
 									"Chats: %d\n" + 
 									"PChats: %d\n" + 
 									"Rooms: %d\n" + 
 									"Name Changes: %d\n" + 
-									"Kicks: %d",
+									"Kicks: %d\n" + 
 									"Socket Exceptions: %d",
-									uptimeHrs,
+									(System.currentTimeMillis() - stats.startTime) / 1000.0f / 60.0f / 60.0f,
 									stats.cmds,
 									stats.connects,
 									stats.chats,
@@ -52,11 +48,11 @@ public class CMDStats implements Command {
 									stats.rooms,
 									stats.namechanges,
 									stats.kicks,
-									stats.exceptions));
+									stats.exceptions);
 		
 
 		
-		sender.sendChat(strBuf.toString());
+		sender.sendChat(str);
 		
 		return true;
 	}

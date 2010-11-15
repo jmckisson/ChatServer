@@ -144,9 +144,12 @@ public class ChatServer {
 		
 		Logger.getLogger("global").info("Serving shutting down");
 		
-		telnetServer.shutdown();
-		
 		AccountManager.saveAccounts();
+		
+		while (clients.size() > 0)
+			disconnectClient(clients.get(0));
+		
+		telnetServer.shutdown();
 	}
 	
 	
