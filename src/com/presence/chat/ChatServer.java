@@ -121,7 +121,7 @@ public class ChatServer {
 		stats = new ServerStats();
 		
 		//Create default chat room
-		ChatRoom mainRoom = new ChatRoom("main");
+		ChatRoom mainRoom = new ChatRoom("main", null, 0);
 		mainRoom.setDestroyable(false);
 		
 		rooms.put("main", mainRoom);

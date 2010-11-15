@@ -40,13 +40,14 @@ public class CMDWho implements Command {
 			
 			ChatRoom room = c.getRoom();
 			String roomName = "null";
-			if (room != null)
-				roomName = String.format("%s %s", room.getName(), (room.getPassword() != null ? "*" : ""));
+			if (room != null) {
+				int lvl = room.getMinLevel();
+				String lvlStr = lvl > 0 ? "(" + lvl + ")" : "";
+				roomName = String.format("%s%s%s", (room.getPassword() != null ? "*" : ""), lvlStr, room.getName());
+			}
 			
 			ChatProtocol prot = c.getProtocol();
 			String protName = (prot != null ? prot.toString() : "null");
-			
-			
 			
 			strBuf.append(String.format(TEMPLATE, GRN, c.getName(), String.format("%s (%s)", account.getName(), account.getLevel()), CYN, roomName, YEL, c.getAddr(), protName));
 		}

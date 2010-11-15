@@ -59,6 +59,8 @@ public class CMDListen implements Command {
 			
 		if (roomPass != null && !roomPass.equals(password)) {
 			sender.sendChat(String.format("%s chats to you, 'Incorrect password for Room %s!'", ChatPrefs.getName(), roomArgs[0]));
+		} else if (targetRoom.getMinLevel() > sender.getAccount().getLevel()) {
+			sender.sendChat(String.format("%s chats to you, 'You do not meet the level requirements for Room %s!'", ChatPrefs.getName(), roomArgs[0]));
 		} else {
 			targetRoom.addListener(sender, true);
 		}

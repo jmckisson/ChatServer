@@ -465,7 +465,12 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 		String roomPass = room.getPassword();
 	
+		//Verify password
 		if (roomPass != null && !roomPass.equals(password))
+			return false;
+			
+		//Check minlevel
+		if (room.getMinLevel() > myAccount.getLevel())
 			return false;
 	
 		if (myRoom != null)

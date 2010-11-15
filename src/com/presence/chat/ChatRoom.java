@@ -21,15 +21,17 @@ public class ChatRoom {
 	String password;
 	boolean destroyable;
 	boolean silent;
+	int minLevel = 0;
 			
 	Vector<ChatClient> people;
 	Vector<ChatClient> listeners;
 	
 	ChatLog roomLog;
 
-	public ChatRoom(String roomName) {
+	public ChatRoom(String roomName, String password, int minLevel) {
 		name = roomName;
-		password = null;
+		this.password = password;
+		this.minLevel = minLevel;
 		
 		destroyable = true;
 		silent = false;
@@ -39,9 +41,12 @@ public class ChatRoom {
 		
 		roomLog = new ChatLog(roomName);
 		
-		if (!name.equals("main"))
-			ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s] has been created",
-				RED, WHT, ChatPrefs.getName(), RED, name), null);
+		if (!name.equals("main")) {
+			String lvlStr = minLevel > 0 ? String.format(" (minLvl %s%d%s)", YEL, minLevel, RED) : "";
+			
+				ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s] has been created%s",
+			RED, WHT, ChatPrefs.getName(), RED, name, lvlStr), null);
+		}
 				
 		ChatServer.getStats().rooms++;
 		
@@ -87,6 +92,14 @@ public class ChatRoom {
 	
 	public Vector<ChatClient> getPeople() {
 		return people;
+	}
+	
+	public int getMinLevel() {
+		return minLevel;
+	}
+	
+	public void setMinLevel(int min) {
+		minLevel = min;
 	}
 	
 	
