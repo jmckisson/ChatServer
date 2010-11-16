@@ -18,13 +18,13 @@ import com.presence.chat.commands.Command;
 import com.presence.chat.plugin.*;
 
 import com.thoughtworks.xstream.*;
-
+import com.thoughtworks.xstream.converters.basic.StringConverter;
 
 import static com.presence.chat.ANSIColor.*;
 
 public class Bulletin_Board implements ChatPlugin {
 	
-	static final Pattern postPattern = Pattern.compile("^\"([A-Za-z!?,#@& ]+)\" (.*)$");
+	static final Pattern postPattern = Pattern.compile("^\"([A-Za-z!?,#@& ]+)\" (.*)", Pattern.DOTALL);
 	
 	static final String FILEPATH = "board.xml";
 	
@@ -184,6 +184,10 @@ public class Bulletin_Board implements ChatPlugin {
 				showBoard(sender);
 				return true;
 			}
+			
+			//Strip ansi if level < 3
+			if (sender.getAccount().getLevel() < 3)
+				args[1] = args[1].replaceAll("\u001b\\[[0-9;]+m", "");
 		
 			Matcher matcher = postPattern.matcher(args[1]);
 				
@@ -236,7 +240,7 @@ public class Bulletin_Board implements ChatPlugin {
 				
 				StringBuilder strBuf = new StringBuilder(getHeader() + "\n");
 				
-				strBuf.append(entry.getLongDateHeader() + "\n");
+				strBuf.append(entry.getHeader() + "\n");
 				strBuf.append(NRM + "\n" + entry.getContent() + "\n");
 				
 				sender.sendChat(strBuf.toString());
@@ -247,8 +251,6 @@ public class Bulletin_Board implements ChatPlugin {
 			return true;
 		}
 		
-		
-
 	}
 	
 	class CMDRemove implements Command {
@@ -295,4 +297,5 @@ public class Bulletin_Board implements ChatPlugin {
 			return true;
 		}
 	}
+
 }
