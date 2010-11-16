@@ -13,12 +13,16 @@ import java.util.Date;
 
 import com.presence.chat.*;
 
+import com.thoughtworks.xstream.annotations.*;
+
 import static com.presence.chat.ANSIColor.*;
 
 class BoardEntry implements Serializable {
 	Date date;
 	String author;
 	String title;
+	
+	@XStreamConverter(ContentStringConverter.class)
 	String content;
 	
 	//DateFormat used for displaying creation date of board entries
@@ -29,7 +33,7 @@ class BoardEntry implements Serializable {
 	public BoardEntry(ChatClient client, String title, String content) {
 		author = client.getAccount().getName();
 		
-		if (client.getAccount().getLevel() >= 4) {
+		if (client.getAccount().getLevel() >= 3) {
 			content = content.replace("&k", BLK);
 			content = content.replace("&r", RED);
 			content = content.replace("&g", GRN);
@@ -85,4 +89,6 @@ class BoardEntry implements Serializable {
 	public String getLongDateHeader() {
 		return String.format(TEMPLATE, Bulletin_Board.indexOf(this) + 1, ldf.format(date), author, title);
 	}
+	
+	
 }

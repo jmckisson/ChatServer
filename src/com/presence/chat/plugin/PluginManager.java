@@ -27,6 +27,7 @@ public class PluginManager {
 		
 		xstream = new XStream();
 		xstream.setClassLoader(getClassLoader());
+		xstream.autodetectAnnotations(true);
 		
 		instance = this;
 	}
