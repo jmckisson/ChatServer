@@ -125,10 +125,12 @@ public class ChatLog {
 				continue;
 			
 			//Break into multiple chats if the message gets long
+			/*
 			if (strBuf.length() >= 4000) {
 				sender.sendChat(strBuf.toString());
 				strBuf.setLength(0);
 			}
+			*/
 		}
 		
 		return strBuf.toString();
