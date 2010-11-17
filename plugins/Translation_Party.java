@@ -127,6 +127,7 @@ public class Translation_Party implements ChatPlugin {
 		}
 		
 		//http://download.oracle.com/javase/tutorial/networking/urls/readingWriting.html
+		//http://xstream.codehaus.org/json-tutorial.html
 		public void run() {
 			try {
 				String encodedString = URLEncoder.encode(chatData[2], "UTF-8");
