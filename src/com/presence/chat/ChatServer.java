@@ -21,6 +21,8 @@ import com.presence.chat.commands.*;
 import com.presence.chat.plugin.*;
 import com.presence.chat.socket.*;
 
+import com.webobjects.foundation.NSNotificationCenter;
+
 import static com.presence.chat.ANSIColor.*;
 
 public class ChatServer {
@@ -311,6 +313,10 @@ public class ChatServer {
 	
 	public static ServerStats getStats() {
 		return instance.stats;
+	}
+	
+	public static NSNotificationCenter getNotificationCenter() {
+		return NSNotificationCenter.defaultCenter();
 	}
 	
 	
