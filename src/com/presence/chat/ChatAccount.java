@@ -11,6 +11,8 @@ import java.io.Serializable;
 
 import java.util.logging.*;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 public class ChatAccount implements Serializable {
@@ -27,6 +29,9 @@ public class ChatAccount implements Serializable {
 	
 	Vector<String> gagList = null;
 	
+	//Fields that can be used to store custom information from plugins etc...
+	Map<String, String> customFields = null;
+	
 	public ChatAccount(String name) {
 		this(name, "", 0);
 	}
@@ -41,6 +46,13 @@ public class ChatAccount implements Serializable {
 		this.level = level;
 		
 		log.info("New account for " + name);
+	}
+	
+	private Object readResolve() {
+		if (customFields == null)
+			customFields = new HashMap<String, String>();
+		
+		return this;
 	}
 	
 	
@@ -151,5 +163,13 @@ public class ChatAccount implements Serializable {
 	
 	public void setCompact(boolean val) {
 		compact = val;
+	}
+	
+	public String getField(String field) {
+		return customFields.get(field);
+	}
+	
+	public String setField(String field, String value) {
+		return customFields.put(field, value);
 	}
 }
