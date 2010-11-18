@@ -210,7 +210,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		log.info(String.format("%s connected with %s", myName, reason));
 				
 		//Send person to room but dont echo
-		toRoom(ChatServer.getRoom("main"), null, false);
+		toRoom(ChatServer.getRoom("main"), null, false, false);
 		
 		myAccount.updateLastLogin();
 		
@@ -461,17 +461,19 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	 * All room password checks must be done before this is called
 	 * @param room Room to be moved to
 	 */
-	public boolean toRoom(ChatRoom room, String password, boolean echo) {
+	public boolean toRoom(ChatRoom room, String password, boolean echo, boolean force) {
 	
-		String roomPass = room.getPassword();
-	
-		//Verify password
-		if (roomPass != null && !roomPass.equals(password))
-			return false;
-			
-		//Check minlevel
-		if (room.getMinLevel() > myAccount.getLevel())
-			return false;
+		if (!force) {
+			String roomPass = room.getPassword();
+		
+			//Verify password
+			if (roomPass != null && !roomPass.equals(password))
+				return false;
+				
+			//Check minlevel
+			if (room.getMinLevel() > myAccount.getLevel())
+				return false;
+		}
 	
 		if (myRoom != null)
 			//This does a room echo that the person has left

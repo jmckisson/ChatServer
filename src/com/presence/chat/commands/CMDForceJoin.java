@@ -74,7 +74,7 @@ public class CMDForceJoin implements Command {
 		
 		
 		//Join new room
-		boolean moved = client.toRoom(targetRoom, password, true);
+		boolean moved = client.toRoom(targetRoom, password, true, true);
 		
 		if (!moved)
 			sender.sendChat(joinArgs[0] + " was unable to join that room");

@@ -78,7 +78,7 @@ public class CMDCreateRoom implements Command {
 		ChatServer.getRooms().put(roomArgs[0].toLowerCase(), newRoom);
 		
 		//Join new room
-		sender.toRoom(newRoom, password, true);
+		sender.toRoom(newRoom, password, true, false);
 		
 		return true;
 	}

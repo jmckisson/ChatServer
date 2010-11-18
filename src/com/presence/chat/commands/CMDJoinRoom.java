@@ -48,7 +48,7 @@ public class CMDJoinRoom implements Command {
 			
 		
 		//Join new room
-		boolean moved = sender.toRoom(targetRoom, password, true);
+		boolean moved = sender.toRoom(targetRoom, password, true, false);
 		
 		if (!moved)
 			sender.sendChat("You were unable to join that room");
