@@ -44,7 +44,7 @@ public class Google_Voice implements ChatPlugin {
 	
 	private void tryConnect() {
 		try {
-			voice = new Voice("john.mckisson@gmail.com", "!$Xdf4gh5");
+			voice = new Voice("", "");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
