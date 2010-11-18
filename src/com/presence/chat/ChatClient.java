@@ -109,7 +109,8 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 				break;
 				
 			case VERSION:
-				setVersion(message);
+				protocol.setVersion(message);
+				//setVersion(message);
 				break;
 		}
 		
@@ -222,10 +223,12 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		return myChannel;
 	}
 	
-	
+	/*
 	void setVersion(String ver) {
 		version = new String(ver);
+		System.out.println("version set");
  	}
+	*/
 	
 	
 	/**
@@ -347,6 +350,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	public void setProtocol(ChatProtocol prot) {
 		protocol = prot;
+		System.out.println("protocol set");
 	}
 	
 	public void setSocket(Channel sock) {

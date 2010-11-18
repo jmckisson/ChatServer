@@ -20,6 +20,8 @@ public abstract class ChatProtocol {
 	ChatClient myClient;
 	String content;
 	String version;
+	
+	boolean bufLimited = false;
 		
 	public ChatProtocol(ChatClient client) {
 		this.sock = client.getSocket();
@@ -50,19 +52,9 @@ public abstract class ChatProtocol {
 		sock.write(str);
 	}
 	
-	
-	/*
-	 * Sends a string to the socket encapsulating it in a chat command
-	 */
-	public void chatCmdToSocket(byte cmd, String str) {
-		ChatAccount ac = myClient.getAccount();
-		
-		if (ac != null && !ac.isCompact())
-			str += "\n";
-		
+	private void bufToSocket(byte cmd, String str) {
 		byte[] bytes = str.getBytes();
 		
-			
 		ChannelBuffer buf = ChannelBuffers.buffer(bytes.length + 4);
 		
 		buf.writeByte(cmd);
@@ -78,14 +70,62 @@ public abstract class ChatProtocol {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Sends a string to the socket encapsulating it in a chat command
+	 */
+	public void chatCmdToSocket(byte cmd, String str) {
+		ChatAccount ac = myClient.getAccount();
+		
+		if (ac != null && !ac.isCompact())
+			str += "\n";
+			
+		if (!bufLimited || str.length() < 4900) {
+			bufToSocket(cmd, str);
+			
+		} else {
+			//Break up the message into smaller packets so other clients can handle them
+			int idx = 4900; //Start at some index close to the limit
+			int loc = 0;
+			
+			while (idx != -1) {
+				//System.out.println("loc " + loc + " idx " + idx);
+			
+				while (true) {
+					idx = str.indexOf("\n", idx);
+					System.out.println("idx " + idx);
+					if (idx == -1 || idx - loc > 4900)	//Hit end of string or exceeded max buf length
+						break;
+					
+					idx++;	//Keep searching
+				}
+				
+				int end = idx != -1 ? idx : str.length();
+				
+				//System.out.println("substring from " + loc + " to " + end);
+				bufToSocket(cmd, str.substring(loc, end));
+				if (idx == -1)
+					break;
+				loc = idx;
+				idx += 4900;
+			}
+		}
+		
+	}
 
 	
 	public void sendVersion() {
-		chatCmdToSocket(VERSION.commandByte(), ChatServer.VERSION);
+		bufToSocket(VERSION.commandByte(), ChatServer.VERSION);
 	}
 	
-	void setVersion() {
-		version = new String(content);		
+	public String getVersion() {
+		return version;
+	}
+	
+	public void setVersion(String data) {
+		version = data;
+		if (version.toLowerCase().contains("mudmaster"))
+			bufLimited = true;
 	}
 	
 	
@@ -111,7 +151,7 @@ public abstract class ChatProtocol {
 	}
 	
 	public void sendNameChange(String name) {
-		chatCmdToSocket(NAME_CHANGE.commandByte(), name);
+		bufToSocket(NAME_CHANGE.commandByte(), name);
 	}
 	
 	/*
@@ -123,10 +163,10 @@ public abstract class ChatProtocol {
 	}
 	
 	public void sendPingResponse(String msg) {
-		chatCmdToSocket(PING_RESPONSE.commandByte(), msg);
+		bufToSocket(PING_RESPONSE.commandByte(), msg);
 	}
 	
 	public void startSnoop() {
-		chatCmdToSocket(SNOOP.commandByte(), "");
+		bufToSocket(SNOOP.commandByte(), "");
 	}
 }

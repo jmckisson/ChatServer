@@ -17,8 +17,8 @@ import static com.presence.chat.ANSIColor.*;
 
 public class CMDWho implements Command {
 
-	static final String HEADER = String.format( "%s[ %sName           %s][ %sAccount (Lvl)    %s][ %sRoom     %s][ %sAddress       %s][ %sProtocol %s]\n" +
-												"%s ----------------  ------------------  ----------  ---------------  ----------\n",
+	static final String HEADER = String.format( "%s[ %sName           %s][ %sAccount (Lvl)    %s][ %sRoom     %s][ %sAddress       %s][ %sVersion %s]\n" +
+												"%s ----------------  ------------------  ----------  ---------------  ---------\n",
 												BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT);
 
 	static String TEMPLATE = "  %s%-16s  %-18s  %s%-10s  %s%-15s  %-10s\n";
@@ -46,10 +46,10 @@ public class CMDWho implements Command {
 				roomName = String.format("%s%s%s", (room.getPassword() != null ? "*" : ""), lvlStr, room.getName());
 			}
 			
-			ChatProtocol prot = c.getProtocol();
-			String protName = (prot != null ? prot.toString() : "null");
+			String version = c.getProtocol().getVersion();
+			String verName = (version != null ? version.toString() : "null");
 			
-			strBuf.append(String.format(TEMPLATE, GRN, c.getName(), String.format("%s (%s)", account.getName(), account.getLevel()), CYN, roomName, YEL, c.getAddr(), protName));
+			strBuf.append(String.format(TEMPLATE, GRN, c.getName(), String.format("%s (%s)", account.getName(), account.getLevel()), CYN, roomName, YEL, c.getAddr(), verName));
 		}
 		
 		sender.sendChat(strBuf.toString());
