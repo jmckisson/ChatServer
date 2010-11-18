@@ -45,17 +45,17 @@ public class ChatLog {
 	 * Returns ANSI stripped message
 	 */
 	public String addEntry(String msg) {
-		entries.addFirst(new ChatLogEntry(msg));
+		ChatLogEntry entry = new ChatLogEntry(msg);
+		entries.addFirst(entry);
 		
-		//strip ansi from the logfile
-		msg = msg.replaceAll("\u001b\\[[0-9;]+m", "");
+		String stripped = entry.getStrippedMessage();
 		
-		Logger.getLogger("global").info("["+name+"] " + msg);
+		Logger.getLogger("global").info("["+name+"] " + stripped);
 
 		if (entries.size() > maxSize)
 			entries.removeLast();
 			
-		return msg;
+		return stripped;
 	}
 	
 	public int size() {
@@ -107,6 +107,11 @@ public class ChatLog {
 				
 		while (it.hasNext() && count > 0) {
 			ChatLogEntry entry = it.next();
+			
+			if (entry == null) {
+				Logger.getLogger("global").warning("entry somehow null!");
+				continue;
+			}
 			
 			String msg = entry.getStrippedMessage();
 			

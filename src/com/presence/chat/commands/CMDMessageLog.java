@@ -32,7 +32,7 @@ public class CMDMessageLog extends CMDLog implements Command {
 			return true;
 		}
 		
-		String strBuf = getLog(messageLog, sender, args);
+		String strBuf = messageLog.getLog(sender, args);
 		
 		if (strBuf.length() > 0)
 			sender.sendChat(strBuf);
