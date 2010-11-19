@@ -215,6 +215,8 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		
 		myAccount.updateLastLogin();
 		
+		NSNotificationCenter.defaultCenter().postNotification("ClientConnected", myName);
+		
 		ChatServer.getStats().connects++;
 	}
 	
@@ -345,6 +347,8 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		}
 		
 		log.info(String.format("%s has disconnected", myName));
+		
+		NSNotificationCenter.defaultCenter().postNotification("ClientDisconnected", myName);
 	}
 
 	
