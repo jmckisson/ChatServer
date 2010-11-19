@@ -7,6 +7,7 @@
 //
 package com.presence.chat;
 
+import java.util.Date;
 import java.util.prefs.*;
 
 public class ChatPrefs {

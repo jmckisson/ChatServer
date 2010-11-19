@@ -7,6 +7,8 @@
 //
 package com.presence.chat;
 
+import java.util.Date;
+
 public class ServerStats {
 
 	public long startTime;
@@ -20,8 +22,12 @@ public class ServerStats {
 	public int cmds;
 	public int exceptions;
 	
+	public Date startDate;
+	
 	public ServerStats() {
 		startTime = System.currentTimeMillis();
+		
+		startDate = new Date(startTime);
 		
 		connects = 0;
 		namechanges = 0;
