@@ -124,7 +124,8 @@ public abstract class ChatProtocol {
 	
 	public void setVersion(String data) {
 		version = data;
-		if (version.toLowerCase().contains("mudmaster"))
+		String lowVersion = version.toLowerCase();
+		if (lowVersion.contains("master") || lowVersion.contains("zchat"))
 			bufLimited = true;
 	}
 	
