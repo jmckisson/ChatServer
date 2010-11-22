@@ -20,6 +20,14 @@ public class ChatPrefs {
 	static final String PREF_SPAM_PROT		= "Spam Protection";
 	static final String PREF_SPAM_THRESH	= "Spam Threshold";
 	
+	public static String getPref(String pref, String def) {
+		return prefs.get(pref, def);
+	}
+	
+	public static void setPref(String pref, String val) {
+		prefs.put(pref, val);
+	}
+	
 	public static boolean getIPAuth() {
 		return prefs.getBoolean(PREF_AUTHIP, true);
 	}

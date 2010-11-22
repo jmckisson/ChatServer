@@ -127,6 +127,7 @@ public class PluginManager {
 				
 		} catch (InstantiationException e) {
 			Logger.getLogger("global").warning("Unable to load plugin (ins)");
+			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			Logger.getLogger("global").warning("Unable to load plugin, possibly because it is not public.");

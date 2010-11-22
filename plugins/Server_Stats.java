@@ -32,6 +32,9 @@ public class Server_Stats implements ChatPlugin {
 
 	static final String CHATS_PATH = "hourlyChat.xml";
 	static final String ONLINE_COUNT_PATH = "hourlyMaxOnline.xml";
+	static final String PREF_LAST_PUSH = "LastStatsPush";
+
+	static final int timeConst = 3600000;
 
 	Timer hourlyTimer;
 	int hourlyChats = 0;
@@ -42,6 +45,8 @@ public class Server_Stats implements ChatPlugin {
 
 	public void register() {
 	
+		System.out.println("register");
+	
 		XStream xs = PluginManager.getXStream();
 		
 		try {
@@ -50,8 +55,30 @@ public class Server_Stats implements ChatPlugin {
 			//TODO: clean this up
 			e.printStackTrace();
 		}
-	
-		ActionListener hourlyAL = new ActionListener() {
+		
+		long currentTime = System.currentTimeMillis();
+		
+		long lastPush = Long.parseLong(ChatPrefs.getPref(PREF_LAST_PUSH, String.valueOf(currentTime)));
+		
+		//Find different in hours between now and the last push, then fill in zeroes to account for downtime
+		long difMillis = (currentTime - lastPush);
+		
+		long difHours = difMillis / timeConst;
+		
+		if (difHours > 0) {
+			System.out.println("Filling in for " + difHours + " missed hours");
+		
+			for (int i = 0; i < difHours; i++) {
+				chats.addFirst(0);
+				maxOnline.addFirst(0);
+			}
+		}
+		
+		//Set initial delay to the time left the partial hour
+		int initialDelay = (int)(timeConst - (difMillis - (difHours * timeConst)));
+		System.out.println("Initial delay: " + initialDelay);
+
+		hourlyAL = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Push new values
 				synchronized (chats) {
@@ -60,21 +87,30 @@ public class Server_Stats implements ChatPlugin {
 					
 					hourlyChats = 0;
 					hourlyOnline = 0;
+					
+					ChatPrefs.setPref(PREF_LAST_PUSH, String.valueOf(System.currentTimeMillis()));
+					saveEntries();
 				}
 			}
 		};
+
 	
-		hourlyTimer = new Timer(3600000, hourlyAL);	//one hour
+		hourlyTimer = new Timer(timeConst, hourlyAL);	//one hour
+		hourlyTimer.setInitialDelay(initialDelay);
 		hourlyTimer.setRepeats(true);
 		hourlyTimer.start();
 	
 		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
 		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationClientConnected", new Class[] {NSNotification.class}), "ClientConnected", null);
+
+		ChatServer.addCommand("stats", new CMDStats(), 5);
 	}
 	
 	public String name() {
 		return "Server Stats";
 	}
+	
+	ActionListener hourlyAL;
 	
 	public void notificationChatAll(NSNotification n) {
 		synchronized (chats) {
@@ -90,8 +126,11 @@ public class Server_Stats implements ChatPlugin {
 		}
 	}
 	
-	private String makeHist(int[] data, String titleStr) {
+	private String makeHist(Integer[] data, String titleStr) {
 		StringBuilder strBuf = new StringBuilder(BLD);
+		
+		if (data.length == 0)
+			return "";
 		
 		DecimalFormat df = new DecimalFormat("###,###,###");
 	
@@ -135,6 +174,8 @@ public class Server_Stats implements ChatPlugin {
 		
 		strBuf.append(header);
 	
+		int bins = Math.min(60, data.length);
+	
 		//Loop over rows
 		for (int r = 0; r < 22; r++) {
 	
@@ -144,7 +185,7 @@ public class Server_Stats implements ChatPlugin {
 			strBuf.append(String.format(rowFormat, GRN, rowString[r], rowColor));
 			
 			//Loop over bins
-			for (int i = 0; i < 60; i++) {
+			for (int i = 0; i < bins; i++) {
 				//For each column check if the bin value is >= the row index value
 				if ((	data[i] > 0 && rowVal[r] >= 0 && data[i] >= rowVal[r]) ||
 					(	data[i] < 0 && rowVal[r] < 0 && data[i] < rowVal[r]))
@@ -159,6 +200,29 @@ public class Server_Stats implements ChatPlugin {
 		return strBuf.toString();
 	}
 	
+	
+	/////////////////////
+	// Stats Command
+	/////////////////////
+	class CMDStats implements Command {
+		public String help() { return "View Server Statistics"; }
+		
+		public String usage() { return String.format(ChatServer.USAGE_STRING, "remove [#]"); }
+		
+		public boolean execute(ChatClient sender, String[] args) {
+			Integer[] data = chats.toArray(new Integer[0]);
+			
+			sender.sendChat(makeHist(data, "Chats"));
+			
+			return true;
+		}
+	}
+	
+	public Server_Stats() {
+	}
+	
+	
+	
 	public Server_Stats(String title) {
 		int data[] = new int[] {500, 1000, 1005, 2000, 2005, 3000, 3005, 4000, 4005, 5000,
 								-50, -100, -105, -200,-205, -300, -305, -400, -450, -500,
@@ -169,8 +233,12 @@ public class Server_Stats implements ChatPlugin {
 								
 		for (int i = 0; i < data.length; i++)
 			data[i] *= 1000;
+			
+		Integer[] ints = new Integer[data.length];
+		int i = 0;
+		for (int val : data) ints[i++] = val;
 		
-		System.out.println(makeHist(data, title) + NRM);
+		System.out.println(makeHist(ints, title) + NRM);
 	}
 	
 	public void loadEntries() throws FileNotFoundException {

@@ -55,7 +55,6 @@ public class ChatServer {
 		commands.put("plugins",	new CommandEntry(new CMDPlugins(), 0));
 		commands.put("pmsg",	new CommandEntry(new CMDChatPrivate(), 0));
 		commands.put("who",		new CommandEntry(new CMDWho(), 0));
-		commands.put("stats",	new CommandEntry(new CMDStats(), 0));
 	
 		//Level 1 commands
 		commands.put("ccreate",	new CommandEntry(new CMDCreateRoom(), 1));
@@ -89,6 +88,7 @@ public class ChatServer {
 		//Level 5 commands
 		commands.put("accounts",new CommandEntry(new CMDAccounts(), 5));
 		commands.put("del",		new CommandEntry(new CMDDelete(), 5));
+		commands.put("info",	new CommandEntry(new CMDStats(), 5));
 		commands.put("setname", new CommandEntry(new CMDSetName(), 5));
 		commands.put("shutdown",new CommandEntry(new CMDShutdown(), 5));
 		//commands.put("wl",		new CommandEntry(new CMDWriteLog(), 5));
