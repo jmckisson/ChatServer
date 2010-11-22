@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.Timer;
 
+import com.webobjects.foundation.*;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.channel.*;
 
@@ -186,6 +187,12 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			//Kick them or something?
 			log.info(myName + " un-authenticated");
 			return;
+		}
+		
+		//Remove any previous zombie connection
+		for (ChatClient cl : ChatServer.getClients()) {
+			if (cl.getAccount() == myAccount && cl != this)
+				cl.disconnect();
 		}
 		
 		//Add incoming IP address to known addresses list for this account
