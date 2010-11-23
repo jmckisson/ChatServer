@@ -126,7 +126,7 @@ public class Server_Stats implements ChatPlugin {
 		}
 	}
 	
-	private String makeHist(Integer[] data, String titleStr) {
+	private String makeHist(Integer[] data, String header1, String header2, String titleStr) {
 		StringBuilder strBuf = new StringBuilder(BLD);
 		
 		if (data.length == 0)
@@ -138,13 +138,15 @@ public class Server_Stats implements ChatPlugin {
 		int[] rowVal = new int[22];
 		String[] rowString = new String[22];
 		
-		int high = Integer.MIN_VALUE, low = Integer.MAX_VALUE;
+		int high = 0, low = 0;
 		for (int i = 0; i < data.length; i++) {
 			if (data[i] > high)
 				high = data[i];
 			else if (data[i] < low)
 				low = data[i];
 		}
+		
+		System.out.printf("low: %d   high: %d\n", low, high);
 		
 		int dif = (int)Math.round((high - low) / 22.0);
 		
@@ -163,12 +165,29 @@ public class Server_Stats implements ChatPlugin {
 		
 		String rowFormat = String.format("%%s%%%ds%%s ", maxLen);
 
+		String h1String = "" + header1;
+		String h2String = "60 " + header2 + " Ago";
 		
-		int pad1 = (int)((30 - titleStr.length()) / 2.0);
-		int pad2 = titleStr.length() % 2 == 0 ? pad1 : pad1 + 1;
+		int len = h1String.length() + h2String.length() + titleStr.length();
 		
-		String headerFormat = String.format("%%%ds %s<-Yesterday%%%ds%sTOTAL %s%%%ds%s60 Days Ago->\n",
-											maxLen, RED, pad1, CYN, titleStr, pad2, RED);
+		//50 is 60 minus string length of "Total" (5), 1 space, <- and ->
+		int pad1 = (int)((50 - len) / 2.0);
+		
+		/*
+		System.out.println(len);
+		if (len % 2 == 0)
+			System.out.println("even");
+		else
+			System.out.println("odd");
+		*/
+		
+		int pad2 = len % 2 == 0 ? pad1 : pad1 + 1;
+		
+		String headerFormat = String.format("%%%ds%s <-%s%%%ds%sTotal %s%%%ds%s%s->\n",
+											maxLen, RED, h1String, pad1, CYN, titleStr, pad2, RED, h2String);
+		
+		//String headerFormat = String.format("%%%ds %s<-Yesterday%%%ds%sTOTAL %s%%%ds%s60 Days Ago->\n",
+		//									maxLen, RED, pad1, CYN, titleStr, pad2, RED);
 				
 		String header = String.format(headerFormat, " ", " ", " ");
 		
@@ -212,7 +231,7 @@ public class Server_Stats implements ChatPlugin {
 		public boolean execute(ChatClient sender, String[] args) {
 			Integer[] data = chats.toArray(new Integer[0]);
 			
-			sender.sendChat(makeHist(data, "Chats"));
+			//sender.sendChat(makeHist(data, "Chats"));
 			
 			return true;
 		}
@@ -223,22 +242,24 @@ public class Server_Stats implements ChatPlugin {
 	
 	
 	
-	public Server_Stats(String title) {
-		int data[] = new int[] {500, 1000, 1005, 2000, 2005, 3000, 3005, 4000, 4005, 5000,
-								-50, -100, -105, -200,-205, -300, -305, -400, -450, -500,
-								100, 200, 400, 800, 1600, 3200, -3200, -1600, -800, -400,
-								0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-								0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-								0, 0, 0, 0, 0, 0, 0, 0, 0, 5000};
+	public Server_Stats(String title, String h1, String h2) {
+		//int data[] = new int[] {500, 1000, 1005, 2000, 2005, 3000, 3005, 4000, 4005, 5000,
+		//						-50, -100, -105, -200,-205, -300, -305, -400, -450, -500,
+		//						100, 200, 400, 800, 1600, 3200, -3200, -1600, -800, -400,
+		//						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		//						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+		//						0, 0, 0, 0, 0, 0, 0, 0, 0, 5000};
+		
+		int data[] = new int[] {-1, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
 								
-		for (int i = 0; i < data.length; i++)
-			data[i] *= 1000;
+		//for (int i = 0; i < data.length; i++)
+		//	data[i] *= 1000;
 			
 		Integer[] ints = new Integer[data.length];
 		int i = 0;
 		for (int val : data) ints[i++] = val;
 		
-		System.out.println(makeHist(ints, title) + NRM);
+		System.out.println(makeHist(ints, h1, h2, title) + NRM);
 	}
 	
 	public void loadEntries() throws FileNotFoundException {
@@ -270,7 +291,7 @@ public class Server_Stats implements ChatPlugin {
 	}
 	
 	public static void main(String args[]) {
-		new Server_Stats(args != null ? args[0] : "Nothing");
+		new Server_Stats(args[0], args[1], args[2]);
 	}
 	
 	
