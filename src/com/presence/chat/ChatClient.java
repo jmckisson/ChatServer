@@ -65,6 +65,20 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		myName = name;
 		address = ip;
 		
+		ChatClient zombie = null;
+		
+		//Remove any previous zombie connection
+		for (ChatClient cl : ChatServer.getClients()) {
+			if (cl.getName() == name) {
+				zombie = cl;
+				break;
+			}
+		}
+		
+		
+		if (zombie != null)
+			zombie.disconnect();
+		
 		//Add to global client list
 		ChatServer.getClients().add(this);
 	}
@@ -187,12 +201,6 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			//Kick them or something?
 			log.info(myName + " un-authenticated");
 			return;
-		}
-		
-		//Remove any previous zombie connection
-		for (ChatClient cl : ChatServer.getClients()) {
-			if (cl.getAccount() == myAccount && cl != this)
-				cl.disconnect();
 		}
 		
 		//Add incoming IP address to known addresses list for this account
