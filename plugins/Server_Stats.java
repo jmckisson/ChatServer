@@ -231,7 +231,7 @@ public class Server_Stats implements ChatPlugin {
 		public boolean execute(ChatClient sender, String[] args) {
 			Integer[] data = chats.toArray(new Integer[0]);
 			
-			//sender.sendChat(makeHist(data, "Chats"));
+			sender.sendChat(makeHist(data, "Chats", "This Hour", "Hours"));
 			
 			return true;
 		}
