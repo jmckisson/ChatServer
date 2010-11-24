@@ -34,27 +34,9 @@ class BoardEntry implements Serializable {
 		author = client.getAccount().getName();
 		
 		if (client.getAccount().getLevel() >= 3) {
-			content = content.replace("&k", BLK);
-			content = content.replace("&r", RED);
-			content = content.replace("&g", GRN);
-			content = content.replace("&y", YEL);
-			content = content.replace("&b", BLU);
-			content = content.replace("&m", MAG);
-			content = content.replace("&c", CYN);
-			content = content.replace("&w", WHT);
-			content = content.replace("&N", NRM);
-			content = content.replace("&B", BLD);
+			content = ChatServer.makeANSI(content);
 			
-			title = title.replace("&k", BLK);
-			title = title.replace("&r", RED);
-			title = title.replace("&g", GRN);
-			title = title.replace("&y", YEL);
-			title = title.replace("&b", BLU);
-			title = title.replace("&m", MAG);
-			title = title.replace("&c", CYN);
-			title = title.replace("&w", WHT);
-			title = title.replace("&N", NRM);
-			title = title.replace("&B", BLD);
+			title = ChatServer.makeANSI(title);
 			
 			//Do some stupid stuff to pad the end of the title so brackets line up...
 			int escLoc, loc = 0, escLen = 0;

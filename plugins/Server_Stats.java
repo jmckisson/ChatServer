@@ -35,6 +35,8 @@ public class Server_Stats implements ChatPlugin {
 	static final String PREF_LAST_PUSH = "LastStatsPush";
 
 	static final int timeConst = 3600000;
+	
+	static final int MAXROWS = 22;
 
 	Timer hourlyTimer;
 	int hourlyChats = 0;
@@ -135,8 +137,6 @@ public class Server_Stats implements ChatPlugin {
 		DecimalFormat df = new DecimalFormat("###,###,###");
 	
 		//Compute row index values
-		int[] rowVal = new int[22];
-		String[] rowString = new String[22];
 		
 		int high = 0, low = 0;
 		for (int i = 0; i < data.length; i++) {
@@ -146,16 +146,23 @@ public class Server_Stats implements ChatPlugin {
 				low = data[i];
 		}
 		
-		System.out.printf("low: %d   high: %d\n", low, high);
+		int dif = high - low;
+		int binDif = dif < MAXROWS ? 1 : (int)Math.round(dif / MAXROWS);
+		int numRows = dif < MAXROWS ? dif + 1 : binDif;
 		
-		int dif = (int)Math.round((high - low) / 22.0);
+		int[] rowVal = new int[numRows];
+		String[] rowString = new String[numRows];
 		
+		//System.out.printf("low: %d   high: %d   dif: %d   binDif: %d numRows: %d\n", low, high, high - low, binDif, numRows);
+
 		int maxLen = 0;
-		for (int i = 0; i < 22; i++) {
+		
+		for (int i = 0; i < numRows; i++) {
+		
 			if (i == 0)
 				rowVal[0] = high;
 			else
-				rowVal[i] = rowVal[i - 1] - dif;
+				rowVal[i] = rowVal[i - 1] - binDif;
 				
 			//Find longest number string
 			rowString[i] = df.format(rowVal[i]);
@@ -185,9 +192,6 @@ public class Server_Stats implements ChatPlugin {
 		
 		String headerFormat = String.format("%%%ds%s <-%s%%%ds%sTotal %s%%%ds%s%s->\n",
 											maxLen, RED, h1String, pad1, CYN, titleStr, pad2, RED, h2String);
-		
-		//String headerFormat = String.format("%%%ds %s<-Yesterday%%%ds%sTOTAL %s%%%ds%s60 Days Ago->\n",
-		//									maxLen, RED, pad1, CYN, titleStr, pad2, RED);
 				
 		String header = String.format(headerFormat, " ", " ", " ");
 		
@@ -196,7 +200,7 @@ public class Server_Stats implements ChatPlugin {
 		int bins = Math.min(60, data.length);
 	
 		//Loop over rows
-		for (int r = 0; r < 22; r++) {
+		for (int r = 0; r < rowVal.length; r++) {
 	
 			String rowColor = rowVal[r] >= 0 ? YEL : RED;
 	
@@ -207,7 +211,7 @@ public class Server_Stats implements ChatPlugin {
 			for (int i = 0; i < bins; i++) {
 				//For each column check if the bin value is >= the row index value
 				if ((	data[i] > 0 && rowVal[r] >= 0 && data[i] >= rowVal[r]) ||
-					(	data[i] < 0 && rowVal[r] < 0 && data[i] < rowVal[r]))
+					(	data[i] < 0 && rowVal[r] < 0 && data[i] <= rowVal[r]))
 					strBuf.append("X");
 				else
 					strBuf.append(" ");
@@ -231,7 +235,7 @@ public class Server_Stats implements ChatPlugin {
 		public boolean execute(ChatClient sender, String[] args) {
 			Integer[] data = chats.toArray(new Integer[0]);
 			
-			sender.sendChat(makeHist(data, "Chats", "This Hour", "Hours"));
+			sender.sendChat(makeHist(data, "This Hour", "Hours", "Chats"));
 			
 			return true;
 		}
@@ -250,7 +254,7 @@ public class Server_Stats implements ChatPlugin {
 		//						0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 		//						0, 0, 0, 0, 0, 0, 0, 0, 0, 5000};
 		
-		int data[] = new int[] {-1, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
+		int data[] = new int[] {0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2};
 								
 		//for (int i = 0; i < data.length; i++)
 		//	data[i] *= 1000;

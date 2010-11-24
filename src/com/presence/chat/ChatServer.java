@@ -91,6 +91,7 @@ public class ChatServer {
 		commands.put("info",	new CommandEntry(new CMDStats(), 5));
 		commands.put("setname", new CommandEntry(new CMDSetName(), 5));
 		commands.put("shutdown",new CommandEntry(new CMDShutdown(), 5));
+		commands.put("spoof",	new CommandEntry(new CMDSpoof(), 5));
 		//commands.put("wl",		new CommandEntry(new CMDWriteLog(), 5));
 	}
 	
@@ -466,6 +467,13 @@ public class ChatServer {
 		}
 	}
 	*/
+	
+	public static String makeANSI(String str) {
+		str = str.replace("&k", BLK).replace("&r", RED).replace("&g", GRN).replace("&y", YEL).replace("&b", BLU).replace("&m", MAG)
+					.replace("&c", CYN).replace("&w", WHT).replace("&N", NRM).replace("&B", BLD);
+		
+		return str;
+	}
 	
 	public static void echo(String msg) {
 		

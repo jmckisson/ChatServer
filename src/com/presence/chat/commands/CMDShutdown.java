@@ -8,6 +8,7 @@
 package com.presence.chat.commands;
 
 import java.awt.event.*;
+import java.io.File;
 import java.util.logging.*;
 import javax.swing.Timer;
 
@@ -52,6 +53,13 @@ public class CMDShutdown implements Command {
 		}
 		
 		typeStr = "Restart";
+		
+		//Remove .killscript file
+		File killscript = new File(".killscript");
+		if (killscript.exists()) {
+			Logger.getLogger("global").info("Removing killscript file");
+			killscript.delete();
+		}
 	
 		float mins = seconds / 60.0f;
 			
