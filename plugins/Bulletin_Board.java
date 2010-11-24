@@ -24,7 +24,7 @@ import static com.presence.chat.ANSIColor.*;
 
 public class Bulletin_Board implements ChatPlugin {
 	
-	static final Pattern postPattern = Pattern.compile("^\"([A-Za-z!?,#@& ]+)\" (.*)", Pattern.DOTALL);
+	static final Pattern postPattern = Pattern.compile("^\"([0-9A-Za-z!?,#\\*\\(\\)@&/ ]+)\" (.*)", Pattern.DOTALL);
 	
 	static final String FILEPATH = "board.xml";
 	
