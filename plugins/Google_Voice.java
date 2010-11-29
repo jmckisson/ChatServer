@@ -25,6 +25,8 @@ public class Google_Voice implements ChatPlugin {
 
 	static final String NUMBER_FIELD = "SMSNumber";
 	static final String GROUP_FIELD = "SMSGroup";
+	static final String USER_PREF = "GVUSER";
+	static final String PASS_PREF = "GVPASS";
 
 	Voice voice = null;
 
@@ -35,6 +37,7 @@ public class Google_Voice implements ChatPlugin {
 		ChatServer.addCommand("sms", new CMDSendSMS(), 5);
 		ChatServer.addCommand("getsms", new CMDGetNumber(), 5);
 		ChatServer.addCommand("setsms", new CMDSetNumber(), 5);
+		ChatServer.addCommand("setgva",  new CMDSetVoiceAccount(), 5);
 		ChatServer.addCommand("smslist", new CMDListSMS(), 5);
 	}
 	
@@ -43,10 +46,43 @@ public class Google_Voice implements ChatPlugin {
 	}
 	
 	private void tryConnect() {
+		String user = ChatPrefs.getPref(USER_PREF, "");
+		String pass = ChatPrefs.getPref(PASS_PREF, "");
+	
 		try {
-			voice = new Voice("", "");
+			voice = new Voice(user, pass);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	class CMDSetVoiceAccount implements Command {
+		public String help() { return "Set GoogleVoice account data"; }
+		
+		public String usage() { return String.format(ChatServer.USAGE_STRING, "setgva <user> <pw>"); }
+	
+		public boolean execute(ChatClient sender, String[] args) {
+			//args[1] is the argument after the actual command
+			if (args.length < 2) {
+				sender.sendChat(usage());
+				return true;
+			}
+			
+			String[] accArgs = args[1].split(" ");
+			if (accArgs.length < 2) {
+				sender.sendChat(usage());
+				return true;
+			}
+			
+			String userName = accArgs[0];
+			String password = accArgs[1];
+			
+			ChatPrefs.setPref(USER_PREF, userName);
+			ChatPrefs.setPref(PASS_PREF, password);
+			
+			sender.sendChat(String.format("Ok, GVoice will now use the %s account.", userName));
+			
+			return true;
 		}
 	}
 	
@@ -106,23 +142,12 @@ public class Google_Voice implements ChatPlugin {
 				if (numbers.size() == 0) {
 					sender.sendChat("No recipients found...");
 				} else {
+					
+					Thread t = new Thread(new SMSSender(sender, numbers, messageStr));
+					t.start();
+				
 					sender.sendChat("Sending SMS Messages...");
 					
-					for (String number : numbers) {
-						try {
-							voice.sendSMS(number, messageStr);
-						} catch (IOException e) {
-							//Find account with this number
-							for (ChatAccount account : accounts) {
-								String num = account.getField(NUMBER_FIELD);
-								if (num.compareTo(number) == 0) {
-									sender.sendChat(String.format("Error sending SMS to %s (%s)", num, account.getName()));
-								}
-							}
-							e.printStackTrace();
-						}
-					}
-					sender.sendChat("Done!");
 				}
 			}
 			
@@ -263,6 +288,45 @@ public class Google_Voice implements ChatPlugin {
 			}
 			
 			return true;
+		}
+	}
+	
+	
+	class SMSSender implements Runnable {
+		List<String> numbers;
+		String message;
+		ChatClient sender;
+	
+		SMSSender(ChatClient sender, List<String> numbers, String message) {
+			this.sender = sender;
+			this.numbers = numbers;
+			this.message = message;
+		}
+	
+		public void run() {
+			synchronized (voice) {
+				sender.sendChat("Sending SMS Messages...");
+						
+				for (String number : numbers) {
+					try {
+						voice.sendSMS(number, message);
+					} catch (IOException e) {
+						//Find account with this number
+						List<ChatAccount> accounts = AccountManager.getAccounts();
+						synchronized (accounts) {
+						
+							for (ChatAccount account : accounts) {
+								String num = account.getField(NUMBER_FIELD);
+								if (num.compareTo(number) == 0) {
+									sender.sendChat(String.format("Error sending SMS to %s (%s)", num, account.getName()));
+								}
+							}
+						}
+						e.printStackTrace();
+					}
+				}
+				sender.sendChat("Done!");
+			}
 		}
 	}
 }
