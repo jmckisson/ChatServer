@@ -17,39 +17,57 @@ import static com.presence.chat.ANSIColor.*;
 
 public class CMDWho implements Command {
 
-	static final String HEADER = String.format( "%s[ %sName           %s][ %sAccount (Lvl)    %s][ %sRoom     %s][ %sAddress       %s][ %sVersion %s]\n" +
-												"%s ----------------  ------------------  ----------  ---------------  ---------\n",
-												BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT);
+	static final String HEADER = String.format( "%s[ %sName             %s][ %sIdle     %s][ %sAccount (Lvl)    %s][ %sRoom     %s][ %sAddress       %s][ %sVersion     %s]\n" +
+												"%s ------------------  ----------  ------------------  ----------  ---------------  -------------\n",
+												BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT, BLU, WHT);
 
-	static String TEMPLATE = "  %s%-16s  %-18s  %s%-10s  %s%-15s  %-10s\n";
+	//static String TEMPLATE = ;
 
 	public boolean execute(ChatClient sender, String[] args) {
 		//Send client a list of all connected clients
 			
 		StringBuilder strBuf = new StringBuilder(BLD + HEADER);
 		
-		for (Iterator<ChatClient> it = ChatServer.getClients().iterator() ; it.hasNext() ;) {
-			ChatClient c = it.next();
+		List<ChatClient> clients = ChatServer.getClients();
+		
+		synchronized (clients) {
+		
+			long timeNow = System.currentTimeMillis();
 			
-			ChatAccount account = c.getAccount();
-			if (account == null) {
-				//A client can have a null account if it has not yet been authenticated
-				Logger.getLogger("global").warning("Client object has null Account, still authenticating?");
-				continue;
+			for (Iterator<ChatClient> it = clients.iterator() ; it.hasNext() ;) {
+				ChatClient c = it.next();
+				
+				ChatAccount account = c.getAccount();
+				if (account == null) {
+					//A client can have a null account if it has not yet been authenticated
+					Logger.getLogger("global").warning("Client object has null Account, still authenticating?");
+					continue;
+				}
+				
+				ChatRoom room = c.getRoom();
+				String roomName = "null";
+				if (room != null) {
+					int lvl = room.getMinLevel();
+					String lvlStr = lvl > 0 ? "(" + lvl + ")" : "";
+					roomName = String.format("%s%s%s", (room.getPassword() != null ? "*" : ""), lvlStr, room.getName());
+				}
+				
+				String version = c.getProtocol().getVersion();
+				String verName = (version != null ? version.toString() : "null");
+				long last = c.getLastActivity();
+				float idle = (timeNow - last) / 60000.0f;
+				String idleStr = " ";
+								
+				if (idle >= 10.0f) {
+					if (idle > 90.0f)
+						idleStr += String.format("%.1f hr", idle / 60.0f);
+					else
+						idleStr += String.format("%.1f min", idle);
+				}
+				
+				strBuf.append(String.format("  %s%-18s %s%-12s %s%-18s  %s%-10s  %s%-15s  %-10s\n",
+					GRN, c.getName(), RED, idleStr, GRN, String.format("%s (%s)", account.getName(), account.getLevel()), CYN, roomName, YEL, c.getAddr(), verName));
 			}
-			
-			ChatRoom room = c.getRoom();
-			String roomName = "null";
-			if (room != null) {
-				int lvl = room.getMinLevel();
-				String lvlStr = lvl > 0 ? "(" + lvl + ")" : "";
-				roomName = String.format("%s%s%s", (room.getPassword() != null ? "*" : ""), lvlStr, room.getName());
-			}
-			
-			String version = c.getProtocol().getVersion();
-			String verName = (version != null ? version.toString() : "null");
-			
-			strBuf.append(String.format(TEMPLATE, GRN, c.getName(), String.format("%s (%s)", account.getName(), account.getLevel()), CYN, roomName, YEL, c.getAddr(), verName));
 		}
 		
 		sender.sendChat(strBuf.toString());

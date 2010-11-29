@@ -64,23 +64,6 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		//Logger.getLogger("global").info("new ChatClient: " + name + "("+ip+")");
 		myName = name;
 		address = ip;
-		
-		ChatClient zombie = null;
-		
-		//Remove any previous zombie connection
-		for (ChatClient cl : ChatServer.getClients()) {
-			if (cl.getName() == name) {
-				zombie = cl;
-				break;
-			}
-		}
-		
-		
-		if (zombie != null)
-			zombie.disconnect();
-		
-		//Add to global client list
-		ChatServer.getClients().add(this);
 	}
 	
 	/*
@@ -179,8 +162,9 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	}
 	
 	@Override
-	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {	
-		disconnect();
+	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+		if (authenticated)
+			disconnect();
 		
 		super.channelClosed(ctx, e);
 	}
@@ -200,6 +184,8 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		if (val == false) {
 			//Kick them or something?
 			log.info(myName + " un-authenticated");
+			ChatServer.disconnectClient(this);
+			
 			return;
 		}
 		
@@ -212,6 +198,22 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			AccountManager.saveAccounts();
 		}
 		
+		ChatClient zomb = null;
+		List<ChatClient> clients = ChatServer.getClients();
+		synchronized (clients) {
+			for (ChatClient cl : clients) {
+				if (cl.getName().toLowerCase().compareTo(myName.toLowerCase()) == 0) {
+					zomb = cl;
+					break;
+				}
+			}
+		}
+		
+		if (zomb != null)
+			zomb.setAuthenticated(false, null);
+		
+		//Add to global client list
+		ChatServer.addClient(this);
 		
 		//Send Version
 		sendChat(ChatServer.VERSION);
@@ -225,8 +227,9 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			
 		log.info(String.format("%s connected with %s", myName, reason));
 				
-		//Send person to room but dont echo
-		toRoom(ChatServer.getRoom("main"), null, false, false);
+		if (myRoom == null)	//Check if its a reconnect
+			//Send person to room but dont echo
+			toRoom(ChatServer.getRoom("main"), null, false, false);
 		
 		myAccount.updateLastLogin();
 		
@@ -339,7 +342,6 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			//Create a temporary level 0 account for this person based on their chatname
 			myAccount = new TemporaryChatAccount(myName);
 		
-		
 			setAuthenticated(true, "Guest Auth");
 		}
 			
@@ -369,11 +371,14 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	public void setProtocol(ChatProtocol prot) {
 		protocol = prot;
-		System.out.println("protocol set");
 	}
 	
 	public void setSocket(Channel sock) {
 		myChannel = sock;
+	}
+	
+	public Channel getChannel() {
+		return myChannel;
 	}
 	
 	public ChatAccount getAccount() {
@@ -402,6 +407,9 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		return myName;
 	}
 	
+	public long getLastActivity() {
+		return lastActivity;
+	}
 	
 	public ChatLog getMessageLog() {
 		if (messageLog == null)

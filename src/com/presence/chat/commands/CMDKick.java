@@ -38,15 +38,20 @@ public class CMDKick implements Command {
 		//Check if dude is online
 		boolean found = false;
 		ChatClient c = null;
-		Iterator<ChatClient> it = ChatServer.getClients().iterator();
 		
-		while (it.hasNext()) {
-			c = it.next();
+		List<ChatClient> clients = ChatServer.getClients();
+		
+		synchronized (clients) {
+			Iterator<ChatClient> it = clients.iterator();
 			
-			//if (name.equals(c.getName().toLowerCase())) {
-			if (name.equalsIgnoreCase(c.getName())) {
-				found = true;
-				break;
+			while (it.hasNext()) {
+				c = it.next();
+				
+				//if (name.equals(c.getName().toLowerCase())) {
+				if (name.equalsIgnoreCase(c.getName())) {
+					found = true;
+					break;
+				}
 			}
 		}
 		

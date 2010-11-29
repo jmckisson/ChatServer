@@ -116,10 +116,12 @@ public class ChatRoom {
 			return;
 		}
 		
-		//Remove them from listen list if they were listening to this channel
-		if (listeners.contains(person))
-			listeners.remove(person);
-		
+		synchronized (listeners) {
+			//Remove them from listen list if they were listening to this channel
+			if (listeners.contains(person))
+				listeners.remove(person);
+		}
+	
 		//Notify the room that a new person has joined
 		if (echo)
 			echo(String.format("%s[%s%s%s][%s%s%s] %s%s%s has joined the room", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED, WHT, person.getName(), RED), null);
@@ -130,10 +132,13 @@ public class ChatRoom {
 		Logger.getLogger("global").info(String.format("%s joined room %s", person.getName(), name));
 			
 		//Add dude to this room
-		people.add(person);
-		
+		synchronized (people) {
+			people.add(person);
+		}
+	
 		//RoomJoin hook
 		NSNotificationCenter.defaultCenter().postNotification("RoomJoin", person.getName() + ":" + getName());
+		
 	}
 	
 	
@@ -149,7 +154,9 @@ public class ChatRoom {
 			return;
 		}
 		
-		people.remove(person);
+		synchronized (people) {
+			people.remove(person);
+		}
 		
 		//RoomLeave hook
 		NSNotificationCenter.defaultCenter().postNotification("RoomLeave", person.getName() + ":" + getName());
@@ -161,7 +168,9 @@ public class ChatRoom {
 			ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s%s%s] has been destroyed", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED), null);
 			
 			ChatServer.getRooms().remove(name);
-			listeners.clear();
+			synchronized (listeners) {
+				listeners.clear();
+			}
 			
 			//RoomDestroy hook
 			NSNotificationCenter.defaultCenter().postNotification("RoomDestroy", getName());
@@ -191,7 +200,9 @@ public class ChatRoom {
 		Logger.getLogger("global").info(String.format("%s listens to room %s", person.getName(), name));
 			
 		//Add dude to this room
-		listeners.add(person);
+		synchronized (listeners) {
+			listeners.add(person);
+		}
 	}
 	
 	public void removeListener(ChatClient person, boolean echo) {
@@ -205,7 +216,9 @@ public class ChatRoom {
 		//Notify person
 		person.sendChat(String.format("%s[%s%s%s] You are no longer listening to room [%s%s%s]", RED, WHT, ChatPrefs.getName(), RED, WHT, name, RED));
 		
-		listeners.remove(person);
+		synchronized (listeners) {
+			listeners.remove(person);
+		}
 		
 		//Notify the room that a person has left
 		if (echo)
@@ -244,35 +257,40 @@ public class ChatRoom {
 		//Probably need to add carriage returns back in
 		//msg = "\n" + msg;
 		
-		Iterator<ChatClient> it = people.iterator();
-		
-		while (it.hasNext()) {
-			ChatClient client = it.next();
+		Iterator<ChatClient> it;
+		synchronized (people) {
+			it = people.iterator();
 			
-			if (exclude == client)
-				continue;
+			while (it.hasNext()) {
+				ChatClient client = it.next();
 				
-			//If the client has the sending account in their gag list, dont send them anything
-			if (ac != null && client.getAccount().hasGagged(accountName))
-				continue;
-			
-			client.sendChatAll(msg);
+				if (exclude == client)
+					continue;
+					
+				//If the client has the sending account in their gag list, dont send them anything
+				if (ac != null && client.getAccount().hasGagged(accountName))
+					continue;
+				
+				client.sendChatAll(msg);
+			}
 		}
 		
-		it = listeners.iterator();
+		synchronized (listeners) {
+			it = listeners.iterator();
 		
-		while (it.hasNext()) {
-			ChatClient client = it.next();
-			
-			if (exclude == client)
-				continue;
+			while (it.hasNext()) {
+				ChatClient client = it.next();
 				
-			//If the client has the sending account in their gag list, dont send them anything
-			if (ac != null && client.getAccount().hasGagged(ac.getName()))
-				continue;
-			
-			client.sendChatAll(String.format("%s[%s%s%s] %s", RED, YEL, name, RED, msg));
-			//client.sendChatAll(msg);
+				if (exclude == client)
+					continue;
+					
+				//If the client has the sending account in their gag list, dont send them anything
+				if (ac != null && client.getAccount().hasGagged(ac.getName()))
+					continue;
+				
+				client.sendChatAll(String.format("%s[%s%s%s] %s", RED, YEL, name, RED, msg));
+				//client.sendChatAll(msg);
+			}
 		}
 	
 		//ChatAll hook

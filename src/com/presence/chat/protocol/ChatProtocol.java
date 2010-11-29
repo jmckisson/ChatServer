@@ -10,6 +10,8 @@ package com.presence.chat.protocol;
 import org.jboss.netty.buffer.*;
 import org.jboss.netty.channel.Channel;
 
+import java.util.logging.*;
+
 import com.presence.chat.*;
 
 import static com.presence.chat.ANSIColor.*;
@@ -21,8 +23,11 @@ public abstract class ChatProtocol {
 	String content;
 	String version;
 	
+	static final int MAX_LEN = 3000;
+	
 	boolean bufLimited = false;
 		
+	//Socket needs to be set first
 	public ChatProtocol(ChatClient client) {
 		this.sock = client.getSocket();
 		myClient = client;
@@ -80,21 +85,23 @@ public abstract class ChatProtocol {
 		if (ac != null && !ac.isCompact())
 			str += "\n";
 			
-		if (!bufLimited || str.length() < 4900) {
+		if (!bufLimited || str.length() < MAX_LEN) {
 			bufToSocket(cmd, str);
 			
 		} else {
 			//Break up the message into smaller packets so other clients can handle them
-			int idx = 4900; //Start at some index close to the limit
+			int idx = MAX_LEN; //Start at some index close to the limit
 			int loc = 0;
+			
+			Logger.getLogger("global").info("Splitting up long message");
 			
 			while (idx != -1) {
 				//System.out.println("loc " + loc + " idx " + idx);
 			
 				while (true) {
 					idx = str.indexOf("\n", idx);
-					System.out.println("idx " + idx);
-					if (idx == -1 || idx - loc > 4900)	//Hit end of string or exceeded max buf length
+					//System.out.println("idx " + idx);
+					if (idx == -1 || idx - loc > MAX_LEN)	//Hit end of string or exceeded max buf length
 						break;
 					
 					idx++;	//Keep searching
@@ -107,10 +114,9 @@ public abstract class ChatProtocol {
 				if (idx == -1)
 					break;
 				loc = idx;
-				idx += 4900;
+				idx += MAX_LEN;
 			}
 		}
-		
 	}
 
 	

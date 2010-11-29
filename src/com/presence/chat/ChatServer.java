@@ -170,93 +170,12 @@ public class ChatServer {
 		spamTimer.start();
 	}
 	
-	/*
-	void mainLoop() throws Exception {
-		//Allocate an unbound server socket channel
-		ServerSocketChannel serverChannel = ServerSocketChannel.open();
-		
-		ServerSocket serverSocket = serverChannel.socket();
-		
-		mainSelector = Selector.open();
-		
-		try {
-			serverSocket.bind(new InetSocketAddress(ChatPrefs.getPort()));
-		} catch (BindException e) {
-			Logger.getLogger("global").severe("Address already bound, restarting in 5 seconds");
-			serverSocket = null;
-			Thread.sleep(5000);
-			return;
-		}
-		
-		serverChannel.configureBlocking(false);
-		
-		//Register selector with ssc
-		serverChannel.register(mainSelector, SelectionKey.OP_ACCEPT);
-		
-		Logger.getLogger("global").info("Server ready, listening on port " + ChatPrefs.getPort());
-		
-		while (keepRunning) {
-
-			//I'm using select without a timeout here to avoid additional overhead
-			//The selector is an instance member so we're able to wakeup() externally
-			int n = mainSelector.select();
-			
-			if (n == 0) continue;
-			
-			Iterator it = mainSelector.selectedKeys().iterator();
-			
-			while (it.hasNext()) {
-				SelectionKey key = (SelectionKey)it.next();
-				
-				//Invalid key, connection dropped or something
-				if (!key.isValid()) {
-					SocketChannel socketChannel = (SocketChannel)key.channel();
-		
-					ChatClient theClient = clients.get(socketChannel);
-					
-					if (theClient == null) {
-						Logger.getLogger("global").warning("Something bad happened trying to read data from a client that doesnt exist!");
-						socketChannel.close();
-					} else {
-						Logger.getLogger("global").warning("Closing socket with invalid key");
-						theClient.disconnect();
-					}
-				}
-				
-				//New connection
-				if (key.isAcceptable()) {
-					ServerSocketChannel server = (ServerSocketChannel)key.channel();
-					
-					SocketChannel channel = server.accept();
-					
-					registerClient(mainSelector, channel, SelectionKey.OP_READ);
-				}
-				
-				//New data
-				if (key.isReadable()) {
-					readDataFromSocket(key);
-				}
-				
-				//Done with this key
-				it.remove();
-			}
-		}
-		
-		serverChannel.close();
-	}
-	*/
 	
-	/*
-	void registerClient(Selector selector, SocketChannel channel, int ops) throws Exception {
-		if (channel == null) return;
-		
-		channel.configureBlocking(false);
-		
-		channel.register(selector, ops);	//Regsiter with selector
-		
-		clients.put(channel, new ChatClient(channel));
+	static public void addClient(ChatClient client) {
+		synchronized (clients) {
+			clients.add(client);
+		}
 	}
-	*/
 	
 	/**
 	 * Closes a clients socket, removes them from the client list, and logs their disconnect
@@ -269,48 +188,10 @@ public class ChatServer {
 			sock.close();
 		}
 		
-		clients.remove(client);
-	}
-
-	/*
-	void readDataFromSocket(SelectionKey key) throws Exception {
-		SocketChannel socketChannel = (SocketChannel)key.channel();
-		
-		ChatClient theClient = clients.get(socketChannel);
-		
-		if (theClient == null) {
-			Logger.getLogger("global").warning("Something bad happened trying to read data from a client that doesnt exist!");
-			socketChannel.close();
-			return;
-		}
-		
-		BUF.clear();
-		
-		try {
-			int numBytesRead = socketChannel.read(BUF);
-			
-			if (numBytesRead == -1) {
-				//Close channel on EOF, this invalidates the key
-				
-				Logger.getLogger("global").warning("EOF on socket");
-				theClient.disconnect();
-			
-			} else {
-				BUF.flip();
-				
-				theClient.processIncomingData();
-			}
-
-		} catch (IOException e) {
-			//Ok, we don't know what happened here...  This seems to be disconnecting clients a lot
-			Logger.getLogger("global").warning("Client Exception");
-			e.printStackTrace();
-			
-			//theClient.disconnect();
+		synchronized (clients) {
+			clients.remove(client);
 		}
 	}
-	*/
-	
 	
 	public static ServerStats getStats() {
 		return instance.stats;
@@ -407,15 +288,17 @@ public class ChatServer {
 	 * @return true if the specified person is online, false otherwise
 	 */
 	public static boolean checkOnlineName(String testName, String skip) {
-		Iterator<ChatClient> it = clients.iterator();
-		
-		while (it.hasNext()) {
-			ChatClient c = it.next();
+		synchronized (clients) {
+			Iterator<ChatClient> it = clients.iterator();
 			
-			String name = c.getName();
-			
-			if (name != null && name.equalsIgnoreCase(testName) && !name.equalsIgnoreCase(skip)) {
-				return true;
+			while (it.hasNext()) {
+				ChatClient c = it.next();
+				
+				String name = c.getName();
+				
+				if (name != null && name.equalsIgnoreCase(testName) && !name.equalsIgnoreCase(skip)) {
+					return true;
+				}
 			}
 		}
 		
@@ -425,14 +308,16 @@ public class ChatServer {
 	
 	public static ChatClient getClientByName(String name) {
 		
-		for (Iterator<ChatClient> it = getClients().iterator() ; it.hasNext() ;) {
-			ChatClient targ = it.next();
-			
-			if (targ.getName() == null) continue;
-			
-			if (targ.getName().equalsIgnoreCase(name))
-				return targ;
+		synchronized (clients) {
+			for (Iterator<ChatClient> it = getClients().iterator() ; it.hasNext() ;) {
+				ChatClient targ = it.next();
 				
+				if (targ.getName() == null) continue;
+				
+				if (targ.getName().equalsIgnoreCase(name))
+					return targ;
+					
+			}
 		}
 		
 		return null;

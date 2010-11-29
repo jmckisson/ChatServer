@@ -15,6 +15,7 @@ import org.jboss.netty.channel.*;
 import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
 
 import com.presence.chat.ChatClient;
+import com.presence.chat.ChatServer;
 import com.presence.chat.protocol.*;
 
 import static com.presence.chat.protocol.ChatCommand.*;
@@ -50,7 +51,7 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 		String[] nameAndIP = null;
 		
 		if (str.contains(":")) {
-			String[] result = str.split(":");
+			String[] result = str.split(":", 2);
 			
 			if (result[0].equals("CHAT")) {
 						
@@ -79,16 +80,62 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				nameAndIP[1] = "Something broke";
 			}
 			
-			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
+			/*
+			ChatClient client = null;
 			
-			pipeline.replace("handshake", "client", client);
-						
-			client.setSocket(e.getChannel());
+			//Find a previous zombie connection
+			for (ChatClient cl : ChatServer.getClients()) {
+				if (cl.getName().toLowerCase().compareTo(nameAndIP[0].toLowerCase()) == 0
+					&& cl.getAddr().compareTo(nameAndIP[1]) == 0) {
+					
+					client = cl;
+					Logger.getLogger("global").info("Found zombie instance for " + cl.getName());
+					//Logger.getLogger("global").info(cl.getAddr());
+					//Logger.getLogger("global").info(nameAndIP[1]);
+					break;
+				}
+			}
 			
-			ChatProtocol protocol = new MudMasterProtocol(client);
+			ChatProtocol protocol = null;
+			
+			if (client == null) {
+				Logger.getLogger("global").info("Creating new client instance for " + nameAndIP[0]);
+				client = new ChatClient(nameAndIP[0], nameAndIP[1]);
+				
+				pipeline.replace("handshake", "client", client);
+			
+				client.setSocket(e.getChannel());
+				
+				//Add to global client list
+				ChatServer.getClients().add(client);
+			} else {
+				client.setAuthenticated(false, "");
+				
+				pipeline.replace("handshake", "client", client);
+			
+				client.setSocket(e.getChannel());
+				
+				//client.setAuthenticated(true, "Reconnect");
+			}
+								
+			protocol = new MudMasterProtocol(client);
 			
 			client.setProtocol(protocol);
 			
+			protocol.sendConnectResponse();
+			protocol.sendVersion();
+			*/
+			
+			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
+
+			pipeline.replace("handshake", "client", client);
+
+			client.setSocket(e.getChannel());
+
+			ChatProtocol protocol = new MudMasterProtocol(client);
+
+			client.setProtocol(protocol);
+
 			protocol.sendConnectResponse();
 			protocol.sendVersion();
 			

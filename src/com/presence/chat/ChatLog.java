@@ -46,7 +46,10 @@ public class ChatLog {
 	 */
 	public String addEntry(String msg) {
 		ChatLogEntry entry = new ChatLogEntry(msg);
-		entries.addFirst(entry);
+		
+		synchronized (entries) {
+			entries.addFirst(entry);
+		}
 		
 		String stripped = entry.getStrippedMessage();
 		
@@ -98,44 +101,46 @@ public class ChatLog {
 		} else
 			count = Math.min(20, entries.size());
 		
-		Iterator<ChatLogEntry> it = entries.iterator();
-		
-		boolean compact = sender.getAccount().isCompact();
-		
-		//System.out.println("grepStr: " + grepStr);
-		//System.out.println("log size: " + entries.size() + " search count: " + count);
+		synchronized (entries) {
+			Iterator<ChatLogEntry> it = entries.iterator();
+			
+			boolean compact = sender.getAccount().isCompact();
+			
+			//System.out.println("grepStr: " + grepStr);
+			//System.out.println("log size: " + entries.size() + " search count: " + count);
+					
+			while (it.hasNext() && count > 0) {
+				ChatLogEntry entry = it.next();
 				
-		while (it.hasNext() && count > 0) {
-			ChatLogEntry entry = it.next();
-			
-			if (entry == null) {
-				Logger.getLogger("global").warning("entry somehow null!");
-				continue;
-			}
-			
-			String msg = entry.getStrippedMessage();
-			
-			//System.out.println("checking for: '" + grepStr + "' in: '" + msg + "'");
-			
-			if (grepStr == null || (grepStr != null && msg.toLowerCase().contains(grepStr))) {
+				if (entry == null) {
+					Logger.getLogger("global").warning("Entry iterator returned null entry!");
+					break;
+				}
+				
+				String msg = entry.getStrippedMessage();
+				
+				//System.out.println("checking for: '" + grepStr + "' in: '" + msg + "'");
+				
+				if (grepStr == null || (grepStr != null && msg.toLowerCase().contains(grepStr))) {
 
-				strBuf.insert(0, String.format(TEMPLATE + "%s", df.format(entry.getDate()), entry.getMessage(), (compact ? "" : "\n")));
-			
-				count--;
-			
-				//if (it.hasPrevious() && !compact)
-				//	strBuf.append("\n");
-						
-			} else
-				continue;
-			
-			//Break into multiple chats if the message gets long
-			/*
-			if (strBuf.length() >= 4000) {
-				sender.sendChat(strBuf.toString());
-				strBuf.setLength(0);
+					strBuf.insert(0, String.format(TEMPLATE + "%s", df.format(entry.getDate()), entry.getMessage(), (compact ? "" : "\n")));
+				
+					count--;
+				
+					//if (it.hasPrevious() && !compact)
+					//	strBuf.append("\n");
+							
+				} else
+					continue;
+				
+				//Break into multiple chats if the message gets long
+				/*
+				if (strBuf.length() >= 4000) {
+					sender.sendChat(strBuf.toString());
+					strBuf.setLength(0);
+				}
+				*/
 			}
-			*/
 		}
 		
 		return strBuf.toString();

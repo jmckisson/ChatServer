@@ -7,6 +7,7 @@
 //
 package com.presence.chat.commands;
 
+import java.util.List;
 import java.util.logging.*;
 
 import com.presence.chat.*;
@@ -39,8 +40,11 @@ public class CMDSetName implements Command {
 		
 		ChatPrefs.setName(args[1]);
 		
-		for (ChatClient cl : ChatServer.getClients()) {
-			cl.sendNameChange(args[1]);
+		List<ChatClient> clients = ChatServer.getClients();
+		synchronized (clients) {
+			for (ChatClient cl : clients) {
+				cl.sendNameChange(args[1]);
+			}
 		}
 
 		return true;
