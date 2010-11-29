@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.*;
 import javax.swing.Timer;
 
 import com.presence.chat.*;
@@ -46,9 +47,7 @@ public class Server_Stats implements ChatPlugin {
 	LinkedList<Integer> chats, maxOnline;
 
 	public void register() {
-	
-		System.out.println("register");
-	
+		
 		XStream xs = PluginManager.getXStream();
 		
 		try {
@@ -68,7 +67,7 @@ public class Server_Stats implements ChatPlugin {
 		long difHours = difMillis / timeConst;
 		
 		if (difHours > 0) {
-			System.out.println("Filling in for " + difHours + " missed hours");
+			Logger.getLogger("global").info("Filling in for " + difHours + " missed hours");
 		
 			for (int i = 0; i < difHours; i++) {
 				chats.addFirst(0);
@@ -78,7 +77,7 @@ public class Server_Stats implements ChatPlugin {
 		
 		//Set initial delay to the time left the partial hour
 		int initialDelay = (int)(timeConst - (difMillis - (difHours * timeConst)));
-		System.out.println("Initial delay: " + initialDelay);
+		Logger.getLogger("global").info("Initial delay: " + initialDelay);
 
 		hourlyAL = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -105,7 +104,7 @@ public class Server_Stats implements ChatPlugin {
 		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
 		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationClientConnected", new Class[] {NSNotification.class}), "ClientConnected", null);
 
-		ChatServer.addCommand("stats", new CMDStats(), 5);
+		ChatServer.addCommand("stats", new CMDStats(), 2);
 	}
 	
 	public String name() {
@@ -137,9 +136,10 @@ public class Server_Stats implements ChatPlugin {
 		DecimalFormat df = new DecimalFormat("###,###,###");
 	
 		//Compute row index values
+		int dataLen = Math.min(60, data.length);
 		
 		int high = 0, low = 0;
-		for (int i = 0; i < data.length; i++) {
+		for (int i = 0; i < dataLen; i++) {
 			if (data[i] > high)
 				high = data[i];
 			else if (data[i] < low)
@@ -147,8 +147,8 @@ public class Server_Stats implements ChatPlugin {
 		}
 		
 		int dif = high - low;
-		int binDif = dif < MAXROWS ? 1 : (int)Math.round(dif / MAXROWS);
-		int numRows = dif < MAXROWS ? dif + 1 : binDif;
+		int binDif = dif < MAXROWS ? 1 : (int)dif / MAXROWS;
+		int numRows = dif < MAXROWS ? dif + 1 : MAXROWS;
 		
 		int[] rowVal = new int[numRows];
 		String[] rowString = new String[numRows];
