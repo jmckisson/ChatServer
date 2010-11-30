@@ -11,7 +11,10 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.*;
 
+import com.presence.chat.ChatPrefs;
+
 import com.thoughtworks.xstream.*;
+import com.webobjects.foundation.NSNotificationCenter;
 
 public class PluginManager {
 	ClassLoader classLoader;
@@ -141,22 +144,57 @@ public class PluginManager {
 	 * Locates and installs user plugins
 	 */
 	public void installPlugins() {
-		String[] plugins = findPlugins();
+		//String[] plugins = findPlugins();
+		
+		String pString = ChatPrefs.getPref("Plugins", "");
+		if (pString.equals(""))
+			return;
+		
+		String[] plugins = pString.split(";");
 		
 		if (plugins == null)
 			return;
 			
+		ChatPrefs.setPref("Plugins", "");
+			
 		Logger.getLogger("global").info(String.format("Installing %d plugins:", plugins.length));
 
 		for (int i = 0; i < plugins.length; i++) {
-			installUserPlugin(plugins[i]);
+			if (!plugins[i].equals(""))
+				installUserPlugin(plugins[i]);
 		}
+	}
+	
+	
+	public void reloadPlugins() {
+		NSNotificationCenter.defaultCenter().postNotification("PluginReload", null);
+	
+		pluginsTable.clear();
+		
+		xstream.setClassLoader(null);
+		xstream = null;
+		
+		((ChatPluginClassLoader)classLoader).clearCache();
+		classLoader = null;
+		System.gc();
+		System.gc();
+		
+		xstream = new XStream();
+		xstream.autodetectAnnotations(true);
+		xstream.setClassLoader(getClassLoader());
+		installPlugins();
 	}
 
 
 	/** Installs a plugin in the Plugins menu using the class name,
 		with underscores replaced by spaces, as the command. */
-	void installUserPlugin(String className) {
+	public void installUserPlugin(String className) {
+	
+		String plugins = ChatPrefs.getPref("Plugins", "");
+		
+		if (plugins.contains(className)) {
+			return;
+		}
 	
 		Logger.getLogger("global").info(String.format("Installing plugin: %s", className));
 
@@ -175,7 +213,11 @@ public class PluginManager {
 			
 		pluginsTable.put(command, className.replace('/', '.'));
 		
-		runUserPlugIn(className);
+		Object plug = runUserPlugIn(className);
+		if (plug != null) {
+			plugins += className + ";";
+			ChatPrefs.setPref("Plugins", plugins);
+		}
 	}
 	
 	

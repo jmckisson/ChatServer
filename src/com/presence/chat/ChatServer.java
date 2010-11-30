@@ -40,9 +40,8 @@ public class ChatServer {
 	
 	javax.swing.Timer spamTimer = null;
 	javax.swing.Timer shutdownTimer = null;
-
-	
-	static {
+			
+	public static void loadCommands() {
 		commands = new Hashtable<String, CommandEntry>();
 	
 		//Level 0 commands
@@ -92,24 +91,20 @@ public class ChatServer {
 		commands.put("setname", new CommandEntry(new CMDSetName(), 5));
 		commands.put("shutdown",new CommandEntry(new CMDShutdown(), 5));
 		commands.put("spoof",	new CommandEntry(new CMDSpoof(), 5));
+		commands.put("load",	new CommandEntry(new CMDLoadPlugin(), 5));
+		commands.put("reload",	new CommandEntry(new CMDReloadPlugins(), 5));
+		
 		//commands.put("wl",		new CommandEntry(new CMDWriteLog(), 5));
 	}
 	
 	public static void addCommand(String str, Command cmd, int level) {
 		commands.put(str, new CommandEntry(cmd ,level));
 	}
-	
+
 
 	public static final String VERSION = "jChatServ by Humera, " + ChatServer.class.getPackage().getImplementationVersion();
 	
 	public static String USAGE_STRING = ChatPrefs.getName() + " chats to you, 'Usage: /chat " + ChatPrefs.getName() + " %s'";
-	
-	//Use the same ByteBuffer for all channels.  A single thread is servicing all the channels
-	//so there is no danger of concurrent access
-	//public static ByteBuffer BUF = ByteBuffer.allocateDirect(40960);	//40k buffer
-
-	
-	//Selector mainSelector;
 	
 	boolean keepRunning = true;
 	
@@ -120,6 +115,8 @@ public class ChatServer {
 	public ChatServer() throws Exception {
 	
 		instance = this;
+		
+		loadCommands();
 		
 		stats = new ServerStats();
 		
@@ -147,12 +144,23 @@ public class ChatServer {
 		
 		Logger.getLogger("global").info("Serving shutting down");
 		
+		NSNotificationCenter.defaultCenter().postNotification("ServerShutdown", null);
+		
 		AccountManager.saveAccounts();
 		
 		while (clients.size() > 0)
 			disconnectClient(clients.get(0));
 		
 		telnetServer.shutdown();
+	}
+	
+	public void reloadPlugins() {
+		loadCommands();
+		pManager.reloadPlugins();
+	}
+	
+	public void loadPlugin(String pName) {
+		pManager.installUserPlugin(pName);
 	}
 	
 	

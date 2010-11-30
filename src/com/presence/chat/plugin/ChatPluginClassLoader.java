@@ -38,6 +38,11 @@ public class ChatPluginClassLoader extends ClassLoader {
 		super(Thread.currentThread().getContextClassLoader());
 		init(path);
 	}
+	
+	public void clearCache() {
+		cache.clear();
+		jarFiles.clear();
+	}
 
 	void init(String path) {
 		this.path = path;
@@ -62,8 +67,10 @@ public class ChatPluginClassLoader extends ClassLoader {
 	}
 
     private void addJAR(File f) {
-        if (f.getName().endsWith(".jar") || f.getName().endsWith(".zip"))
+        if (f.getName().endsWith(".jar") || f.getName().endsWith(".zip")) {
+			System.out.println("Adding JAR file: " + f.getName());
             jarFiles.addElement(f);
+		}
     }
 
     /**
