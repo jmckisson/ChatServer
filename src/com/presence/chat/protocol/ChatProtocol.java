@@ -23,6 +23,8 @@ public abstract class ChatProtocol {
 	String content;
 	String version;
 	
+	ChannelBuffer lastBuffer;
+	
 	static final int MAX_LEN = 3000;
 	
 	boolean bufLimited = false;
@@ -36,6 +38,10 @@ public abstract class ChatProtocol {
 	
 	public String toString() {
 		return "Generic";
+	}
+	
+	public ChannelBuffer getLastBuffer() {
+		return lastBuffer;
 	}
 	
 	
@@ -69,6 +75,8 @@ public abstract class ChatProtocol {
 		if (!sock.isOpen())
 			return;
 			
+		lastBuffer = ChannelBuffers.copiedBuffer(buf);
+			
 		try {
 			sock.write(buf);
 		} catch (Exception e) {
@@ -95,6 +103,8 @@ public abstract class ChatProtocol {
 			
 			Logger.getLogger("global").info("Splitting up long message");
 			
+			boolean needBold = false;
+			
 			while (idx != -1) {
 				//System.out.println("loc " + loc + " idx " + idx);
 			
@@ -109,12 +119,24 @@ public abstract class ChatProtocol {
 				
 				int end = idx != -1 ? idx : str.length();
 				
+				String s = str.substring(loc, end);
+				
 				//System.out.println("substring from " + loc + " to " + end);
-				bufToSocket(cmd, str.substring(loc, end));
+				bufToSocket(cmd, (needBold ? BLD : "") + s);
 				if (idx == -1)
 					break;
+					
 				loc = idx;
 				idx += MAX_LEN;
+				
+				
+				//Apparently MM and Zmud reset back to NRM for each incoming chat
+				//So here we find out if the last character is supposed to be bold
+				//and prepend a bold to the next buffer... (stupid, yes)
+				int boldIdx = s.lastIndexOf("[1m");
+				int nrmIdx = s.lastIndexOf("[0m");
+				needBold = (boldIdx > nrmIdx);
+				
 			}
 		}
 	}

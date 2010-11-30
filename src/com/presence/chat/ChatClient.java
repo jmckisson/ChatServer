@@ -87,6 +87,13 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		super.handleDownstream(ctx, e);
 	}
 	*/
+	
+	/*
+	@Override
+	public void writeRequested(ChannelHandlerContext ctx, MessageEvent e) {
+		lastEvent = e;
+	}
+	*/
 
 	
 	@Override
@@ -158,6 +165,14 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			msg += buf.readByte() + " ";
 		}
 		System.out.println(msg);
+		System.out.println("=======");
+		buf = protocol.getLastBuffer();
+		msg = "";
+		while (buf.readable()) {
+			msg += buf.readByte() + " ";
+		}
+		System.out.println(msg);
+		System.out.println("=======");
 		ChatServer.getStats().exceptions++;
 	}
 	
