@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.*;
 
 import com.presence.chat.*;
 import com.presence.chat.commands.Command;
@@ -29,11 +30,22 @@ public class Google_Voice implements ChatPlugin {
 	static final String PASS_PREF = "GVPASS";
 
 	Voice voice = null;
+	boolean commandsLoaded = false;
 
 	public void register() {
 		
-		tryConnect();
+		if (!tryConnect())
+			return;
 		
+		loadCommands();
+	}
+	
+	public String name() {
+		return "Google Voice";
+	}
+	
+	public void loadCommands() {
+		commandsLoaded = true;
 		ChatServer.addCommand("sms", new CMDSendSMS(), 5);
 		ChatServer.addCommand("getsms", new CMDGetNumber(), 5);
 		ChatServer.addCommand("setsms", new CMDSetNumber(), 5);
@@ -41,19 +53,24 @@ public class Google_Voice implements ChatPlugin {
 		ChatServer.addCommand("smslist", new CMDListSMS(), 5);
 	}
 	
-	public String name() {
-		return "Google Voice";
-	}
-	
-	private void tryConnect() {
+	private boolean tryConnect() {
 		String user = ChatPrefs.getPref(USER_PREF, "");
 		String pass = ChatPrefs.getPref(PASS_PREF, "");
+		
+		if (user.equals("") || pass.equals("")) {
+			Logger.getLogger("global").warning("No username/password set, disabling...");
+			return false;
+		}
 	
 		try {
 			voice = new Voice(user, pass);
 		} catch (IOException e) {
 			e.printStackTrace();
+			voice = null;
+			return false;
 		}
+		
+		return true;
 	}
 	
 	class CMDSetVoiceAccount implements Command {
@@ -81,6 +98,12 @@ public class Google_Voice implements ChatPlugin {
 			ChatPrefs.setPref(PASS_PREF, password);
 			
 			sender.sendChat(String.format("Ok, GVoice will now use the %s account.", userName));
+			
+			if (!tryConnect())
+				return true;
+				
+			if (!commandsLoaded)
+				loadCommands();
 			
 			return true;
 		}

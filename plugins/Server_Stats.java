@@ -73,6 +73,9 @@ public class Server_Stats implements ChatPlugin {
 				chats.addFirst(0);
 				maxOnline.addFirst(0);
 			}
+		} else {
+			hourlyChats = chats.pop();
+			hourlyOnline = maxOnline.pop();
 		}
 		
 		//Set initial delay to the time left the partial hour
@@ -81,17 +84,7 @@ public class Server_Stats implements ChatPlugin {
 
 		hourlyAL = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Push new values
-				synchronized (chats) {
-					chats.addFirst(hourlyChats);
-					maxOnline.addFirst(hourlyOnline);
-					
-					hourlyChats = 0;
-					hourlyOnline = 0;
-					
-					ChatPrefs.setPref(PREF_LAST_PUSH, String.valueOf(System.currentTimeMillis()));
-					saveEntries();
-				}
+				pushStats();
 			}
 		};
 
@@ -100,15 +93,33 @@ public class Server_Stats implements ChatPlugin {
 		hourlyTimer.setInitialDelay(initialDelay);
 		hourlyTimer.setRepeats(true);
 		hourlyTimer.start();
+		
+		NSNotificationCenter nc = ChatServer.getNotificationCenter();
 	
-		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
-		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationClientConnected", new Class[] {NSNotification.class}), "ClientConnected", null);
+		nc.addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
+		nc.addObserver(this, new NSSelector("notificationClientConnected", new Class[] {NSNotification.class}), "ClientConnected", null);
+		nc.addObserver(this, new NSSelector("notificationNeedDataPush", new Class[] {NSNotification.class}), "ServerShutdown", null);
+		nc.addObserver(this, new NSSelector("notificationNeedDataPush", new Class[] {NSNotification.class}), "PluginReload", null);
 
 		ChatServer.addCommand("stats", new CMDStats(), 2);
 	}
 	
 	public String name() {
 		return "Server Stats";
+	}
+	
+	void pushStats() {
+		//Push new values
+		synchronized (chats) {
+			chats.push(hourlyChats);
+			maxOnline.push(hourlyOnline);
+			
+			hourlyChats = 0;
+			hourlyOnline = 0;
+			
+			ChatPrefs.setPref(PREF_LAST_PUSH, String.valueOf(System.currentTimeMillis()));
+			saveEntries();
+		}
 	}
 	
 	ActionListener hourlyAL;
@@ -127,6 +138,10 @@ public class Server_Stats implements ChatPlugin {
 		}
 	}
 	
+	public void notificationNeedDataPush(NSNotification n) {
+		pushStats();
+	}
+	
 	private String makeHist(Integer[] data, String header1, String header2, String titleStr) {
 		StringBuilder strBuf = new StringBuilder(BLD);
 		
@@ -137,7 +152,7 @@ public class Server_Stats implements ChatPlugin {
 	
 		//Compute row index values
 		int dataLen = Math.min(60, data.length);
-		
+				
 		int high = 0, low = 0;
 		for (int i = 0; i < dataLen; i++) {
 			if (data[i] > high)
@@ -230,12 +245,75 @@ public class Server_Stats implements ChatPlugin {
 	class CMDStats implements Command {
 		public String help() { return "View Server Statistics"; }
 		
-		public String usage() { return String.format(ChatServer.USAGE_STRING, "remove [#]"); }
+		public String usage() { return String.format(ChatServer.USAGE_STRING, "stats <daily|hourly>"); }
 		
 		public boolean execute(ChatClient sender, String[] args) {
+			
+			if (args.length < 2) {
+				sender.sendChat(usage());
+				return true;
+			}
+			
+			/*
+			String[] statArgs = args[1].split(" ");
+			
+			if (statArgs.length < 2) {
+				sender.sendChat(usage());
+				return true;
+			}
+			*/
+			
+			//Push current hourly chats
+			chats.push(hourlyChats);
+			
 			Integer[] data = chats.toArray(new Integer[0]);
 			
-			sender.sendChat(makeHist(data, "This Hour", "Hours", "Chats"));
+			String type = args[1].toLowerCase();
+			String header1, header2, header3 = "Chats";
+			
+			if (args[1].compareTo("daily") == 0) {
+				int[] dayData = new int[(data.length / 24) + 1];
+				
+				//System.out.println("dayData.length: " + dayData.length);
+				
+				int day = dayData.length - 1;
+				int hour = 0;
+				int i = data.length - 1;
+				//try {
+					for (; i >= 0; i--) {
+					
+						//System.out.println("dayData["+day+"]("+dayData[day]+") += data["+i+"]("+data[i]+")");
+					
+						dayData[day] += data[i];
+						
+						if (++hour % 24 == 0)
+							day--;
+
+					}
+				//} catch (NullPointerException e) {
+				//	System.out.printf("datalen: %d, dayDataLen %d, i: %d", data.length, dayData.length, 1);
+				//}
+				
+				data = new Integer[dayData.length];
+				for (i = 0; i < dayData.length; i++)
+					data[i] = dayData[i];
+				
+				header1 = "Today";
+				header2 = "Days";
+								
+			} else if (args[1].compareTo("hourly") == 0) {
+				header1 = "This Hour";
+				header2 = "Hours";
+				
+			} else {
+				sender.sendChat(usage());
+				return true;
+			}
+
+			sender.sendChat(makeHist(data, header1, header2, header3));
+			
+			//Pop hourly chats back off
+			chats.pop();
 			
 			return true;
 		}
