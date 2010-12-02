@@ -38,9 +38,9 @@ public class Battleship implements ChatPlugin {
 						DESTROYER = 5;	//2
 						
 	static final String[] ROW = new String[] {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
-	static final int NUM[] = new int[] {CARRIER, BATTLESHIP, CRUISER, SUBMARINE, DESTROYER};
-	static final String[] NAME = new String[] {"Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
-	static final String[] SHIP = new String[] {"", "C", "B", "R", "S", "D"};
+	static final int NUM[] = new int[] {NONE, CARRIER, BATTLESHIP, CRUISER, SUBMARINE, DESTROYER};
+	static final String[] NAME = new String[] {"ERROR", "Carrier", "Battleship", "Cruiser", "Submarine", "Destroyer"};
+	static final String[] SHIP = new String[] {"X", "C", "B", "R", "S", "D"};
 	static final int SLOT[] = new int[] {0, 5, 4, 3, 3, 2};
 						
 	class CMDBShip implements Command {
@@ -50,10 +50,28 @@ public class Battleship implements ChatPlugin {
 		
 		private Point parsePosition(String pos) {
 			int x, y;
+			System.out.println("parsePosition: " + pos);
 			try {
-				y = Integer.parseInt(pos.substring(0, 1), 16);
-				x = Integer.parseInt(pos.substring(1, 1));
+				String s = pos.substring(0, 1);
+				System.out.println("s: " + s);
+				if (s.equalsIgnoreCase("a"))		y = 0;
+				else if (s.equalsIgnoreCase("b"))	y = 1;
+				else if (s.equalsIgnoreCase("c"))	y = 2;
+				else if (s.equalsIgnoreCase("d"))	y = 3;
+				else if (s.equalsIgnoreCase("e"))	y = 4;
+				else if (s.equalsIgnoreCase("f"))	y = 5;
+				else if (s.equalsIgnoreCase("g"))	y = 6;
+				else if (s.equalsIgnoreCase("h"))	y = 7;
+				else if (s.equalsIgnoreCase("i"))	y = 8;
+				else								y = 9;
+				//y = Integer.parseInt(pos.substring(0, 1), 16);
+				
+				s = pos.substring(1);
+				System.out.println("s: " + s);
+				
+				x = Integer.parseInt(s);
 			} catch (NumberFormatException e) {
+				e.printStackTrace();
 				return null;
 			}
 			
@@ -136,6 +154,8 @@ public class Battleship implements ChatPlugin {
 				if (game.getEnemy(sender).isReady()) {
 					game.start();
 					game.nextTurn();
+				} else {
+					game.getEnemy(sender).client().sendChat("The other player is waiting on you!");
 				}
 					
 					
@@ -185,6 +205,8 @@ public class Battleship implements ChatPlugin {
 					return true;
 				}
 				
+				System.out.println("Found ship: " + ship);
+				
 				//Check if ship is already placed
 				if (player.isPlaced(ship - 1)) {
 					sender.sendChat("You've already placed that ship! Use reset to reset playfield");
@@ -201,8 +223,12 @@ public class Battleship implements ChatPlugin {
 				int x = (int)loc.getX();
 				int y = (int)loc.getY();
 				
+				System.out.println("x: "+ x + "  y: " + y);
+				
 				//Get alignment
 				boolean vert = shipArgs[3].toLowerCase().startsWith("v");
+				
+				System.out.println("vertical: " + (vert ? "yes" : "no"));
 				
 				PlayField myField = player.getField();
 				
@@ -212,7 +238,7 @@ public class Battleship implements ChatPlugin {
 					for (int i = 0; i < SLOT[ship]; i++) {
 						int tile = myField.getTile(loc);
 						
-						if ((tile & 0x5) != 0) {
+						if ((tile & 0x7) != 0) {
 							fail = true;
 							sender.sendChat("That would overlap another ship!");
 							break;
@@ -230,9 +256,13 @@ public class Battleship implements ChatPlugin {
 					return true;
 					
 				//Ok it should fit and isnt overlapping
+				System.out.println("placing ship: " + NAME[ship]);
+				int slots = SLOT[ship];
+				System.out.println("slots: " + slots);
+				
 				loc.setLocation(x, y);
-				for (int i = 0; i < SLOT[ship]; i++) {
-					myField.setTile(loc, NUM[ship]);
+				for (int i = 0; i < slots; i++) {
+					myField.setTile(loc, ship);
 					
 					if (vert)	loc.translate(0, 1);
 					else		loc.translate(1, 0);
@@ -291,12 +321,15 @@ public class Battleship implements ChatPlugin {
 				
 				int tile = enemyField.getTile(loc);
 				
-				int ship = tile & 0x5;
+				int ship = tile & 0x7;
 				if (ship != 0) {
 					sender.sendChat("You hit a ship!");
-					if (enemy.hit(loc)) {	//set ship hit and try bits
+					enemy.client().sendChat("Your " + NAME[ship] + " was hit!");
+					
+					if (enemy.hit(loc)) {	//returns true if you sunk
 					
 						sender.sendChat("You sunk their " + NAME[ship] + "!");
+						enemy.client().sendChat("Your " + NAME[ship] + " was sunk!");
 						
 						if (enemy.checkAllSunk()) {
 							sender.sendChat("You win the game!");
@@ -310,7 +343,7 @@ public class Battleship implements ChatPlugin {
 					enemyField.setTile(loc, tile | 0x10);	//just set try bit
 				}
 				
-				game.showFields(sender);
+				game.nextTurn();
 			}
 			
 			return true;
@@ -344,17 +377,26 @@ public class Battleship implements ChatPlugin {
 		
 		//return if the ship was sunk
 		public boolean hit(Point loc) {
-			int ship = field.getTile(loc) & 0x5;
+			int ship = field.getTile(loc) & 0x7;
 			field.setTile(loc, ship | 0x30);
+			
+			//duh check if its HIT here too =)
 			
 			int[][] grid = field.getGrid();
 			int count = 0;
 			for (int x = 0; x < 10; x++) {
 				for (int y = 0; y < 10; y++) {
-					if ((grid[x][y] & 0x5) == ship)
+					int pos = grid[x][y] & 0x7;
+					if (pos == ship) {
 						count++;
+						System.out.println("x: " + x + "  y: " + y);
+						System.out.println("hit, count: " + count + " on ship: " + ship + "  SLOT[ship] = " + SLOT[ship] + "  pos: " + pos + "  grid[x][y] = " + grid[x][y]);
+					}
 				}
 			}
+			
+			//hit, count: 5 on ship: 1  SLOT[ship] = 5
+			System.out.println("hit, count: " + count + " on ship: " + ship + "  SLOT[ship] = " + SLOT[ship]);
 			
 			if (count == SLOT[ship])
 				sunk[ship] = true;
@@ -423,12 +465,17 @@ public class Battleship implements ChatPlugin {
 		}
 		
 		public void nextTurn() {
-			if (currentTurn == null || currentTurn == player2)
+			if (currentTurn == null || currentTurn == player2) {
 				currentTurn = player1;
-			else
+				player1.client().sendChat("It is your turn");
+			} else {
 				currentTurn = player2;
+				player1.client().sendChat("Waiting for the other player to fire...");
+			}
 				
-			currentTurn.client().sendChat("It is your turn");
+			showFields(player1.client());
+			showFields(player2.client());
+			
 		}
 		
 		public Player getPlayer(ChatClient cl) {
@@ -454,8 +501,8 @@ public class Battleship implements ChatPlugin {
 			Point p = new Point(0, 0);
 			StringBuilder strBuf = new StringBuilder();
 			
-			strBuf.append("     You        Enemy   \n");
-			strBuf.append(BLD + GRN + "  0123456789  0123456789\n");
+			strBuf.append("    You        Enemy   \n");
+			strBuf.append(BLD + GRN + " 0123456789  0123456789\n");
 			
 			//Loop over rows
 			for (int i = 0; i < 10; i++) {
@@ -468,11 +515,29 @@ public class Battleship implements ChatPlugin {
 				for (int j = 0; j < 10; j++) {
 					
 					int tile = myField.getTile(p);
+					
+					/*
+					    You        Enemy   
+					 0123456789  0123456789
+					A           A          
+					B C       S B          
+					C C     R S C          
+					D C     R S D          
+					E C     R   E          
+					F C  X      F          
+					G   DD      G          
+					H           H          
+					I BBBB      I          
+					J           J          
+					*/
 					//On my own field 0x10 is an enemy hit
 					
 					//Background blue if its clear, red if its been hit
 					String bgColor = ((tile & 0x10) == 0x10 ? "41m" : "44m");
-					String shipStr = SHIP[tile & 0x5];
+					String shipStr = ((tile & 0x7) == 0 ? " " : SHIP[tile & 0x7]);
+					
+					if (tile != 0)
+						System.out.println("tile @ " + i + ", " + j + " = " + tile + "(" + SHIP[tile & 0x7]+")");
 					
 					strBuf.append((char)27 + "[33;" + bgColor + shipStr);
 					p.translate(1, 0);
