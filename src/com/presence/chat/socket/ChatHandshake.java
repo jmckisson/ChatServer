@@ -7,6 +7,7 @@
 //
 package com.presence.chat.socket;
 
+import java.net.SocketAddress;
 import java.util.logging.*;
 
 import org.jboss.netty.buffer.*;
@@ -33,13 +34,30 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 	}
 	*/
 
-	/*
+	
 	@Override
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		
-		Logger.getLogger("global").info(e.toString());
+		ChannelState state = e.getState();
+		if (state == ChannelState.CONNECTED) {
+			SocketAddress sockAddr = (SocketAddress)e.getValue();
+			
+			String addrStr = sockAddr.toString();
+			String ip = addrStr.substring(1, addrStr.lastIndexOf(':'));
+			
+			//Now check this IP against the ban list
+			//Also check if its been site banned
+			String siteIP = ip.substring(0, ip.lastIndexOf('.') + 1) + "*";
+			
+			if (ChatServer.banList().contains(siteIP) || ChatServer.banList().contains(ip)) {
+				Logger.getLogger("global").warning("Attempted login from BANNED IP: " + ip);
+			
+				//Just disconnect the socket
+				ctx.getChannel().close();
+			}
+		}
 	}
-	*/
+	
 	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
@@ -79,52 +97,6 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				nameAndIP[0] = "Woops";
 				nameAndIP[1] = "Something broke";
 			}
-			
-			/*
-			ChatClient client = null;
-			
-			//Find a previous zombie connection
-			for (ChatClient cl : ChatServer.getClients()) {
-				if (cl.getName().toLowerCase().compareTo(nameAndIP[0].toLowerCase()) == 0
-					&& cl.getAddr().compareTo(nameAndIP[1]) == 0) {
-					
-					client = cl;
-					Logger.getLogger("global").info("Found zombie instance for " + cl.getName());
-					//Logger.getLogger("global").info(cl.getAddr());
-					//Logger.getLogger("global").info(nameAndIP[1]);
-					break;
-				}
-			}
-			
-			ChatProtocol protocol = null;
-			
-			if (client == null) {
-				Logger.getLogger("global").info("Creating new client instance for " + nameAndIP[0]);
-				client = new ChatClient(nameAndIP[0], nameAndIP[1]);
-				
-				pipeline.replace("handshake", "client", client);
-			
-				client.setSocket(e.getChannel());
-				
-				//Add to global client list
-				ChatServer.getClients().add(client);
-			} else {
-				client.setAuthenticated(false, "");
-				
-				pipeline.replace("handshake", "client", client);
-			
-				client.setSocket(e.getChannel());
-				
-				//client.setAuthenticated(true, "Reconnect");
-			}
-								
-			protocol = new MudMasterProtocol(client);
-			
-			client.setProtocol(protocol);
-			
-			protocol.sendConnectResponse();
-			protocol.sendVersion();
-			*/
 			
 			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
 

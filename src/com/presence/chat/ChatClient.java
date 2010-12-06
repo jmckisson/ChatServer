@@ -372,13 +372,18 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 				System.out.println(cause);
 				exceptionString = String.format(" %s(%s%s%s)", YEL, RED, exception.getCause().getMessage(), YEL);
 			}
+			
+			String str = String.format("%s[%s%s%s] %s%s%s has left the server%s",
+				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, exceptionString);
 		
 			//Let other ppl know someone disconnected
-			ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has left the server%s",
-				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, exceptionString));
-		}
-		
-		log.info(String.format("%s has disconnected", myName));
+			ChatServer.echo(str);
+			
+			//Add it to the main room log
+			ChatServer.getRoom("main").getLog().addEntry(str);
+			
+		} else
+			log.info(String.format("%s has disconnected", myName));
 		
 		NSNotificationCenter.defaultCenter().postNotification("ClientDisconnected", myName);
 	}
