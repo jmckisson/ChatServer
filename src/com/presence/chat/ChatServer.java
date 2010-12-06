@@ -38,6 +38,8 @@ public class ChatServer {
 	
 	static Hashtable<String, CommandEntry> commands;
 	
+	static List<String> banList;
+	
 	javax.swing.Timer spamTimer = null;
 	javax.swing.Timer shutdownTimer = null;
 			
@@ -79,15 +81,14 @@ public class ChatServer {
 		commands.put("kick",	new CommandEntry(new CMDKick(), 4));
 		commands.put("setlvl",	new CommandEntry(new CMDSetLevel(), 4));
 		commands.put("setpw",	new CommandEntry(new CMDSetPassword(), 4));
-		//ban Ban a username or IP address
-		//unban
-		//banlist
+
 		//gag Gag a user for specified time
 		
 		//Level 5 commands
 		commands.put("accounts",new CommandEntry(new CMDAccounts(), 5));
 		commands.put("del",		new CommandEntry(new CMDDelete(), 5));
 		commands.put("info",	new CommandEntry(new CMDStats(), 5));
+		commands.put("ipban",	new CommandEntry(new CMDIPBan(), 5));
 		commands.put("setname", new CommandEntry(new CMDSetName(), 5));
 		commands.put("shutdown",new CommandEntry(new CMDShutdown(), 5));
 		commands.put("spoof",	new CommandEntry(new CMDSpoof(), 5));
@@ -117,6 +118,18 @@ public class ChatServer {
 		instance = this;
 		
 		loadCommands();
+		
+		//Ban list
+		String banString = ChatPrefs.getPref("BanList", "");
+		System.out.println(banString);
+		if (!banString.equals("")) {
+			String[] banArray = banString.substring(1, banString.length() - 1).split(", ");
+		
+			banList = new ArrayList(Arrays.asList(banArray));
+		
+			Logger.getLogger("global").info("Loaded " + banList.size() + " banned IPs");
+		} else
+			banList = new ArrayList<String>();
 		
 		stats = new ServerStats();
 		
@@ -199,6 +212,24 @@ public class ChatServer {
 		synchronized (clients) {
 			clients.remove(client);
 		}
+	}
+	
+	public static List<String> banList() {
+		return banList;
+	}
+	
+	public static void addBan(String ip) {
+		banList.add(ip);
+		String banString = Arrays.toString(banList.toArray());
+		System.out.println(banString);
+		ChatPrefs.setPref("BanList", banString);
+	}
+	
+	public static void removeBan(String ip) {
+		banList.remove(ip);
+		String banString = Arrays.toString(banList.toArray());
+		System.out.println(banString);
+		ChatPrefs.setPref("BanList", banString);
 	}
 	
 	public static ServerStats getStats() {
