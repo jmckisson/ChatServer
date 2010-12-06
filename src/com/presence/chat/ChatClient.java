@@ -10,15 +10,12 @@ package com.presence.chat;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.*;
-import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.logging.*;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
 import javax.swing.Timer;
 
 import com.webobjects.foundation.*;
-import org.jboss.netty.buffer.ChannelBuffer;
+import org.jboss.netty.buffer.*;
 import org.jboss.netty.channel.*;
 
 import com.presence.chat.protocol.*;
@@ -28,7 +25,6 @@ import static com.presence.chat.protocol.ChatCommand.*;
 
 //public class ChatClient extends SimpleChannelHandler {
 public class ChatClient extends SimpleChannelUpstreamHandler {
-	private static final Logger log = Logger.getLogger("global");
 	
 	ChatProtocol protocol = null;
 	Channel myChannel = null;
@@ -159,19 +155,10 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		Object[] obj = (Object[])lastEvent.getMessage();
 		String str = (String)obj[1];
 		System.out.println(str);
-		ChannelBuffer buf = (ChannelBuffer)obj[2];
-		String msg = "";
-		while (buf.readable()) {
-			msg += buf.readByte() + " ";
-		}
-		System.out.println(msg);
+		System.out.println(ChannelBuffers.hexDump((ChannelBuffer)obj[2]));
 		System.out.println("=======");
-		buf = protocol.getLastBuffer();
-		msg = "";
-		while (buf.readable()) {
-			msg += buf.readByte() + " ";
-		}
-		System.out.println(msg);
+		
+		System.out.println(ChannelBuffers.hexDump(protocol.getLastBuffer()));
 		System.out.println("=======");
 		ChatServer.getStats().exceptions++;
 	}
@@ -198,7 +185,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		
 		if (val == false) {
 			//Kick them or something?
-			log.info(myName + " un-authenticated");
+			Logger.getLogger("global").info(myName + " un-authenticated");
 			ChatServer.disconnectClient(this);
 			
 			return;
@@ -236,11 +223,17 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		//Send MOTD
 		sendChat(ChatPrefs.getMOTD());
 		
-		//Global
-		ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has connected %s(%s%s%s)%s",
-			RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, YEL, RED, reason, YEL, RED));
+		//Global Echo
+		String str = String.format("%s%s%s has connected %s(%s%s%s)%s",
+			WHT, myName, RED, YEL, RED, reason, YEL, RED);
 			
-		log.info(String.format("%s connected with %s", myName, reason));
+		String header = String.format("%s[%s%s%s] ", RED, WHT, ChatPrefs.getName(), RED);
+			
+		ChatServer.echo(header + str);
+			
+		ChatServer.getRoom("main").getLog().addEntry(str);
+			
+		//log.info(String.format("%s connected with %s", myName, reason));
 				
 		if (myRoom == null)	//Check if its a reconnect
 			//Send person to room but dont echo
@@ -285,7 +278,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 				
 				sendChat(String.format("%s chats to you, 'Grats bro you're the first person to connect! I have made you a super admin... please change your password.'", ChatPrefs.getName()));
 			} else {
-				log.warning(String.format("Error trying to add initial super admin account for %s", myName));
+				Logger.getLogger("global").warning(String.format("Error trying to add initial super admin account for %s", myName));
 			}
 			
 			return;
@@ -312,9 +305,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			if (ChatPrefs.getIPAuth()) {
 				String incomingAddr = getAddr();
 				
-				if (myAccount.addressIsKnown(incomingAddr)) {
-					//log.info(String.format("%s IP authenticated", myName));
-				
+				if (myAccount.addressIsKnown(incomingAddr)) {				
 					setAuthenticated(true, "IP Auth");
 					
 					return;
@@ -373,17 +364,19 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 				exceptionString = String.format(" %s(%s%s%s)", YEL, RED, exception.getCause().getMessage(), YEL);
 			}
 			
-			String str = String.format("%s[%s%s%s] %s%s%s has left the server%s",
-				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, exceptionString);
+			String str = String.format("%s%s%s has left the server%s",
+				WHT, myName, RED, exceptionString);
+				
+			String header = String.format("%s[%s%s%s] ", RED, WHT, ChatPrefs.getName(), RED);
 		
 			//Let other ppl know someone disconnected
-			ChatServer.echo(str);
+			ChatServer.echo(header + str);
 			
 			//Add it to the main room log
 			ChatServer.getRoom("main").getLog().addEntry(str);
 			
 		} else
-			log.info(String.format("%s has disconnected", myName));
+			Logger.getLogger("global").info(String.format("%s has disconnected", myName));
 		
 		NSNotificationCenter.defaultCenter().postNotification("ClientDisconnected", myName);
 	}
@@ -449,13 +442,6 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	public void setGagged(boolean val) {
 		isGagged = val;
 	}
-	
-	/*
-	public void setName(String name) {
-		myName = name;
-	}
-	*/
-
 	
 	public void setName(String newName) {
 	
@@ -540,15 +526,6 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	}
 	
 	
-	/*
-	 * Set current room
-	 */
-	@Deprecated
-	public void setRoom(ChatRoom room) {
-		myRoom = room;
-	}
-	
-	
 	/**
 	 * Forward the received string to everyone in my room except myself
 	 */
@@ -595,18 +572,13 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	}
 
 	//Matcher to trim carriage returns
-	static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
+	//static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
 	/**
 	 *  Prepend a name tag if they're trying to spoof someone
 	 */
 	private String spoofCheck(String msg) {
 	
 		String msgNoANSI = msg.replaceAll("\u001b\\[[0-9;]+m", "").trim().toLowerCase();
-	
-		//matcher.reset(msgNoANSI);	//Trim carriage returns
-		
-		//if (matcher.find())
-		//	msgNoANSI = matcher.group(1).toLowerCase();
 					
 		if (!msgNoANSI.startsWith(myName.toLowerCase()))
 			return String.format("%s(%s%s%s)%s%s", YEL, RED, myName, YEL, RED, msg);
@@ -623,7 +595,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		if (protocol != null)
 			protocol.sendChat(str);
 		else
-			log.warning(String.format("Protocol null when trying to chat to %s", myName));
+			Logger.getLogger("global").warning(String.format("Protocol null when trying to chat to %s", myName));
 	}
 	
 	public void sendNameChange(String name) {
