@@ -7,6 +7,8 @@
 //
 package com.presence.chat.socket;
 
+import com.presence.chat.ChatServer;
+
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 import java.util.logging.*;
@@ -21,7 +23,8 @@ public class TelnetServer {
 
 	public TelnetServer(int port) {
 	
-		Logger.getLogger("global").info("Starting... " + Version.ID + " on port " + port);
+		Logger.getLogger("global").info("Starting... " + ChatServer.class.getPackage().getImplementationVersion() + " on port " + port);
+		Logger.getLogger("global").info("Socket Library: " + Version.ID);
 	
 		factory = new NioServerSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
 		
@@ -29,7 +32,7 @@ public class TelnetServer {
 		
 		bootstrap.setPipelineFactory(new TelnetPipelineFactory());
 		bootstrap.setOption("child.tcpNoDelay", true);
-		//bootstrap.setOption("child.keepAlive", true);
+		bootstrap.setOption("child.keepAlive", true);
 		
 		bootstrap.bind(new InetSocketAddress(port));
 	}
