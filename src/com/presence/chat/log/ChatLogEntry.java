@@ -5,7 +5,7 @@
 //  Created by John McKisson on 4/16/08.
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
-package com.presence.chat;
+package com.presence.chat.log;
 
 import java.util.Date;
 import java.util.logging.*;

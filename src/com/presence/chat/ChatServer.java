@@ -18,6 +18,7 @@ import java.awt.event.*;
 import org.jboss.netty.channel.Channel;
 
 import com.presence.chat.commands.*;
+import com.presence.chat.log.*;
 import com.presence.chat.plugin.*;
 import com.presence.chat.socket.*;
 

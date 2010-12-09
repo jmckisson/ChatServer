@@ -5,7 +5,7 @@
 //  Created by John McKisson on 5/7/08.
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
-package com.presence.chat;
+package com.presence.chat.log;
 
 import java.io.InvalidObjectException;
 import java.io.ObjectStreamException;

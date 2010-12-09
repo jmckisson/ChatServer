@@ -5,13 +5,15 @@
 //  Created by John McKisson on 4/16/08.
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
-package com.presence.chat;
+package com.presence.chat.log;
 
 import java.text.DateFormat;
 import java.util.LinkedList;
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.logging.*;
+
+import com.presence.chat.*;
 
 import static com.presence.chat.ANSIColor.*;
 
