@@ -71,7 +71,7 @@ public class CMDChatPrivate implements Command {
 			ChatServer.getStats().pchats++;
 			
 		} else {
-			sender.sendChat(String.format("%s chats to you, 'Sorry, I did not find anyone namd %s.'", ChatPrefs.getName(), chatArgs[0]));
+			sender.sendChat(String.format("%s chats to you, 'Sorry, I did not find anyone named %s.'", ChatPrefs.getName(), chatArgs[0]));
 		}
 		
 		return true;
