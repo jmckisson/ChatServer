@@ -10,7 +10,9 @@ package com.presence.chat.log;
 import java.util.*;
 import java.util.logging.*;
 
+import com.presence.chat.ANSIColor;
 import com.presence.chat.ChatClient;
+import com.presence.chat.ChatPrefs;
 
 public class ChatLogHandler extends Handler {
 
@@ -26,8 +28,14 @@ public class ChatLogHandler extends Handler {
 		records = new LinkedList<LogRecord>();
 	}
 	
+	public int size() {
+		return records.size();
+	}
+	
 	@Override
 	public void publish(LogRecord record) {
+	
+		//Logger.getLogger("global").info("publishing record in handler: " + this);
 	
 		//Maintain circular buffer of records
 		records.addFirst(record);
@@ -35,36 +43,59 @@ public class ChatLogHandler extends Handler {
 		if (records.size() > sizeThreshold)
 			records.removeLast();
 			
-		String logMsg = getFormatter().format(record);
-			
-		//for (Iterator<BaseObject> it = World.getAccounts().iterator(); it.hasNext(); ) {
-		//	((MudAccount)it.next()).getClient().send(logMsg);
-		//}
-		
+		//String logMsg = getFormatter().format(record);
 	}
 	
-	public String getFormattedHistory(ChatClient sender, int count, String grepStr) {
-		if (records.size() == 0)
-			return "";
-			
-		java.util.logging.Formatter fmt = getFormatter();
 	
+	public String getFormattedHistory(ChatClient sender, String[] args) {
+		if (records.size() == 0)
+			return String.format("%s chats to you, 'There are no messages'", ChatPrefs.getName());
+	
+		int count;
+		String grepStr = null;
+		
+		java.util.logging.Formatter fmt = getFormatter();
+		
+		//System.out.println("using formatter: " + fmt);
+		
 		StringBuilder strBuf = new StringBuilder();
 		
-		count = Math.min(count, records.size());
+		if (args.length == 2) {
+			String[] logArgs = args[1].split(" ", 2);
+			
+			int val = 20;
+			
+			if (logArgs.length == 2) {
+				grepStr = logArgs[0].toLowerCase();
+				try {
+					val = Integer.parseInt(logArgs[1]);
+				} catch (NumberFormatException e) {}
+			} else {
+				try {
+					val = Integer.parseInt(logArgs[0]);
+				} catch (NumberFormatException e) {
+					grepStr = logArgs[0];
+				}
+			}
+		
+			count = Math.min(val, records.size());
+		} else
+			count = Math.min(20, records.size());
+		
+		//System.out.println("count: " + count + "  grepStr: " + grepStr);
 		
 		boolean compact = sender.getAccount().isCompact();
 		
-		ListIterator<LogRecord> it = records.listIterator();
+		Iterator<LogRecord> it = records.iterator();
 		
-		while (it.hasPrevious() && count > 0) {
-			LogRecord rec = it.previous();
+		while (it.hasNext() && count > 0) {
+			LogRecord rec = it.next();
 			
-			String logMsg = fmt.format(rec);
+			String recString = fmt.format(rec);
 			
-			if (grepStr == null || (grepStr != null && logMsg.toLowerCase().contains(grepStr))) {
+			if (grepStr == null || (grepStr != null && ANSIColor.strip(recString).toLowerCase().contains(grepStr))) {
 			
-				strBuf.append((compact ? "" : "\n") + logMsg);
+				strBuf.insert(0, recString + (compact ? "" : "\n"));
 				
 				--count;
 			} else

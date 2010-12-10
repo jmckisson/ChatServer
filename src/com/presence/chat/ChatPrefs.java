@@ -10,6 +10,8 @@ package com.presence.chat;
 import java.util.Date;
 import java.util.prefs.*;
 
+import static com.presence.chat.ANSIColor.*;
+
 public class ChatPrefs {
 	static Preferences prefs = Preferences.userNodeForPackage(ChatPrefs.class);
 	
@@ -50,6 +52,7 @@ public class ChatPrefs {
 	
 	public static void setName(String name) {
 		ChatServer.USAGE_STRING = ChatPrefs.getName() + " chats to you, 'Usage: /chat " + ChatPrefs.getName() + " %s'";
+		ChatServer.HEADER = String.format("%s%s[%s%s%s] ", BLD, RED, WHT, name, RED);
 		prefs.put(PREF_NAME, name);
 	}
 	

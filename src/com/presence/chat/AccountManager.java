@@ -16,7 +16,6 @@ import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.converters.*;
 
 public class AccountManager {
-	private static final Logger log = Logger.getLogger("global");
 	
 	private static final String FILEPATH = "accounts.xml";
 	
@@ -57,7 +56,7 @@ public class AccountManager {
 		boolean exists = new File(FILEPATH).exists();
 		
 		if (!exists) {
-			log.info("No accounts file found, first person to connect will be made super admin");
+			Logger.getLogger("global").info("No accounts file found, first person to connect will be made super admin");
 		
 			accounts = new Vector<ChatAccount>();
 			return;
@@ -78,7 +77,7 @@ public class AccountManager {
 		
 		accounts = (Vector<ChatAccount>)xstream.fromXML(xml.toString());
 		
-		log.info("Account information loaded");
+		Logger.getLogger("global").info("Account information loaded");
 	}
 	
 
@@ -111,7 +110,7 @@ public class AccountManager {
 			e.printStackTrace();
 		}
 
-		log.info("Account information saved");
+		Logger.getLogger("global").info("Account information saved");
 
 	}
 	
@@ -216,7 +215,7 @@ public class AccountManager {
 				e.printStackTrace();
 			}
 
-			log.info("Account information saved");
+			Logger.getLogger("global").info("Account information saved");
          }
      }
 }

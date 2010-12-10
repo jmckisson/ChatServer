@@ -20,7 +20,6 @@ import static com.presence.chat.ANSIColor.*;
  * If called while autentication is already disabled, re-enable it.
  */
 public class CMDAuth implements Command {
-	private static final Logger log = Logger.getLogger("global");
 	
 	transient static String TEMPLATE = String.format("%s[%s%s%s] Authentication %%s by %s%%s%s", RED, WHT, ChatPrefs.getName(), RED, WHT, RED);
 	

@@ -8,8 +8,7 @@
 package com.presence.chat.commands;
 
 import com.presence.chat.*;
-
-import static com.presence.chat.ANSIColor.*;
+import com.presence.chat.log.*;
 
 public class CMDMessageLog extends CMDLog implements Command {
 
@@ -25,20 +24,16 @@ public class CMDMessageLog extends CMDLog implements Command {
 	public boolean execute(ChatClient sender, String[] args) {
 		
 		//Get log for the current room
-		ChatLog messageLog = sender.getMessageLog();
+		MessageLog messageLog = sender.getMessageLog();
 		
-		if (messageLog.size() == 0) {
-			sender.sendChat(String.format("%s chats to you, 'You don't have any messages!'", ChatPrefs.getName()));
-			return true;
+		String strBuf = messageLog.getHistory(sender, args);
+		
+		if (strBuf != null) {
+			if (strBuf.length() > 0)
+				sender.sendChat(strBuf);
+			else
+				sender.sendChat(String.format("%s chats to you, 'There are no messages'", ChatPrefs.getName()));
 		}
-		
-		String strBuf = messageLog.getLog(sender, args);
-		
-		if (strBuf.length() > 0)
-			sender.sendChat(strBuf);
-		else
-			sender.sendChat(String.format("%s chats to you, 'There are no messages'", ChatPrefs.getName()));
-		
 
 		return true;
 	}

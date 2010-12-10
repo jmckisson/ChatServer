@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 /**
  * An OutputStream that writes contents to a Logger upon each call to flush()
  */
-class LoggingOutputStream extends ByteArrayOutputStream {
+public class LoggingOutputStream extends ByteArrayOutputStream {
  
 	private String lineSeparator;
 

@@ -17,7 +17,6 @@ import com.presence.chat.*;
  * They may be in a different room
  */
 public class CMDChatPrivate implements Command {
-	private static final Logger log = Logger.getLogger("global");
 
 	public String help() {
 		return "Send a private message to another user";
@@ -65,8 +64,10 @@ public class CMDChatPrivate implements Command {
 			sender.sendChat(senderStr);
 			
 			//Log them too
-			sender.getMessageLog().addEntry(senderStr);
-			targ.getMessageLog().addEntry(targetStr);
+			Logger.getLogger(sender.getName()).info(senderStr);
+			Logger.getLogger(targ.getName()).info(targetStr);
+			//sender.getMessageLog().addEntry(senderStr);
+			//targ.getMessageLog().addEntry(targetStr);
 			
 			ChatServer.getStats().pchats++;
 			

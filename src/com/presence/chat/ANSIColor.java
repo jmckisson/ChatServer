@@ -23,23 +23,8 @@ public class ANSIColor {
 	public static final String CYN = (char)27 + "[36m";
 	public static final String WHT = (char)27 + "[37m";
 	
-	/*
-	CRED (1, RED),
-	CGRN (2, GRN),
-	CYEL (3, YEL),
-	CBLU (4, BLU),
-	CMAG (5, MAG),
-	CCYN (6, CYN),
-	CWHT (7, WHT);
-	
-	private final int code;
-	private final String str;
-	private final 
-	
-	ANSIColor(int code, String str, Color clr) {
-		this.code = code;
-		
+	public static String strip(String msg) {
+		return msg.replaceAll("\u001b\\[[0-9;]+m", "");
 	}
-	*/
 	
 }

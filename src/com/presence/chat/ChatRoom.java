@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.*;
 
+import com.presence.chat.log.*;
+
 import com.presence.chat.*;
 import com.webobjects.foundation.*;
 
@@ -22,24 +24,24 @@ public class ChatRoom {
 	boolean destroyable;
 	boolean silent;
 	int minLevel = 0;
+	
+	ChatLog log;
 			
 	Vector<ChatClient> people;
 	Vector<ChatClient> listeners;
-	
-	ChatLog roomLog;
 
 	public ChatRoom(String roomName, String password, int minLevel) {
 		name = roomName;
 		this.password = password;
 		this.minLevel = minLevel;
 		
+		log = new ChatLog(roomName);
+		
 		destroyable = true;
 		silent = false;
 		
 		people = new Vector<ChatClient>();
 		listeners = new Vector<ChatClient>();
-		
-		roomLog = new ChatLog(roomName);
 		
 		if (!name.equals("main")) {
 			String lvlStr = minLevel > 0 ? String.format(" (minLvl %s%d%s)", YEL, minLevel, RED) : "";
@@ -52,6 +54,10 @@ public class ChatRoom {
 		
 		//RoomCreate hook
 		NSNotificationCenter.defaultCenter().postNotification("RoomCreate", getName());
+	}
+	
+	public ChatLog getLog() {
+		return log;
 	}
 	
 	public Vector<ChatClient> getListeners() {
@@ -72,10 +78,6 @@ public class ChatRoom {
 	
 	public void setSilent(boolean val) {
 		silent = val;
-	}
-	
-	public ChatLog getLog() {
-		return roomLog;
 	}
 	
 	public String getName() {
@@ -247,12 +249,13 @@ public class ChatRoom {
 			return;
 		}
 	
-		String msgNoANSI = roomLog.addEntry(msg);
-		
+		//Logger.getLogger("global").info("sending to room: " + name+ "  log: " + Logger.getLogger(name));
+		Logger.getLogger(name).info(msg);
+			
 		ChatAccount ac = (from != null ? from.getAccount() : null);
 		String accountName = (ac != null ? ac.getName() : ChatPrefs.getName());
 		
-		String hookMsg = accountName + ":" + name + ":" + msgNoANSI;
+		String hookMsg = accountName + ":" + name + ":" + ANSIColor.strip(msg);
 		
 		//Probably need to add carriage returns back in
 		//msg = "\n" + msg;

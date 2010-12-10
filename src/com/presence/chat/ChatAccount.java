@@ -17,8 +17,6 @@ import java.util.Vector;
 
 public class ChatAccount implements Serializable {
 
-	private static final transient Logger log = Logger.getLogger("global");
-
 	String name;
 	String password;
 	int level;
@@ -45,7 +43,7 @@ public class ChatAccount implements Serializable {
 		this.password = password;
 		this.level = level;
 		
-		log.info("New account for " + name);
+		Logger.getLogger("global").info("New account for " + name);
 	}
 	
 	private Object readResolve() {
@@ -76,7 +74,7 @@ public class ChatAccount implements Serializable {
 			
 		knownAddresses.add(addr);
 		
-		log.info(String.format("Added %s for account %s", addr, name));
+		Logger.getLogger("global").info(String.format("Added %s for account %s", addr, name));
 	}
 	
 	

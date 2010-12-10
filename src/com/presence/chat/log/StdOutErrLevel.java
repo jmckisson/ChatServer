@@ -18,6 +18,9 @@ import java.util.logging.Level;
  */
 public class StdOutErrLevel extends Level {
     
+	public static int OUTLVLINT = Level.INFO.intValue() + 53;
+	public static int ERRLVLINT = Level.INFO.intValue() + 54;
+	
     /**
      * Private constructor
      */
@@ -27,13 +30,11 @@ public class StdOutErrLevel extends Level {
     /**
      * Level for STDOUT activity.
      */
-    public static Level STDOUT =
-        new StdOutErrLevel("STDOUT", Level.INFO.intValue()+53);
+    public static Level STDOUT = new StdOutErrLevel("STDOUT", OUTLVLINT);
     /**
      * Level for STDERR activity
      */
-    public static Level STDERR =
-        new StdOutErrLevel("STDERR", Level.INFO.intValue()+54);
+    public static Level STDERR = new StdOutErrLevel("STDERR", ERRLVLINT);
 
     /**
      * Method to avoid creating duplicate instances when deserializing the

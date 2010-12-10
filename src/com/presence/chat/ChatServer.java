@@ -43,6 +43,10 @@ public class ChatServer {
 	
 	javax.swing.Timer spamTimer = null;
 	javax.swing.Timer shutdownTimer = null;
+	
+	//should these be static?
+	static ChatLogHandler	slHandler;
+	static Logger			sysLog;
 			
 	public static void loadCommands() {
 		commands = new Hashtable<String, CommandEntry>();
@@ -90,10 +94,11 @@ public class ChatServer {
 		commands.put("del",		new CommandEntry(new CMDDelete(), 5));
 		commands.put("info",	new CommandEntry(new CMDStats(), 5));
 		commands.put("ipban",	new CommandEntry(new CMDIPBan(), 5));
+		commands.put("load",	new CommandEntry(new CMDLoadPlugin(), 5));
 		commands.put("setname", new CommandEntry(new CMDSetName(), 5));
 		commands.put("shutdown",new CommandEntry(new CMDShutdown(), 5));
 		commands.put("spoof",	new CommandEntry(new CMDSpoof(), 5));
-		commands.put("load",	new CommandEntry(new CMDLoadPlugin(), 5));
+		commands.put("syslog",	new CommandEntry(new CMDSyslog(), 5));
 		commands.put("reload",	new CommandEntry(new CMDReloadPlugins(), 5));
 		
 		//commands.put("wl",		new CommandEntry(new CMDWriteLog(), 5));
@@ -107,6 +112,8 @@ public class ChatServer {
 	public static final String VERSION = "jChatServ by Humera, " + ChatServer.class.getPackage().getImplementationVersion();
 	
 	public static String USAGE_STRING = ChatPrefs.getName() + " chats to you, 'Usage: /chat " + ChatPrefs.getName() + " %s'";
+	
+	public static String HEADER = String.format("%s%s[%s%s%s] ", BLD, RED, WHT, ChatPrefs.getName(), RED);
 	
 	boolean keepRunning = true;
 	
@@ -406,7 +413,7 @@ public class ChatServer {
 			c.sendChatAll(msg);
 		}
 		
-		Logger.getLogger("global").info(msg.replaceAll("\u001b\\[[0-9;]+m", ""));
+		//Logger.getLogger("global").info(ANSIColor.strip(msg));
 	}
 	
 	
@@ -466,25 +473,31 @@ public class ChatServer {
 		System.out.println(strBuf.toString() + "\n");
 	}
 	
-
+	public static ChatLogHandler getSystemLog() {
+		return slHandler;
+	}
 
     public static void main (String args[]) throws Exception {
 		
-		//Setup logging facilities
+		//Setup logging
 		LogManager logManager = LogManager.getLogManager();
-        logManager.reset();
+		logManager.reset();
+			
+		sysLog = Logger.getLogger("global");
+			
+		sysLog.setUseParentHandlers(false);
 		
-		Logger log = Logger.getLogger("global");
-		
-		log.setUseParentHandlers(false);
-		
-		ChatLogFormatter clf = new ChatLogFormatter();
+		SystemLogFormatter slf = new SystemLogFormatter();
 		
 		Handler consoleHandler = new ConsoleHandler();
-		consoleHandler.setFormatter(clf);
-		log.addHandler(consoleHandler);
+		consoleHandler.setFormatter(slf);
+		sysLog.addHandler(consoleHandler);
 		
-		
+		//Install memoryhandler so we can grep system log
+		slHandler = new ChatLogHandler(10000);
+		slHandler.setFormatter(slf);
+		sysLog.addHandler(slHandler);
+
 		//Make sure log directory exists
 		boolean diskLog = false;
 		try {
@@ -492,19 +505,18 @@ public class ChatServer {
 			if (logDir.exists() || logDir.mkdir())
 				diskLog = true;
 		} catch (SecurityException e) {
-			log.warning("Permission denied trying to create log directory");
+			sysLog.warning("Permission denied trying to create log directory");
 		}
 		
 		if (diskLog) {
-			// log file max size 10K, 6 rolling files, append-on-open
-			Handler fileHandler = new FileHandler("log/syslog%g.log", 10000000, 6, true);
-			fileHandler.setFormatter(clf);
-			log.addHandler(fileHandler);
+			Handler fileHandler = new FileHandler("log/syslog%g.log", 5000000, 10, true);
+			fileHandler.setFormatter(slf);
+			sysLog.addHandler(fileHandler);
 		}
 		
 		//Redirect stdout and stderr to our logger
-        System.setOut(new PrintStream(new LoggingOutputStream(log, StdOutErrLevel.STDOUT), true));
-        System.setErr(new PrintStream(new LoggingOutputStream(log, StdOutErrLevel.STDERR), true));
+        System.setOut(new PrintStream(new LoggingOutputStream(sysLog, StdOutErrLevel.STDOUT), true));
+        System.setErr(new PrintStream(new LoggingOutputStream(sysLog, StdOutErrLevel.STDERR), true));
 		
 		//Parse arguments
 		parseArgs(args);

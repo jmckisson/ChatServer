@@ -98,6 +98,8 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				nameAndIP[1] = "Something broke";
 			}
 			
+			Logger.getLogger("global").info(nameAndIP[0] + " connected from " + e.getChannel().getRemoteAddress());
+			
 			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
 
 			pipeline.replace("handshake", "client", client);

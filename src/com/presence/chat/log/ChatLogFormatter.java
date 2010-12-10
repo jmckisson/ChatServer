@@ -11,62 +11,30 @@ import java.text.*;
 import java.util.*;
 import java.util.logging.*;
 
+import static com.presence.chat.ANSIColor.*;
+
 public class ChatLogFormatter extends java.util.logging.Formatter {
-	DateFormat dateFormat;
+
+	static final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
 	
-	//The Windows XP Command Prompt sucks and cannot display ANSI colors via escape sequences =/
-	public static final char ESC = (char)27;
-	public static final String NRM = ESC + "[0m";
-	public static final String BLD = ESC + "[1m";
-	public static final String RED = ESC + "[31m";
-	public static final String GRN = ESC + "[32m";
-	public static final String YEL = ESC + "[33m";
-	public static final String BLU = ESC + "[34m";
-	public static final String MAG = ESC + "[35m";
-	public static final String CYN = ESC + "[36m";
-	public static final String WHT = ESC + "[37m";
-	public static final String NUL = "";
+	private static final String TEMPLATE = String.format("%s%s[%s%%-12s%s] %s%%s\n", BLD, WHT, CYN, WHT, RED);
 
 	public ChatLogFormatter() {
-		dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
 	}
 
 	public String format(LogRecord rec) {
-		StringBuilder buf = new StringBuilder(1000);
+		/*
+		Object[] params = rec.getParameters();
+		boolean compact = false;
+		if (params != null && params[0] instanceof Boolean)
+			compact = ((Boolean)params[0]).booleanValue();
+		*/
 		
-		buf.append(dateFormat.format(new Date(rec.getMillis())));
-		buf.append(" [");
+		//Logger.getLogger("global").info("Formatting log record");
 		
-		// Bold any levels >= WARNING
-		//if (rec.getLevel().intValue() >= Level.WARNING.intValue()) {
-		//	buf.append(MAG);
-		//	buf.append(rec.getLevel());
-		//	buf.append(NRM);
-		//} else {
-		//	buf.append(CYN);
-			buf.append(rec.getLevel());
-		//	buf.append(NRM);
-		//}
+		return String.format(TEMPLATE, dateFormat.format(new Date(rec.getMillis())), rec.getMessage());
 		
-		buf.append("] ");
-		
-		StringTokenizer tok = new StringTokenizer(rec.getSourceClassName(), ".");
-		int numTokens = tok.countTokens();
-		for (int i = 0; i < numTokens - 1; i++)
-			tok.nextToken();
-			
-		String className = tok.nextToken();
-		
-		//Chop off inner-class names
-		int idx = className.indexOf("$");
-		if (idx > 0)
-			className = className.substring(0, idx);
-		
-		buf.append(className + ":: ");
-		buf.append(formatMessage(rec));
-		buf.append('\n');
-		
-		return buf.toString();
+		//return String.format("%s %s", dateFormat.format(new Date(rec.getMillis())), rec.getMessage());
 	}
 
 }

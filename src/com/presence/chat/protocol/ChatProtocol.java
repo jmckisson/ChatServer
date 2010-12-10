@@ -101,7 +101,7 @@ public abstract class ChatProtocol {
 			int idx = MAX_LEN; //Start at some index close to the limit
 			int loc = 0;
 			
-			Logger.getLogger("global").info("Splitting up long message");
+			//Logger.getLogger("global").info("Splitting up long message");
 			
 			boolean needBold = false;
 			

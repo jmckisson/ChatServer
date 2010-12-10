@@ -7,12 +7,10 @@
 //
 package com.presence.chat.commands;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.logging.*;
 
 import com.presence.chat.*;
-
-import static com.presence.chat.ANSIColor.*;
+import com.presence.chat.log.*;
 
 public class CMDLog implements Command {
 
@@ -30,18 +28,10 @@ public class CMDLog implements Command {
 		//Get log for the current room
 		ChatLog roomLog = sender.getRoom().getLog();
 		
-		if (roomLog.size() == 0) {
-			sender.sendChat(String.format("%s chats to you, 'This room has no messages!'", ChatPrefs.getName()));
-			return true;
-		}
+		String strBuf = roomLog.getHistory(sender, args);
 		
-		String strBuf = roomLog.getLog(sender, args);
-		
-		if (strBuf.length() > 0)
-			sender.sendChat(strBuf);
-		else
-			sender.sendChat(String.format("%s chats to you, 'There are no messages'", ChatPrefs.getName()));
-		
+		sender.sendChat(strBuf);
+	
 		return true;
 	}
 	

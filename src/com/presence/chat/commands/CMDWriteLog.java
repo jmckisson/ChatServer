@@ -37,6 +37,7 @@ public class CMDWriteLog implements Command {
 
 	public boolean execute(ChatClient sender, String[] args) {
 	
+		/*
 		ChatLog roomLog = sender.getRoom().getLog();
 	
 		ListIterator<ChatLogEntry> it = roomLog.entryIterator(roomLog.size());
@@ -66,6 +67,7 @@ public class CMDWriteLog implements Command {
 		long totalTime = System.currentTimeMillis() - startTime;
 		
 		sender.sendChat(String.format("%s written: %f seconds", FILENAME, (totalTime / 1000.0f)));
+		*/
 	
 		return true;
 	}

@@ -18,6 +18,7 @@ import com.webobjects.foundation.*;
 import org.jboss.netty.buffer.*;
 import org.jboss.netty.channel.*;
 
+import com.presence.chat.log.*;
 import com.presence.chat.protocol.*;
 
 import static com.presence.chat.ANSIColor.*;
@@ -32,7 +33,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	ChatAccount myAccount = null;
 	
-	ChatLog messageLog = null;
+	MessageLog messageLog = null;
 	StringBuilder snoopLog = null;
 	
 	boolean snooping = false;
@@ -227,11 +228,11 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		String str = String.format("%s%s%s has connected %s(%s%s%s)%s",
 			WHT, myName, RED, YEL, RED, reason, YEL, RED);
 			
-		String header = String.format("%s[%s%s%s] ", RED, WHT, ChatPrefs.getName(), RED);
+		ChatServer.echo(ChatServer.HEADER + str);
+		
+		Logger.getLogger("main").info(str);
 			
-		ChatServer.echo(header + str);
-			
-		ChatServer.getRoom("main").getLog().addEntry(str);
+		//ChatServer.getRoom("main").getLog().addEntry(str);
 			
 		//log.info(String.format("%s connected with %s", myName, reason));
 				
@@ -366,14 +367,13 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			
 			String str = String.format("%s%s%s has left the server%s",
 				WHT, myName, RED, exceptionString);
-				
-			String header = String.format("%s[%s%s%s] ", RED, WHT, ChatPrefs.getName(), RED);
 		
 			//Let other ppl know someone disconnected
-			ChatServer.echo(header + str);
+			ChatServer.echo(ChatServer.HEADER + str);
 			
 			//Add it to the main room log
-			ChatServer.getRoom("main").getLog().addEntry(str);
+			//ChatServer.getRoom("main").getLog().addEntry(str);
+			Logger.getLogger("main").info(str);
 			
 		} else
 			Logger.getLogger("global").info(String.format("%s has disconnected", myName));
@@ -424,9 +424,9 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		return lastActivity;
 	}
 	
-	public ChatLog getMessageLog() {
+	public MessageLog getMessageLog() {
 		if (messageLog == null)
-			messageLog = new ChatLog(500, myName);
+			messageLog = new MessageLog(myName);
 			
 		return messageLog;
 	}
@@ -547,8 +547,12 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			//Don't spam everyone else if we're already gagged
 			if (!isGagged) {
 				isGagged = true;
-				ChatServer.echo(String.format("%s[%s%s%s] %s%s%s Auto-Gagged for spamming",
-					RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED));
+				
+				String gagMsg = String.format("%s%s%s Auto-Gagged for spamming", WHT, myName, RED);
+				
+				ChatServer.echo(ChatServer.HEADER + gagMsg);
+					
+				Logger.getLogger("global").info(gagMsg);
 			}
 			
 			//Reset gag time to 15 seconds
@@ -571,14 +575,13 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		ChatServer.getStats().chats++;
 	}
 
-	//Matcher to trim carriage returns
-	//static Matcher matcher = Pattern.compile("^\n*[ ]*(.*)\n*$").matcher("");
+
 	/**
 	 *  Prepend a name tag if they're trying to spoof someone
 	 */
 	private String spoofCheck(String msg) {
 	
-		String msgNoANSI = msg.replaceAll("\u001b\\[[0-9;]+m", "").trim().toLowerCase();
+		String msgNoANSI = ANSIColor.strip(msg).trim().toLowerCase();
 					
 		if (!msgNoANSI.startsWith(myName.toLowerCase()))
 			return String.format("%s(%s%s%s)%s%s", YEL, RED, myName, YEL, RED, msg);

@@ -7,130 +7,49 @@
 //
 package com.presence.chat.log;
 
-import java.text.DateFormat;
-import java.util.LinkedList;
-import java.util.Iterator;
-import java.util.ListIterator;
+import java.io.IOException;
 import java.util.logging.*;
 
 import com.presence.chat.*;
 
-import static com.presence.chat.ANSIColor.*;
-
 public class ChatLog {
 	
-	static final String TEMPLATE = String.format("%s%s[%s%%-12s%s] %s%%s\n", BLD, WHT, CYN, WHT, RED);
-	static final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
-	
-	int maxSize;
 	String name;
 	
 	static final int MAX_SIZE = 10000;
-
-	LinkedList<ChatLogEntry> entries;
-	
-	public ChatLog(int maxSize, String name) {
-		this(name);
 		
-		this.maxSize = maxSize;
-	}
+	ChatLogHandler clHandler;
+	Logger roomLog;	//Strong reference to this rooms log to prevent it from being garbage collected
 
 	public ChatLog(String name) {
 		this.name = name;
-		entries = new LinkedList<ChatLogEntry>();
 		
-		maxSize = MAX_SIZE;
-	}
-	
-	/**
-	 * Returns ANSI stripped message
-	 */
-	public String addEntry(String msg) {
-		ChatLogEntry entry = new ChatLogEntry(msg);
+		//Setup logging
+		roomLog = Logger.getLogger(name);
+		roomLog.setUseParentHandlers(false);
 		
-		synchronized (entries) {
-			entries.addFirst(entry);
+		//File log uses ansi stripping formatter
+		try {
+			Handler fileHandler = new FileHandler("log/room_" + name + "_%g.log", 1000000, 10, true);
+			fileHandler.setFormatter(new ChatLogANSIStrippedFormatter());
+			roomLog.addHandler(fileHandler);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 		
-		String stripped = entry.getStrippedMessage();
+		clHandler = new ChatLogHandler(MAX_SIZE);
+		clHandler.setFormatter(new ChatLogFormatter());
 		
-		Logger.getLogger("global").info("["+name+"] " + stripped);
-
-		if (entries.size() > maxSize)
-			entries.removeLast();
-			
-		return stripped;
+		roomLog.addHandler(clHandler);
+		
+		//Logger.getLogger("global").info("Setting up room log for: " + name + "  handler: " + clHandler + "  logger: " + roomLog);
 	}
 	
-	public int size() {
-		return entries.size();
+	public String getHistory(ChatClient sender, String[] args) {
+		if (clHandler.size() == 0)
+			return String.format("%s chats to you, 'This room has no messages!'", ChatPrefs.getName());
+	
+		return clHandler.getFormattedHistory(sender, args);
 	}
 	
-	public LinkedList<ChatLogEntry> getEntries() {
-		return entries;
-	}
-	
-	public ListIterator<ChatLogEntry> entryIterator(int idx) {
-		return entries.listIterator(idx);
-	}
-	
-	public String getLog(ChatClient sender, String[] args) {
-		StringBuilder strBuf = new StringBuilder();
-		
-		int count;
-		String grepStr = null;
-		
-		if (args.length == 2) {
-			String[] logArgs = args[1].split(" ", 2);
-			
-			int val = 20;
-			
-			if (logArgs.length == 2) {
-				grepStr = logArgs[0].toLowerCase();
-				try {
-					val = Integer.parseInt(logArgs[1]);
-				} catch (NumberFormatException e) {}
-			} else {
-				try {
-					val = Integer.parseInt(logArgs[0]);
-				} catch (NumberFormatException e) {
-					grepStr = logArgs[0];
-				}
-			}
-		
-			count = Math.min(val, entries.size());
-		} else
-			count = Math.min(20, entries.size());
-		
-		synchronized (entries) {
-			Iterator<ChatLogEntry> it = entries.iterator();
-			
-			boolean compact = sender.getAccount().isCompact();
-					
-			while (it.hasNext() && count > 0) {
-				ChatLogEntry entry = it.next();
-				
-				if (entry == null) {
-					Logger.getLogger("global").warning("Entry iterator returned null entry!");
-					break;
-				}
-				
-				String msg = entry.getStrippedMessage();
-				
-				
-				if (grepStr == null || (grepStr != null && msg.toLowerCase().contains(grepStr))) {
-
-					strBuf.insert(0, String.format(TEMPLATE + "%s", df.format(entry.getDate()), entry.getMessage(), (compact ? "" : "\n")));
-				
-					count--;
-							
-				} else
-					continue;
-				
-			}
-		}
-		
-		return strBuf.toString();
-	}
-
 }
