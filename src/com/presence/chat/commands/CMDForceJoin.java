@@ -21,7 +21,7 @@ public class CMDForceJoin implements Command {
 	 * Show a one liner explaining the syntax of the command.
 	 */
 	public String usage() {
-		return "fjoin <person> <room>";
+		return "fjoin <person> <room> <password>";
 	}
 
 	/**
@@ -49,35 +49,24 @@ public class CMDForceJoin implements Command {
 			return true;
 		}
 		
-
-		
 		ChatRoom currentRoom = client.getRoom();
 		
 		//Now check if the sender is already in the specified room
 		if (client.getRoom().getName().equalsIgnoreCase(joinArgs[1])) {
-			sender.sendChat(String.format("%s chats to you, '%s is already in %s'", ChatPrefs.getName(), joinArgs[0], joinArgs[1]));
+			sender.serverChat(String.format("%s is already in %s", joinArgs[0], joinArgs[1]));
 			return true;
 		}
+		
+		String[] roomArgs = new String[] {joinArgs[1], joinArgs[2], (joinArgs.length >= 3 ? joinArgs[2] : null)};
 
 		//Ok now make sure that room exists
-		ChatRoom targetRoom = ChatServer.getRoom(joinArgs[1]);
-		
-		if (targetRoom == null) {
-			sender.sendChat(String.format("%s chats to you, 'Room %s doesn't exist!'", ChatPrefs.getName(), joinArgs[1]));
-			return true;
-		}
-		
-		String password = null;
-		//Check if a password was supplied
-		if (joinArgs.length == 3)
-			password = joinArgs[3];
-		
+		ChatRoom targetRoom = ChatServer.getRoom(roomArgs);
 		
 		//Join new room
-		boolean moved = client.toRoom(targetRoom, password, true, true);
+		boolean moved = client.toRoom(targetRoom, (roomArgs.length > 1 ? roomArgs[1] : null), true, true);
 		
 		if (!moved)
-			sender.sendChat(joinArgs[0] + " was unable to join that room");
+			sender.serverChat(joinArgs[0] + " was unable to join that room");
 		
 		return true;
 	}

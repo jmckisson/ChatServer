@@ -32,7 +32,7 @@ public class CMDMessageLog extends CMDLog implements Command {
 			if (strBuf.length() > 0)
 				sender.sendChat(strBuf);
 			else
-				sender.sendChat(String.format("%s chats to you, 'There are no messages'", ChatPrefs.getName()));
+				sender.serverChat("There are no messages");
 		}
 
 		return true;

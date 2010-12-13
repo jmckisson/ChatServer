@@ -167,7 +167,11 @@ public class ChatRoom {
 		if (destroyable && people.size() == 0) {
 			//Notify people in main room that this room has been destroyed
 			
-			ChatServer.getRoom("main").echo(String.format("%s[%s%s%s] Room [%s%s%s] has been destroyed", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED), null);
+			String msg = String.format("Room [%s%s%s] has been destroyed", YEL, name, RED);
+			
+			ChatServer.getRoom("main").echo(ChatServer.HEADER + msg, null);
+			
+			Logger.getLogger("global").info(msg);
 			
 			ChatServer.getRooms().remove(name);
 			synchronized (listeners) {
@@ -178,9 +182,12 @@ public class ChatRoom {
 			NSNotificationCenter.defaultCenter().postNotification("RoomDestroy", getName());
 		}
 		
+		String msg = String.format("[%s%s%s] %s%s%s has left the room", YEL, name, RED, WHT, person.getName(), RED);
 		
 		//Notify the room that a person has left
-		echo(String.format("%s[%s%s%s][%s%s%s] %s%s%s has left the room", RED, WHT, ChatPrefs.getName(), RED, YEL, name, RED, WHT, person.getName(), RED), null);
+		echo(ChatServer.HEADER + msg, null);
+		
+		Logger.getLogger("global").info(msg);
 		
 		//System.out.printf("ChatRoom[%s]:: addPerson: %s leaves!\n", name, person.getName());
 	}

@@ -33,7 +33,7 @@ public class CMDPassword implements Command {
 		//Save
 		AccountManager.saveAccounts();
 		
-		sender.sendChat(String.format("%s chats to you, 'Ok, your new password has been set'", ChatPrefs.getName()));
+		sender.serverChat("Ok, your new password has been set");
 
 		return true;
 	}

@@ -277,7 +277,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 				
 				setAuthenticated(true, "Super Admin Auth");
 				
-				sendChat(String.format("%s chats to you, 'Grats bro you're the first person to connect! I have made you a super admin... please change your password.'", ChatPrefs.getName()));
+				serverChat("Grats bro you're the first person to connect! I have made you a super admin... please change your password.");
 			} else {
 				Logger.getLogger("global").warning(String.format("Error trying to add initial super admin account for %s", myName));
 			}
@@ -293,7 +293,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			
 			//Check if account exists
 			if (account == null) {
-				sendChat(String.format("%s chats to you, 'I did not find an account for you, please contact an administrator.'", ChatPrefs.getName()));
+				serverChat("I did not find an account for you, please contact an administrator.");
 				
 				disconnect();
 				return;
@@ -316,7 +316,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			//Send msg and set timer for password to be sent
 			String name = ChatPrefs.getName();
 			
-			sendChat(String.format("%s chats to you, 'Password required, you have 15 seconds to chat me your password'", name));
+			serverChat("Password required, you have 15 seconds to chat me your password");
 			
 			authTimer = new Timer(1000 * 15,
 				new ActionListener() {
@@ -324,7 +324,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 						if (authenticated)
 							return;
 							
-						sendChat(String.format("%s chats to you, 'Password Timeout Expired'", ChatPrefs.getName()));
+						serverChat("Password Timeout Expired");
 						
 						disconnect();
 					}
@@ -469,7 +469,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		
 		if (found) {
 			//Kick user for attempting to impersonate someone
-			sendChat(String.format("%s chats to you, 'Nice try'", ChatPrefs.getName()));
+			serverChat("Nice try");
 			
 			disconnect();
 			
@@ -594,6 +594,10 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		protocol.sendChatAll(str+NRM);
 	}
 	
+	public void serverChat(String str) {
+		sendChat(String.format("%s chats to you, '%s'", ChatPrefs.getName(), str));
+	}
+	
 	public void sendChat(String str) {
 		if (protocol != null)
 			protocol.sendChat(str);
@@ -611,7 +615,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			snoopers = new LinkedList<ChatClient>();
 	
 		if (snoopers.contains(client))
-			client.sendChat(String.format("%s chats to you, 'You're already snooping %s!'", ChatPrefs.getName(), myName));
+			client.serverChat(String.format("You're already snooping %s!", myName));
 		else {
 			snoopers.add(client);
 			
@@ -627,7 +631,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	public void stopSnoop(ChatClient client) {
 		if (!snoopers.contains(client))
-			client.sendChat(String.format("%s chats to you, 'You're not snooping them!'", ChatPrefs.getName()));
+			client.serverChat("You're not snooping them!");
 		else {
 			snoopers.remove(client);
 			client.sendChat(String.format("%s[%s%s%s] You have stopped snooping [%s%s%s]", RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED));

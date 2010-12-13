@@ -51,7 +51,7 @@ public class CMDHelp implements Command {
 		CommandEntry cmdEntry = ChatServer.getCommand(args[1]);
 		
 		if (cmdEntry == null) {
-			sender.sendChat(String.format("%s chats to you, 'You idiot!  There is no <%s> command!'", ChatPrefs.getName(), args[1]));
+			sender.serverChat(String.format("You idiot!  There is no <%s> command!", args[1]));
 			return true;
 		}
 		

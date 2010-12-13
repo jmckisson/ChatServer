@@ -55,7 +55,7 @@ public class ChatServer {
 		commands.put("ca",		new CommandEntry(new CMDChatAll(), 0));
 		commands.put("compact", new CommandEntry(new CMDCompact(), 0));
 		commands.put("help",	new CommandEntry(new CMDHelp(), 0));
-		commands.put("join",	new CommandEntry(new CMDJoinRoom(), 0));
+		
 		commands.put("log",		new CommandEntry(new CMDLog(), 0));
 		commands.put("motd",	new CommandEntry(new CMDMOTD(), 0));
 		commands.put("plugins",	new CommandEntry(new CMDPlugins(), 0));
@@ -63,8 +63,8 @@ public class ChatServer {
 		commands.put("who",		new CommandEntry(new CMDWho(), 0));
 	
 		//Level 1 commands
-		commands.put("ccreate",	new CommandEntry(new CMDCreateRoom(), 1));
 		commands.put("chpw",	new CommandEntry(new CMDPassword(), 1));
+		commands.put("join",	new CommandEntry(new CMDJoinRoom(), 1));
 		commands.put("plog",	new CommandEntry(new CMDMessageLog(), 1));
 		//info Get detailed info on a user
 		//setip Enable/reset ipauth feature
@@ -291,7 +291,7 @@ public class ChatServer {
 				client.setAuthenticated(true, "Password Auth");
 				
 			} else {
-				client.sendChat(String.format("%s chats to you, 'Incorrect Password'", ChatPrefs.getName()));
+				client.serverChat("Incorrect Password");
 				
 				client.getProtocol().closeSocket();	
 			}
@@ -307,7 +307,7 @@ public class ChatServer {
 		CommandEntry cmdEntry = getCommand(args[0]);
 		
 		if (cmdEntry == null || cmdEntry.level > client.getAccount().getLevel()) {
-			client.sendChat(String.format("%s chats to you, 'You idiot!  There is no <%s> command!'", ChatPrefs.getName(), args[0]));
+			client.serverChat(String.format("You idiot!  There is no <%s> command!", args[0]));
 			return;
 		} else {
 			instance.stats.cmds++;
@@ -376,7 +376,50 @@ public class ChatServer {
 	}
 	
 	public static ChatRoom getRoom(String name) {
-		return rooms.get(name.toLowerCase());
+		return getRoom(new String[] {name});
+	}
+	
+	/**
+	 * Finds a room by name arg[0]
+	 * If that room doesn't exist we create it using password/minLevel arguments
+	 */
+	public static ChatRoom getRoom(String[] args) {
+		String roomName = args[0].toLowerCase();
+		String password = null;
+	
+		ChatRoom r = rooms.get(roomName);
+		if (r == null) {
+			int minLevel = 0;
+		
+			//Check if a password has been supplied
+			
+			if (args.length == 2) {
+				//args[1] is either the password or minLevel
+				try {
+					minLevel = Integer.parseInt(args[1]);
+				} catch (NumberFormatException e) {
+					//Wasnt a number, so its the password
+					password = args[1];
+				}
+			} else if (args.length == 3) {
+				//Password is second argument
+				password = args[1];
+				
+				//MinLevel is 3rd argument
+				try {
+					minLevel = Integer.parseInt(args[2]);
+				} catch (NumberFormatException e) {}
+			}
+			
+			minLevel = Math.min(minLevel, 5);
+			minLevel = Math.max(minLevel, 0);
+			
+			r = new ChatRoom(roomName, password, minLevel);
+			
+			rooms.put(roomName, r);
+		}
+		
+		return r;
 	}
 	
 	public static Hashtable<String, ChatRoom> getRooms() {
