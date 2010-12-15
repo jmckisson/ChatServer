@@ -10,10 +10,7 @@ package com.presence.chat;
 import java.io.Serializable;
 
 import java.util.logging.*;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
+import java.util.*;
 
 public class ChatAccount implements Serializable {
 
@@ -88,6 +85,10 @@ public class ChatAccount implements Serializable {
 			return false;
 			
 		return knownAddresses.contains(addr);
+	}
+	
+	public List<String> getKnownAddresses() {
+		return knownAddresses;
 	}
 	
 	
