@@ -41,6 +41,7 @@ public class HoloFinder implements ChatPlugin {
 	
 	List<Point> initialLocations;
 	List<Point> newLocations;
+	List<Point> gy;
 	
 	javax.swing.Timer updateTimer;
 	
@@ -52,6 +53,40 @@ public class HoloFinder implements ChatPlugin {
 		ChatServer.addCommand("holoall", new CMDAllLocations(), 2);
 		ChatServer.addCommand("holonew", new CMDNewLocations(), 2);
 		ChatServer.addCommand("holoupdate", new CMDHoloUpdate(), 5);
+		
+		/* Still need to check:
+		(1136, 1504) (1139, 1099) (1174, 26) (1181, 953) (1219, 1461) (1230, 1400) (1232, 1308) (1259, 1431) (1261, 470) (1265, 475) (1266, 963) (1292, 641) (1330, 841) (1330, 997) (1349, 526) (1406, 1321) (1425, 907) (1426, 1111) (1443, 1038) (1470, 885) (1564, 1103) (1579, 915) (1593, 1200) (1602, 496) (1624, 632) (1672, 408) 
+		 */
+		
+		gy = new ArrayList<Point>();
+		gy.add(new Point(267, 637));
+		gy.add(new Point(291, 472));
+		gy.add(new Point(432, 634));
+		gy.add(new Point(554, 494));
+		gy.add(new Point(589, 1350));
+		gy.add(new Point(614, 1193));
+		gy.add(new Point(669, 893));	//??
+		gy.add(new Point(671, 1063));
+		gy.add(new Point(692, 888));	//??
+		gy.add(new Point(721, 604));	//part of elnissa terrain
+		gy.add(new Point(732, 613));	//^^
+		gy.add(new Point(736, 1304));	//near raskins, just need better culling
+		gy.add(new Point(778, 427));
+		//gy.add(new Point(852, 1519));	//terrain?
+		gy.add(new Point(917, 756));
+		gy.add(new Point(972, 1209));	//gnomonel??
+		gy.add(new Point(984, 662));
+		gy.add(new Point(990, 460));
+		gy.add(new Point(1021, 557));	//thunderhoume, better culling!
+		gy.add(new Point(1020, 987));	//stables near med
+		gy.add(new Point(1052, 932));
+		gy.add(new Point(1084, 841));
+		gy.add(new Point(1100, 765));
+		gy.add(new Point(, ));
+		gy.add(new Point(, ));
+		gy.add(new Point(, ));
+		gy.add(new Point(, ));
+		gy.add(new Point(, ));
 	
 		op = new Opener();
 	}
