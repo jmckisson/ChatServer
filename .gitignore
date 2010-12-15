@@ -97,3 +97,4 @@ plugins/Bulletin_Board.jar
 plugins/Google_Voice.jar
 plugins/Server_Stats.jar
 plugins/Translation_Party.jar
+bin/com/presence/chat/commands/CMDAccountInfo.class
