@@ -26,7 +26,7 @@ public class CMDDelete implements Command {
 	public boolean execute(ChatClient sender, String[] args) {
 	
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

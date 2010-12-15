@@ -70,6 +70,7 @@ public class ChatServer {
 		//setip Enable/reset ipauth feature
 		
 		//Level 2 commands
+		commands.put("acinfo",	new CommandEntry(new CMDAccountInfo(), 2));
 		commands.put("ignore",	new CommandEntry(new CMDIgnore(), 2));
 		commands.put("listen",	new CommandEntry(new CMDListen(), 2));
 		//commands.put("gca",		new CMDGlobalChatAll());
@@ -111,7 +112,7 @@ public class ChatServer {
 
 	public static final String VERSION = "jChatServ by Humera, " + ChatServer.class.getPackage().getImplementationVersion();
 	
-	public static String USAGE_STRING = ChatPrefs.getName() + " chats to you, 'Usage: /chat " + ChatPrefs.getName() + " %s'";
+	public static String USAGE_STRING = "Usage: /chat " + ChatPrefs.getName() + " %s";
 	
 	public static String HEADER = String.format("%s%s[%s%s%s] ", BLD, RED, WHT, ChatPrefs.getName(), RED);
 	

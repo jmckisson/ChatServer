@@ -28,14 +28,14 @@ public class CMDSetLevel implements Command {
 	public boolean execute(ChatClient sender, String[] args) {
 		
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
 		String[] lvlArgs = args[1].split(" ");
 	
 		if (lvlArgs.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

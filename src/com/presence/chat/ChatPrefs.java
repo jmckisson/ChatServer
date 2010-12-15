@@ -51,7 +51,7 @@ public class ChatPrefs {
 	}
 	
 	public static void setName(String name) {
-		ChatServer.USAGE_STRING = ChatPrefs.getName() + " chats to you, 'Usage: /chat " + ChatPrefs.getName() + " %s'";
+		ChatServer.USAGE_STRING = "Usage: /chat " + ChatPrefs.getName() + " %s";
 		ChatServer.HEADER = String.format("%s%s[%s%s%s] ", BLD, RED, WHT, name, RED);
 		prefs.put(PREF_NAME, name);
 	}

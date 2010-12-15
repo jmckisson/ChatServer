@@ -23,14 +23,14 @@ public class CMDIPBan implements Command {
 	public boolean execute(ChatClient sender, String[] args) {
 		
 		if (args.length < 1) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
 		String banArgs[] = args[1].split(" ");
 		
 		if (banArgs.length < 1) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
@@ -48,7 +48,7 @@ public class CMDIPBan implements Command {
 		} else if (banArgs[0].equalsIgnoreCase("unban")) {
 		
 			if (banArgs.length != 2) {
-				sender.sendChat(usage());
+				sender.serverChat(usage());
 			} else {
 		
 				if (ChatServer.banList().contains(banArgs[1])) {

@@ -21,7 +21,7 @@ public class CMDJoinRoom implements Command {
 
 	public boolean execute(ChatClient sender, String[] args) {
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
@@ -47,7 +47,7 @@ public class CMDJoinRoom implements Command {
 }
 /*
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

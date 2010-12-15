@@ -28,14 +28,14 @@ public class CMDSetPassword implements Command {
 	public boolean execute(ChatClient sender, String[] args) {
 	
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
 		String[] pwArgs = args[1].split(" ");
 	
 		if (pwArgs.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

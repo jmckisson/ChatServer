@@ -29,14 +29,14 @@ public class CMDAdd implements Command {
 		//args[1] is the argument after the actual command
 		
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 			
 		String[] addArgs = args[1].split(" ");
 	
 		if (addArgs.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

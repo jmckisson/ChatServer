@@ -30,14 +30,14 @@ public class CMDForceJoin implements Command {
 	 */
 	public boolean execute(ChatClient sender, String[] args) {
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
 		String[] joinArgs = args[1].split(" ");
 		
 		if (joinArgs.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

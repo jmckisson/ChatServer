@@ -30,14 +30,14 @@ public class CMDChatPrivate implements Command {
 	public boolean execute(ChatClient sender, String[] args) {
 		
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
 		String[] chatArgs = args[1].split(" ", 2);
 		
 		if (chatArgs.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		

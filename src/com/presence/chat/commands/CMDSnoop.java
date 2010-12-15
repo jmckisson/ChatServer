@@ -25,14 +25,14 @@ public class CMDSnoop implements Command {
 		//args[1] is the argument after the actual command
 		
 		if (args.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 			
 		String[] snoopArgs = args[1].split(" ");
 	
 		if (snoopArgs.length < 2) {
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 			return true;
 		}
 		
@@ -52,7 +52,7 @@ public class CMDSnoop implements Command {
 		//} else if (command.compareTo("enable") == 0) {
 			
 		} else
-			sender.sendChat(usage());
+			sender.serverChat(usage());
 		
 		return true;
 	}
