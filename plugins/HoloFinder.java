@@ -73,11 +73,13 @@ public class HoloFinder implements ChatPlugin {
 		gy.add(new Point(778, 427));
 		gy.add(new Point(852, 1519));	//near verigaard
 		gy.add(new Point(917, 756));
+		gy.add(new Point(968, 1391));	//castiak?
 		gy.add(new Point(972, 1209));	//gnomonel??
 		gy.add(new Point(984, 662));
 		gy.add(new Point(990, 460));
 		gy.add(new Point(1021, 557));	//thunderhoume, better culling!
 		gy.add(new Point(1020, 987));	//stables near med
+		gy.add(new Point(1041, 1290));	//riverton permament
 		gy.add(new Point(1052, 932));
 		gy.add(new Point(1084, 841));
 		gy.add(new Point(1100, 765));
