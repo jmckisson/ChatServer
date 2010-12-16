@@ -35,7 +35,7 @@ public class HoloFinder implements ChatPlugin {
 	
 	static final int timeDelay = 1000 * 60 * 10;	//10 minutes
 	
-	ImagePlus liveMapOld, liveMapNew, resultImage = null;
+	ImagePlus liveMapOrig, liveMapNew, resultImage = null;
 	
 	Opener op;
 	
@@ -54,15 +54,14 @@ public class HoloFinder implements ChatPlugin {
 		ChatServer.addCommand("holonew", new CMDNewLocations(), 2);
 		ChatServer.addCommand("holoupdate", new CMDHoloUpdate(), 5);
 		
-		/* Still need to check:
-		(1136, 1504) (1139, 1099) (1174, 26) (1181, 953) (1219, 1461) (1230, 1400) (1232, 1308) (1259, 1431) (1261, 470) (1265, 475) (1266, 963) (1292, 641) (1330, 841) (1330, 997) (1349, 526) (1406, 1321) (1425, 907) (1426, 1111) (1443, 1038) (1470, 885) (1564, 1103) (1579, 915) (1593, 1200) (1602, 496) (1624, 632) (1672, 408) 
-		 */
-		
 		gy = new ArrayList<Point>();
 		gy.add(new Point(267, 637));
 		gy.add(new Point(291, 472));
 		gy.add(new Point(432, 634));
+		gy.add(new Point(522, 576));	//zuld
 		gy.add(new Point(554, 494));
+		gy.add(new Point(570, 978));	//near glaak
+		gy.add(new Point(572, 960));	//^^
 		gy.add(new Point(589, 1350));
 		gy.add(new Point(614, 1193));
 		gy.add(new Point(669, 893));	//??
@@ -72,7 +71,7 @@ public class HoloFinder implements ChatPlugin {
 		gy.add(new Point(732, 613));	//^^
 		gy.add(new Point(736, 1304));	//near raskins, just need better culling
 		gy.add(new Point(778, 427));
-		//gy.add(new Point(852, 1519));	//terrain?
+		gy.add(new Point(852, 1519));	//near verigaard
 		gy.add(new Point(917, 756));
 		gy.add(new Point(972, 1209));	//gnomonel??
 		gy.add(new Point(984, 662));
@@ -82,11 +81,25 @@ public class HoloFinder implements ChatPlugin {
 		gy.add(new Point(1052, 932));
 		gy.add(new Point(1084, 841));
 		gy.add(new Point(1100, 765));
-		gy.add(new Point(, ));
-		gy.add(new Point(, ));
-		gy.add(new Point(, ));
-		gy.add(new Point(, ));
-		gy.add(new Point(, ));
+		gy.add(new Point(1139, 1099));
+		gy.add(new Point(1174, 26));
+		gy.add(new Point(1219, 1461));
+		gy.add(new Point(1230, 1400));	//near undead
+		gy.add(new Point(1261, 470));	//coliseum
+		gy.add(new Point(1265, 475));	//^^
+		gy.add(new Point(1266, 963));
+		gy.add(new Point(1330, 841));
+		gy.add(new Point(1349, 526));	//celestia
+		gy.add(new Point(1406, 1321));
+		gy.add(new Point(1426, 1111));
+		gy.add(new Point(1443, 1038));	//??
+		gy.add(new Point(1470, 885));
+		gy.add(new Point(1564, 1103));	//??
+		gy.add(new Point(1579, 915));
+		gy.add(new Point(1593, 1200));
+		gy.add(new Point(1602, 496));	//trellor perm
+		gy.add(new Point(1624, 632));	//fandi
+		gy.add(new Point(1672, 408));	//mello graveyard
 	
 		op = new Opener();
 	}
@@ -95,9 +108,9 @@ public class HoloFinder implements ChatPlugin {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				//Grab initial live map
-				liveMapOld = op.openURL(liveMapStr);
+				liveMapOrig = op.openURL(liveMapStr);
 				
-				ImageProcessor imp = liveMapOld.getProcessor();
+				ImageProcessor imp = liveMapOrig.getProcessor();
 						
 				initialLocations = new ArrayList<Point>();
 				newLocations = new ArrayList<Point>();
@@ -200,29 +213,41 @@ public class HoloFinder implements ChatPlugin {
 	
 		liveMapNew = op.openURL(liveMapStr);
 		
-		ImageProcessor ipOld = liveMapOld.getProcessor();
+		//ImageProcessor ipOld = liveMapOrig.getProcessor();
 		ImageProcessor ipNew = liveMapNew.getProcessor();
 		
-		Calibration cal = liveMapNew.getCalibration();
+		//Calibration cal = liveMapNew.getCalibration();
 		
 		//We need to keep liveMapNew intact, so create a duplicate image
-		ImageProcessor ipTemp = duplicateImage(ipNew);
+		//ImageProcessor ipTemp = duplicateImage(ipNew);
 		
 		//Temp = new - old
-		ipTemp.copyBits(ipOld, 0, 0, mode);
+		//ipTemp.copyBits(ipOld, 0, 0, mode);
 		
 		//old = new
-		liveMapOld = liveMapNew;
+		//liveMapOld = liveMapNew;
 		
-		ipTemp.resetMinAndMax();
-		
+		//find pts in old image
+		//find pts in new image
 		newLocations.clear();
+		search(ipNew, newLocations);
+		//find pts that are in new btu not old
+		Iterator<Point> it = newLocations.iterator();
+		while (it.hasNext()) {
+			Point p = it.next();
+			if (initialLocations.contains(p))
+				it.remove();
+		}
 		
-		search(ipTemp, newLocations);
+		//ipTemp.resetMinAndMax();
 	
 		ChatServer.echo(getNewLocations());
 	}
 	
+	
+	/**
+	 * 
+	 */
 	void search(ImageProcessor ip, List<Point> list) {
 
 		for (int x = 10; x < 1990; x++) {
@@ -242,7 +267,10 @@ public class HoloFinder implements ChatPlugin {
 							!isGreen(ip.get(x + 1, y - 1)) &&
 							!isGreen(ip.get(x - 1, y)) &&
 							!isGreen(ip.get(x + 3, y)) &&
-							!isGreen(ip.get(x + 1, y + 2))) {
+							!isGreen(ip.get(x + 1, y + 2)) &&
+							!isGreen(ip.get(x, y - 1)) &&
+							!isGreen(ip.get(x + 2, y - 1))) {
+							
 							checkPoint(x + 1, y, list);
 						}						
 						
@@ -254,7 +282,9 @@ public class HoloFinder implements ChatPlugin {
 									!isGreen(ip.get(x - 1, y + 1)) &&
 									!isGreen(ip.get(x, y - 1)) &&
 									!isGreen(ip.get(x, y + 3)) &&
-									!isGreen(ip.get(x + 2, y + 1))) ||
+									!isGreen(ip.get(x + 2, y + 1)) &&
+									!isGreen(ip.get(x - 1, y)) &&
+									!isGreen(ip.get(x - 1, y + 2))) ||
 									
 								(	isGreen(ip.get(x - 1, y + 1)) &&	// X
 									isGreen(ip.get(x, y + 1)) &&		//XX
@@ -264,7 +294,9 @@ public class HoloFinder implements ChatPlugin {
 									!isGreen(ip.get(x + 1, y + 1)) &&
 									!isGreen(ip.get(x, y - 1)) &&
 									!isGreen(ip.get(x, y + 3)) &&
-									!isGreen(ip.get(x - 2, y + 1))) ||
+									!isGreen(ip.get(x - 2, y + 1)) &&
+									!isGreen(ip.get(x + 1, y)) &&
+									!isGreen(ip.get(x + 1, y + 2))) ||
 									
 								(	isGreen(ip.get(x - 1, y + 1)) &&	// X
 									isGreen(ip.get(x, y + 1)) &&		//XXX
@@ -274,9 +306,13 @@ public class HoloFinder implements ChatPlugin {
 									!isGreen(ip.get(x, y + 2)) &&
 									!isGreen(ip.get(x - 2, y + 1)) &&
 									!isGreen(ip.get(x + 2, y + 1)) &&
-									!isGreen(ip.get(x, y - 1)))) {
+									!isGreen(ip.get(x, y - 1)) &&
+									!isGreen(ip.get(x, y + 2)) &&
+									!isGreen(ip.get(x + 2, y + 2)))) {
 								
+							
 							checkPoint(x, y + 1, list);
+							
 						}
 					}
 					
@@ -292,9 +328,18 @@ public class HoloFinder implements ChatPlugin {
 		return val == 5;
 	}
 	
+	/*
+	void addPoint(int x, int y, Likt<Point> list) {
+		Point p = new Point(x, y);
+		if (!list.contains(p) && !gy.contains(p)) {
+			list.add(p);
+		}
+	}
+	*/
+	
 	void checkPoint(int x, int y, List<Point> list) {
 		Point p = new Point(x, y);
-		if (!list.contains(p)) {
+		if (!list.contains(p) && !gy.contains(p)) {
 			list.add(p);
 		}
 	}
