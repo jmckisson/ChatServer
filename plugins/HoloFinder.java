@@ -327,7 +327,7 @@ public class HoloFinder implements ChatPlugin {
 	}
 	
 	boolean isGreen(int val) {
-		return val == 5;
+		return (val == 4 || val == 5);	//not sure why index changed
 	}
 	
 	/*
