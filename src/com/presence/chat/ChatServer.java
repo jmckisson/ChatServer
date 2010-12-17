@@ -208,15 +208,13 @@ public class ChatServer {
 	}
 	
 	/**
-	 * Closes a clients socket, removes them from the client list, and logs their disconnect
+	 * Closes a clients socket, removes them from the client list
 	 */
 	static public void disconnectClient(ChatClient client) {
 		Channel sock = client.getSocket();
 		
-		if (sock != null) {
-			
+		if (sock != null)
 			sock.close();
-		}
 		
 		synchronized (clients) {
 			clients.remove(client);

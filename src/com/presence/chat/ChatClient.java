@@ -24,8 +24,8 @@ import com.presence.chat.protocol.*;
 import static com.presence.chat.ANSIColor.*;
 import static com.presence.chat.protocol.ChatCommand.*;
 
-//public class ChatClient extends SimpleChannelHandler {
-public class ChatClient extends SimpleChannelUpstreamHandler {
+public class ChatClient extends SimpleChannelHandler {
+//public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	ChatProtocol protocol = null;
 	Channel myChannel = null;
@@ -71,9 +71,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		}
 		super.handleUpstream(ctx, e);
 	}
-	*/
 	
-	/*
 	@Override
 	public void handleDownstream(ChannelHandlerContext ctx, ChannelEvent e) throws Exception {
 
@@ -84,6 +82,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 		super.handleDownstream(ctx, e);
 	}
 	*/
+	
 	
 	/*
 	@Override
@@ -166,8 +165,11 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	@Override
 	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+	
+		//Logger.getLogger("global").info(e.toString());
+	
 		if (authenticated)
-			disconnect();
+			logDisconnect();
 		
 		super.channelClosed(ctx, e);
 	}
@@ -295,7 +297,8 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			if (account == null) {
 				serverChat("I did not find an account for you, please contact an administrator.");
 				
-				disconnect();
+				//Client isnt in clients table yet, so just close socket
+				myChannel.close();
 				return;
 			}
 			
@@ -326,7 +329,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 							
 						serverChat("Password Timeout Expired");
 						
-						disconnect();
+						myChannel.close();
 					}
 				}
 			);
@@ -341,7 +344,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			if (found) {
 				sendChat("That person is already online, connect with a different chatname.");
 				
-				disconnect();
+				myChannel.close();
 				return;
 			}
 			
@@ -354,9 +357,12 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			
 	}
 	
-	public void disconnect() {
-		ChatServer.disconnectClient(this);
-		
+	/**
+	 * Log client disconnect
+	 */
+	public void logDisconnect() {
+		//ChatServer.disconnectClient(this);
+				
 		if (authenticated) {
 			String exceptionString = "";
 			if (exception != null) {
@@ -372,11 +378,10 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			ChatServer.echo(ChatServer.HEADER + str);
 			
 			//Add it to the main room log
-			//ChatServer.getRoom("main").getLog().addEntry(str);
 			Logger.getLogger("main").info(str);
-			
-		} else
-			Logger.getLogger("global").info(String.format("%s has disconnected", myName));
+		}
+		
+		Logger.getLogger("global").info(String.format("%s has disconnected", myName));
 		
 		NSNotificationCenter.defaultCenter().postNotification("ClientDisconnected", myName);
 	}
@@ -471,7 +476,7 @@ public class ChatClient extends SimpleChannelUpstreamHandler {
 			//Kick user for attempting to impersonate someone
 			serverChat("Nice try");
 			
-			disconnect();
+			ChatServer.disconnectClient(this);
 			
 			ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has been kicked for attempting to impersonate %s%s%s!",
 				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, WHT, newName, RED));
