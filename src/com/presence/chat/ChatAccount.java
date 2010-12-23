@@ -43,14 +43,6 @@ public class ChatAccount implements Serializable {
 		Logger.getLogger("global").info("New account for " + name);
 	}
 	
-	private Object readResolve() {
-		if (customFields == null)
-			customFields = new HashMap<String, String>();
-		
-		return this;
-	}
-	
-	
 	public void updateLastLogin() {
 		lastLogin = new Date(System.currentTimeMillis());
 	}
@@ -165,10 +157,16 @@ public class ChatAccount implements Serializable {
 	}
 	
 	public String getField(String field) {
+		if (customFields == null)
+			customFields = new HashMap<String, String>();
+			
 		return customFields.get(field);
 	}
 	
 	public String setField(String field, String value) {
+		if (customFields == null)
+			customFields = new HashMap<String, String>();
+	
 		return customFields.put(field, value);
 	}
 }

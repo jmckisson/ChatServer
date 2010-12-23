@@ -33,8 +33,14 @@ public class Google_Voice implements ChatPlugin {
 	boolean commandsLoaded = false;
 
 	public void register() {
+	
+		ChatServer.addCommand("setgva",  new CMDSetVoiceAccount(), 5);
 		
-		if (!tryConnect())
+		ChatServer.addCommand("getsms", new CMDGetNumber(), 5);
+		ChatServer.addCommand("setsms", new CMDSetNumber(), 5);
+		ChatServer.addCommand("smslist", new CMDListSMS(), 5);
+		
+		if (!tryConnect(null))
 			return;
 		
 		loadCommands();
@@ -46,14 +52,10 @@ public class Google_Voice implements ChatPlugin {
 	
 	public void loadCommands() {
 		commandsLoaded = true;
-		ChatServer.addCommand("sms", new CMDSendSMS(), 5);
-		ChatServer.addCommand("getsms", new CMDGetNumber(), 5);
-		ChatServer.addCommand("setsms", new CMDSetNumber(), 5);
-		ChatServer.addCommand("setgva",  new CMDSetVoiceAccount(), 5);
-		ChatServer.addCommand("smslist", new CMDListSMS(), 5);
+		ChatServer.addCommand("sms", new CMDSendSMS(), 4);
 	}
 	
-	private boolean tryConnect() {
+	private boolean tryConnect(ChatClient sender) {
 		String user = ChatPrefs.getPref(USER_PREF, "");
 		String pass = ChatPrefs.getPref(PASS_PREF, "");
 		
@@ -67,6 +69,10 @@ public class Google_Voice implements ChatPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 			voice = null;
+			
+			if (sender != null)
+				sender.sendChat(e.getMessage());
+			
 			return false;
 		}
 		
@@ -97,9 +103,9 @@ public class Google_Voice implements ChatPlugin {
 			ChatPrefs.setPref(USER_PREF, userName);
 			ChatPrefs.setPref(PASS_PREF, password);
 			
-			sender.sendChat(String.format("Ok, GVoice will now use the %s account.", userName));
+			sender.sendChat(String.format("Ok, GVoice will now use the %s account with password %s.", userName, password));
 			
-			if (!tryConnect())
+			if (!tryConnect(sender))
 				return true;
 				
 			if (!commandsLoaded)
@@ -323,12 +329,11 @@ public class Google_Voice implements ChatPlugin {
 		SMSSender(ChatClient sender, List<String> numbers, String message) {
 			this.sender = sender;
 			this.numbers = numbers;
-			this.message = message;
+			this.message = String.format("[%s] From %s: %s", ChatPrefs.getName(), sender.getName(), message);
 		}
 	
 		public void run() {
 			synchronized (voice) {
-				sender.sendChat("Sending SMS Messages...");
 						
 				for (String number : numbers) {
 					try {
@@ -348,7 +353,6 @@ public class Google_Voice implements ChatPlugin {
 						e.printStackTrace();
 					}
 				}
-				sender.sendChat("Done!");
 			}
 		}
 	}
