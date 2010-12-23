@@ -10,6 +10,7 @@ package com.presence.chat.commands;
 import com.presence.chat.*;
 
 import java.text.DateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static com.presence.chat.ANSIColor.*;
@@ -46,8 +47,10 @@ public class CMDAccountInfo implements Command {
 		
 		if (ChatServer.checkOnlineName(account.getName(), ""))
 			strBuf.append(WHT + account.getName() + " is online right now!");
-		else
-			strBuf.append(String.format("%s%s last online %s", WHT, account.getName(), df.format(account.lastLogin())));
+		else {
+			Date lastLogin = account.lastLogin();
+			strBuf.append(String.format("%s%s last online %s", WHT, account.getName(), (lastLogin != null ? df.format(lastLogin) : "Never!")));
+		}
 			
 		if (sender.getAccount().getLevel() == 5) {
 			
