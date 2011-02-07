@@ -18,7 +18,7 @@ import com.presence.chat.commands.Command;
 import com.presence.chat.plugin.*;
 
 import com.thoughtworks.xstream.*;
-import com.thoughtworks.xstream.converters.basic.StringConverter;
+//import com.thoughtworks.xstream.converters.basic.StringConverter;
 
 import static com.presence.chat.ANSIColor.*;
 
