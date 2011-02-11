@@ -458,6 +458,20 @@ public class ChatServer {
 		//Logger.getLogger("global").info(ANSIColor.strip(msg));
 	}
 	
+	public static void abortShutdown() {
+		instance._abortShutdown();
+	}
+	
+	void _abortShutdown() {
+		if (shutdownTimer != null && shutdownTimer.isRunning()) {
+			shutdownTimer.stop();
+			shutdownTimer = null;
+							
+			ChatServer.echo(String.format("%s[%s%s%s] %sServer Shutdown aborted",
+				RED, WHT, ChatPrefs.getName(), RED, YEL));
+		}
+	}
+	
 	
 	public static void shutdown(int seconds) {
 		instance._shutdown(seconds);

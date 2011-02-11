@@ -3,7 +3,7 @@
 //  ChatServer
 //
 //  Created by John McKisson on 4/30/08.
-//  Copyright 2008 __MyCompanyName__. All rights reserved.
+//  Copyright 2008 Jefferson Lab. All rights reserved.
 //
 package com.presence.chat.commands;
 
@@ -17,7 +17,6 @@ import com.presence.chat.*;
 import static com.presence.chat.ANSIColor.*;
 
 public class CMDShutdown implements Command {
-	//Timer shutdownTimer = null;
 	String typeStr;
 
 	public String help() {
@@ -26,7 +25,7 @@ public class CMDShutdown implements Command {
 	
 
 	public String usage() {
-		return String.format(ChatServer.USAGE_STRING, "shutdown [time]");
+		return String.format(ChatServer.USAGE_STRING, "shutdown [time | stop]");
 	}
 
 
@@ -37,30 +36,35 @@ public class CMDShutdown implements Command {
 			try {
 				seconds = Integer.parseInt(args[1]);
 			} catch (NumberFormatException e) {
-				/*
+				
 				if (args[1].equalsIgnoreCase("stop")) {
-					if (shutdownTimer != null) {
-						shutdownTimer.stop();
-						shutdownTimer = null;
-						
-						ChatServer.echo(String.format("%s[%s%s%s] Server %s%s%s aborted",
-							RED, WHT, ChatPrefs.getName(), RED, YEL, typeStr, RED));
-					}
 					
+					ChatServer.abortShutdown();
+						
+					return true;
 				}
-				*/
+			}
+			
+			typeStr = "Restart";
+		
+			//Remove .killscript file
+			File killscript = new File(".killscript");
+			if (killscript.exists()) {
+				Logger.getLogger("global").info("Removing killscript file");
+				killscript.delete();
+			}
+
+		} else {
+			typeStr = "Shutdown";
+			
+			//Remove .killscript file
+			File killscript = new File(".killscript");
+			if (!killscript.exists()) {
+				Logger.getLogger("global").info("Failed to create killscript file");
 			}
 		}
 		
-		typeStr = "Restart";
-		
-		//Remove .killscript file
-		File killscript = new File(".killscript");
-		if (killscript.exists()) {
-			Logger.getLogger("global").info("Removing killscript file");
-			killscript.delete();
-		}
-	
+			
 		float mins = seconds / 60.0f;
 			
 		ChatServer.echo(String.format("%s[%s%s%s] Server will %s%s%s in %s%.1f%s minutes",
@@ -70,23 +74,4 @@ public class CMDShutdown implements Command {
 	
 		return true;
 	}
-	
-	/*
-	void setTimer(int seconds) {
-		if (shutdownTimer != null)
-			shutdownTimer = null;
-			
-		shutdownTimer = new Timer(seconds * 1000, new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ChatServer.echo(String.format("%s[%s%s%s] Server %s%s%s",
-					RED, WHT, ChatPrefs.getName(), RED, YEL, typeStr, RED));
-			
-				ChatServer.getServer().shutdown();
-			}
-		});
-		
-		shutdownTimer.setRepeats(false);
-		shutdownTimer.start();
-	}
-	*/
 }
