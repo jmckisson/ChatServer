@@ -253,13 +253,13 @@ public class ChatServer {
 	 * @param myClient Client that sent the personal msg
 	 * @param content Contents of the msg
 	 */
-	static final Matcher matcherChatPrivate = Pattern.compile("(.*) chats to you, '(.*)'", Pattern.DOTALL).matcher("");
+	static final Matcher matcherChatPrivate = Pattern.compile("\\s*(.*) chats to you, '(.*)'\\s*", Pattern.DOTALL).matcher("");
 	 
 	public static void processCommand(ChatClient client, String content) {
 		
-		String trimmed = content.trim();
-		
-		matcherChatPrivate.reset(trimmed);
+		//String trimmed = content.trim();	//does this trim off escape characters?
+		//matcherChatPrivate.reset(trimmed);
+		matcherChatPrivate.reset(content);
 		
 		if (!matcherChatPrivate.find()) {
 			Logger.getLogger("global").info("Invalid private chat syntax from " + client.getName());
@@ -268,11 +268,12 @@ public class ChatServer {
 			return;
 		}
 		
-		String clientName = matcherChatPrivate.group(1).toLowerCase();
+		String clientName = ANSIColor.strip(matcherChatPrivate.group(1)).toLowerCase();
+		String myName = ANSIColor.strip(client.getName()).toLowerCase();
 
 		//Make sure incoming chat name matches the name of the client sending the command
-		if (!client.getName().toLowerCase().equals(clientName)) {
-			Logger.getLogger("global").info(String.format("\tClient names do not match!  %s / %s", client.getName(), matcherChatPrivate.group(1)));
+		if (!myName.equals(clientName)) {
+			Logger.getLogger("global").info(String.format("\tClient names do not match!  %s / %s", myName, clientName));
 			return;
 		}
 			

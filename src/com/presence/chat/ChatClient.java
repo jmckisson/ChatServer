@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import javax.swing.Timer;
 
 import com.webobjects.foundation.*;
@@ -488,6 +490,13 @@ public class ChatClient extends SimpleChannelHandler {
 		ChatServer.echo(String.format("%s[%s%s%s] %s%s%s is now known as %s%s%s",
 			RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, WHT, newName, RED));
 	
+		/*
+		Logger.getLogger("global").info(String.format("Name change '%s' => '%s'", myName, newName));
+		for (byte b : newName.getBytes()) {
+			System.out.print(b + " ");
+		}
+		*/
+	
 		myName = newName;
 	}
 	
@@ -530,6 +539,7 @@ public class ChatClient extends SimpleChannelHandler {
 		return true;
 	}
 	
+	static final Matcher trimMatcher = Pattern.compile("\\s*(.*)\\s*", Pattern.DOTALL).matcher("");
 	
 	/**
 	 * Forward the received string to everyone in my room except myself
@@ -568,6 +578,15 @@ public class ChatClient extends SimpleChannelHandler {
 			return;
 		}
 		
+		trimMatcher.reset(msg);
+		
+		if (!trimMatcher.find()) {
+			Logger.getLogger("global").warning("Unable to match anything?!");
+			return;
+		}
+		
+		msg = trimMatcher.group(1);
+		
 		msg = spoofCheck(msg);
 		
 		msg = msg.replaceFirst("\n", "");
@@ -586,9 +605,9 @@ public class ChatClient extends SimpleChannelHandler {
 	 */
 	private String spoofCheck(String msg) {
 	
-		String msgNoANSI = ANSIColor.strip(msg).trim().toLowerCase();
+		String msgNoANSI = ANSIColor.strip(msg).toLowerCase();
 					
-		if (!msgNoANSI.startsWith(myName.toLowerCase()))
+		if (!msgNoANSI.startsWith(ANSIColor.strip(myName).toLowerCase()))
 			return String.format("%s(%s%s%s)%s%s", YEL, RED, myName, YEL, RED, msg);
 		else
 			return msg;

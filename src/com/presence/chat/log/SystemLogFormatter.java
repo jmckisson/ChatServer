@@ -13,6 +13,8 @@ import java.util.logging.*;
 
 import static com.presence.chat.log.StdOutErrLevel.*;
 
+import com.presence.chat.ANSIColor;
+
 /**
  * Formatter used by the global log instance
  */
@@ -49,7 +51,8 @@ public class SystemLogFormatter extends java.util.logging.Formatter {
 		if (lvl != OUTLVLINT && lvl != ERRLVLINT)
 			buf.append(className + ":: ");
 
-		buf.append(formatMessage(rec));
+		buf.append(ANSIColor.strip(rec.getMessage()));
+		//buf.append(formatMessage(rec));
 		buf.append('\n');
 		
 		return buf.toString();
