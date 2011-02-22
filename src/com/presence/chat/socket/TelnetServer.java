@@ -32,7 +32,7 @@ public class TelnetServer {
 		
 		bootstrap.setPipelineFactory(new TelnetPipelineFactory());
 		bootstrap.setOption("child.tcpNoDelay", true);
-		bootstrap.setOption("child.keepAlive", true);
+		bootstrap.setOption("child.keepAlive", false);
 		
 		bootstrap.bind(new InetSocketAddress(port));
 	}

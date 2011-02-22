@@ -45,7 +45,7 @@ public class CMDAccountInfo implements Command {
 		strBuf.append(String.format("%sAccount Name: %s%s\n", BLU, CYN, account.getName()));
 		strBuf.append(String.format("%sLevel: %s%d\n", BLU, CYN, account.getLevel()));
 		
-		if (ChatServer.checkOnlineName(account.getName(), ""))
+		if (ChatServer.checkOnlineAccount(account.getName(), ""))
 			strBuf.append(WHT + account.getName() + " is online right now!");
 		else {
 			Date lastLogin = account.lastLogin();

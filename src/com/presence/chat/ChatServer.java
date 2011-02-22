@@ -352,6 +352,27 @@ public class ChatServer {
 		return false;
 	}
 	
+	/**
+	 * @return true if the specified account is online, false otherwise
+	 */
+	public static boolean checkOnlineAccount(String testName, String skip) {
+		synchronized (clients) {
+			Iterator<ChatClient> it = clients.iterator();
+			
+			while (it.hasNext()) {
+				ChatClient c = it.next();
+				
+				String name = c.getAccount().getName();
+				
+				if (name != null && name.equalsIgnoreCase(testName) && !name.equalsIgnoreCase(skip)) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
 	
 	public static ChatClient getClientByName(String name) {
 		

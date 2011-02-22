@@ -205,11 +205,17 @@ public class ChatClient extends SimpleChannelHandler {
 			AccountManager.saveAccounts();
 		}
 		
+
+		String acName = myAccount.getName();
+		
 		ChatClient zomb = null;
 		List<ChatClient> clients = ChatServer.getClients();
 		synchronized (clients) {
 			for (ChatClient cl : clients) {
-				if (cl.getName().toLowerCase().compareTo(myName.toLowerCase()) == 0) {
+				if (cl.getName().equalsIgnoreCase(myName) ||
+					cl.getAccount().getName().equalsIgnoreCase(acName)) {
+					
+					//Don't disconnect here, it would cause a ConcurrentModificationException on client list!
 					zomb = cl;
 					break;
 				}
@@ -338,7 +344,7 @@ public class ChatClient extends SimpleChannelHandler {
 			authTimer.setRepeats(false);
 			authTimer.start();
 			
-		} else {
+		} else {	//Auth disabled
 		
 			//First make sure they arent trying to impersonate someone already online
 			boolean found = ChatServer.checkOnlineName(myName, myName);
@@ -457,6 +463,7 @@ public class ChatClient extends SimpleChannelHandler {
 		boolean found = ChatServer.checkOnlineName(newName, myName);
 
 		if (!found) {
+		
 			//Ok now look thru all the accounts
 			Enumeration<ChatAccount> en = AccountManager.getAccounts().elements();
 			
@@ -475,13 +482,36 @@ public class ChatClient extends SimpleChannelHandler {
 		}
 		
 		if (found) {
-			//Kick user for attempting to impersonate someone
-			serverChat("Nice try");
+			//If our account matches the account of the name being changed to, assume
+			//someone else stole our name, so kick them
 			
-			ChatServer.disconnectClient(this);
+			ChatClient impostor = null;
+			Iterator<ChatClient> it = ChatServer.getClients().iterator();
 			
-			ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has been kicked for attempting to impersonate %s%s%s!",
-				RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, WHT, newName, RED));
+			while (it.hasNext()) {
+				ChatClient c = it.next();
+				ChatAccount ac = c.getAccount();
+				String name = ac.getName();
+				
+				if (name != null && name.equalsIgnoreCase(myAccount.getName()) && ac != myAccount) {
+					impostor = c;
+					break;
+				}
+			}
+
+			if (impostor != null) {
+				impostor.serverChat(myName + " wants their name back!");
+				ChatServer.disconnectClient(impostor);			
+			} else {
+		
+				//Kick user for attempting to impersonate someone
+				serverChat("Nice try");
+				
+				ChatServer.disconnectClient(this);
+				
+				ChatServer.echo(String.format("%s[%s%s%s] %s%s%s has been kicked for attempting to impersonate %s%s%s!",
+					RED, WHT, ChatPrefs.getName(), RED, WHT, myName, RED, WHT, newName, RED));
+			}
 			
 			return;
 		}
