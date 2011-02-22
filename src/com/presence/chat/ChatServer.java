@@ -213,12 +213,13 @@ public class ChatServer {
 	static public void disconnectClient(ChatClient client) {
 		Channel sock = client.getSocket();
 		
-		if (sock != null)
-			sock.close();
-		
 		synchronized (clients) {
 			clients.remove(client);
 		}
+		
+		if (sock != null)
+			sock.close();
+		
 	}
 	
 	public static List<String> banList() {

@@ -172,6 +172,8 @@ public class ChatClient extends SimpleChannelHandler {
 	
 		if (authenticated)
 			logDisconnect();
+			
+		ChatServer.disconnectClient(this);
 		
 		super.channelClosed(ctx, e);
 	}
