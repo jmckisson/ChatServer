@@ -23,8 +23,6 @@ import java.util.*;
 import javax.swing.Timer;
 import javax.swing.SwingUtilities;
 
-import com.webobjects.foundation.*;
-
 import static com.presence.chat.ANSIColor.*;
 
 public class HoloFinder implements ChatPlugin {

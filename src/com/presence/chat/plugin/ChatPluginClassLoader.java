@@ -129,10 +129,7 @@ public class ChatPluginClassLoader extends ClassLoader {
                 //IJ.error(e.toString());
 				e.printStackTrace();
             }
-            catch (IOException e) {
-                //IJ.error(e.toString());
-				e.printStackTrace();
-            }
+
         }
         return null;
     }

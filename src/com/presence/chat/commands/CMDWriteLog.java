@@ -14,9 +14,13 @@ import java.util.regex.Matcher;
 import java.text.DateFormat;
 import java.util.ListIterator;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
 import com.presence.chat.*;
 
-import com.lowagie.text.*;
 import com.lowagie.text.rtf.*;
 
 import static com.presence.chat.ANSIColor.*;
@@ -84,7 +88,8 @@ public class CMDWriteLog implements Command {
 	static final int Normal = 0;
 	static final int Bright = 1;
 	
-	static Color[] colors = {Color.BLACK, Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE, Color.MAGENTA, new Color(0, 255, 255), Color.BLACK};
+	static BaseColor[] colors = {BaseColor.BLACK, BaseColor.RED, BaseColor.GREEN, BaseColor.YELLOW, BaseColor.BLUE, BaseColor.MAGENTA,
+								new BaseColor(0, 255, 255), BaseColor.BLACK};
 	
 	Paragraph attributify(String str) {
 		Paragraph p = new Paragraph();
@@ -134,7 +139,7 @@ public class CMDWriteLog implements Command {
 								boolean on =  ((int)(code / 10) > 0 ? true : false);
 				
 								switch (code % 10) {
-									case  0: font.setColor(Color.BLACK); break;
+									case  0: font.setColor(BaseColor.BLACK); break;
 									case  1:
 										if (on) styleStr += "bold";
 										break;

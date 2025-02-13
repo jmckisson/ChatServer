@@ -7,6 +7,7 @@
 //
 package com.presence.chat.commands;
 
+import java.util.List;
 import java.util.Vector;
 
 import com.presence.chat.*;
@@ -29,7 +30,7 @@ public class CMDIgnore implements Command {
 		if (args.length == 1) {
 			//Just show a list of current gags and we're done
 			
-			Vector<String> gags = sender.getAccount().gagList();
+			List<String> gags = sender.getAccount().gagList();
 			
 			if (gags == null || gags.size() == 0) {
 				strBuf.append("You are not ignoring anyone.");
@@ -44,7 +45,7 @@ public class CMDIgnore implements Command {
 			
 		} else {
 			//Gag or ungag someone
-			Vector<String> gags = sender.getAccount().gagList();
+			List<String> gags = sender.getAccount().gagList();
 			
 			ChatAccount ac = sender.getAccount();
 			

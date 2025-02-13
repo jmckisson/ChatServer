@@ -10,6 +10,7 @@ package com.presence.chat.commands;
 import java.lang.Integer;
 import java.util.logging.*;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.presence.chat.*;
 
 import static com.presence.chat.ANSIColor.*;
@@ -49,9 +50,18 @@ public class CMDAdd implements Command {
 			sender.sendChat(String.format("Account for %s already exists!", accountName));
 			return true;
 		}
-		
+
+		String bcryptHashString = BCrypt.withDefaults().hashToString(12, addArgs[1].toCharArray());
+
+		BCrypt.Result result = BCrypt.verifyer().verify(addArgs[1].toCharArray(), bcryptHashString);
+
+		if (!result.verified) {
+			sender.serverChat("Could not verify hash of password");
+			return true;
+		}
+
 		//Ok account doesnt exist, create it
-		ac = new ChatAccount(accountName, JCrypt.crypt("", addArgs[1]));
+		ac = new ChatAccount(accountName, bcryptHashString);
 	
 		//Default level is 0 unless otherwise specified
 		int level = 0;

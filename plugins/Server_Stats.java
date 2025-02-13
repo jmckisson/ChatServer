@@ -17,10 +17,11 @@ import javax.swing.Timer;
 
 import com.presence.chat.*;
 import com.presence.chat.commands.Command;
+import com.presence.chat.event.NotificationCenter;
+import com.presence.chat.event.NotificationEvent;
 import com.presence.chat.plugin.*;
 
 import com.thoughtworks.xstream.*;
-import com.webobjects.foundation.*;
 
 import static com.presence.chat.ANSIColor.*;
 
@@ -94,12 +95,12 @@ public class Server_Stats implements ChatPlugin {
 		hourlyTimer.setRepeats(true);
 		hourlyTimer.start();
 		
-		NSNotificationCenter nc = ChatServer.getNotificationCenter();
+		NotificationCenter nc = ChatServer.getNotificationCenter();
 	
-		nc.addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
-		nc.addObserver(this, new NSSelector("notificationClientConnected", new Class[] {NSNotification.class}), "ClientConnected", null);
-		nc.addObserver(this, new NSSelector("notificationNeedDataPush", new Class[] {NSNotification.class}), "ServerShutdown", null);
-		nc.addObserver(this, new NSSelector("notificationNeedDataPush", new Class[] {NSNotification.class}), "PluginReload", null);
+		nc.getObservable().subscribe(event -> notificationChatAll(event));
+		nc.getObservable().subscribe(event -> notificationClientConnected(event));
+		nc.getObservable().subscribe(event -> notificationNeedDataPush(event));
+		nc.getObservable().subscribe(event -> notificationNeedDataPush(event));
 
 		ChatServer.addCommand("stats", new CMDStats(), 2);
 	}
@@ -124,13 +125,13 @@ public class Server_Stats implements ChatPlugin {
 	
 	ActionListener hourlyAL;
 	
-	public void notificationChatAll(NSNotification n) {
+	public void notificationChatAll(NotificationEvent n) {
 		synchronized (chats) {
 			hourlyChats++;
 		}
 	}
 	
-	public void notificationClientConnected(NSNotification n) {
+	public void notificationClientConnected(NotificationEvent n) {
 		synchronized (chats) {
 			int numOnline = ChatServer.getClients().size();
 			if (numOnline > hourlyOnline)
@@ -138,7 +139,7 @@ public class Server_Stats implements ChatPlugin {
 		}
 	}
 	
-	public void notificationNeedDataPush(NSNotification n) {
+	public void notificationNeedDataPush(NotificationEvent n) {
 		pushStats();
 	}
 	

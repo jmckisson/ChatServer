@@ -11,10 +11,10 @@ import java.util.Iterator;
 import java.util.Vector;
 import java.util.logging.*;
 
+import com.presence.chat.event.NotificationEvent;
 import com.presence.chat.log.*;
 
 import com.presence.chat.*;
-import com.webobjects.foundation.*;
 
 import static com.presence.chat.ANSIColor.*;
 
@@ -53,7 +53,7 @@ public class ChatRoom {
 		ChatServer.getStats().rooms++;
 		
 		//RoomCreate hook
-		NSNotificationCenter.defaultCenter().postNotification("RoomCreate", getName());
+		ChatServer.getNotificationCenter().post(new NotificationEvent("RoomCreate", getName()));
 	}
 	
 	public ChatLog getLog() {
@@ -139,7 +139,7 @@ public class ChatRoom {
 		}
 	
 		//RoomJoin hook
-		NSNotificationCenter.defaultCenter().postNotification("RoomJoin", person.getName() + ":" + getName());
+		ChatServer.getNotificationCenter().post(new NotificationEvent("RoomJoin", person.getName() + ":" + getName()));
 		
 	}
 	
@@ -161,7 +161,7 @@ public class ChatRoom {
 		}
 		
 		//RoomLeave hook
-		NSNotificationCenter.defaultCenter().postNotification("RoomLeave", person.getName() + ":" + getName());
+		ChatServer.getNotificationCenter().post(new NotificationEvent("RoomLeave", person.getName() + ":" + getName()));
 		
 		//This needs to act on the users previous room
 		if (destroyable && people.size() == 0) {
@@ -179,7 +179,7 @@ public class ChatRoom {
 			}
 			
 			//RoomDestroy hook
-			NSNotificationCenter.defaultCenter().postNotification("RoomDestroy", getName());
+			ChatServer.getNotificationCenter().post(new NotificationEvent("RoomDestroy", getName()));
 		}
 		
 		String msg = String.format("[%s%s%s] %s%s%s has left the room", YEL, name, RED, WHT, person.getName(), RED);
@@ -304,7 +304,7 @@ public class ChatRoom {
 		}
 	
 		//ChatAll hook
-		NSNotificationCenter.defaultCenter().postNotification("ChatAll", hookMsg);
+		ChatServer.getNotificationCenter().post(new NotificationEvent("ChatAll", hookMsg));
 	}
 	
 	

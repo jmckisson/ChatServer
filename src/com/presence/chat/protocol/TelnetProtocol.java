@@ -55,7 +55,8 @@ public class TelnetProtocol extends ChatProtocol {
 		//System.out.println("telnet processing " + content);
 		
 		//Treat everything as a personal chat
-		ChatServer.processCommand(myClient, content);
+		//ChatServer.processCommand(myClient, content);
+		myClient.processCommand(content);
 	}
 
 	

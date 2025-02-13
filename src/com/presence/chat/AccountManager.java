@@ -14,6 +14,7 @@ import java.util.logging.*;
 
 import com.thoughtworks.xstream.*;
 import com.thoughtworks.xstream.converters.*;
+import com.thoughtworks.xstream.security.PrimitiveTypePermission;
 
 public class AccountManager {
 	
@@ -23,6 +24,9 @@ public class AccountManager {
 	private static final XStream xstream;
 	static {
 		xstream = new XStream();
+
+		xstream .addPermission(PrimitiveTypePermission.PRIMITIVES); // allow primitive types
+		xstream.allowTypes(new Class[] {com.presence.chat.ChatAccount.class});
 		
 		xstream.alias("account", ChatAccount.class);
 		

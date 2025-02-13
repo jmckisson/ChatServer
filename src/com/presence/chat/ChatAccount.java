@@ -20,9 +20,9 @@ public class ChatAccount implements Serializable {
 	Date lastLogin;
 	boolean compact;
 	
-	Vector<String> knownAddresses = null;
+	List<String> knownAddresses = null;
 	
-	Vector<String> gagList = null;
+	List<String> gagList = null;
 	
 	//Fields that can be used to store custom information from plugins etc...
 	Map<String, String> customFields = null;
@@ -59,7 +59,7 @@ public class ChatAccount implements Serializable {
 	 */
 	public void addAddress(String addr) {
 		if (knownAddresses == null)
-			knownAddresses = new Vector<String>();
+			knownAddresses = new ArrayList<String>();
 			
 		knownAddresses.add(addr);
 		
@@ -93,7 +93,7 @@ public class ChatAccount implements Serializable {
 		AccountManager.saveAccounts();
 	}
 	
-	public Vector<String> gagList() {
+	public List<String> gagList() {
 		return gagList;
 	}
 	
@@ -135,7 +135,7 @@ public class ChatAccount implements Serializable {
 	public void setPassword(String newPass) {
 		password = newPass;
 		
-		knownAddresses = new Vector<String>();
+		knownAddresses = new ArrayList<String>();
 		
 		AccountManager.saveAccounts();
 	}

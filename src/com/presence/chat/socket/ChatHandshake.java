@@ -10,10 +10,10 @@ package com.presence.chat.socket;
 import java.net.SocketAddress;
 import java.util.logging.*;
 
-import org.jboss.netty.buffer.*;
-import org.jboss.netty.channel.*;
+import io.netty.buffer.*;
+import io.netty.channel.*;
 
-import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
+import io.netty.handler.codec.DelimiterBasedFrameDecoder;
 
 import com.presence.chat.ChatClient;
 import com.presence.chat.ChatServer;
@@ -21,8 +21,8 @@ import com.presence.chat.protocol.*;
 
 import static com.presence.chat.protocol.ChatCommand.*;
 
-//@ChannelPipelineCoverage("one")
-public class ChatHandshake extends SimpleChannelUpstreamHandler {
+
+public class ChatHandshake extends SimpleChannelInboundHandler<String> {
 
 	/*
 	@Override
@@ -36,35 +36,31 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 
 	
 	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		
-		ChannelState state = e.getState();
-		if (state == ChannelState.CONNECTED) {
-			SocketAddress sockAddr = (SocketAddress)e.getValue();
-			
-			String addrStr = sockAddr.toString();
-			String ip = addrStr.substring(1, addrStr.lastIndexOf(':'));
-			
-			//Now check this IP against the ban list
-			//Also check if its been site banned
-			String siteIP = ip.substring(0, ip.lastIndexOf('.') + 1) + "*";
-			
-			if (ChatServer.banList().contains(siteIP) || ChatServer.banList().contains(ip)) {
-				Logger.getLogger("global").warning("Attempted login from BANNED IP: " + ip);
-			
-				//Just disconnect the socket
-				ctx.getChannel().close();
-			}
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+
+		SocketAddress sockAddr = ctx.channel().remoteAddress();
+
+		String addrStr = sockAddr.toString();
+		String ip = addrStr.substring(1, addrStr.lastIndexOf(':'));
+
+		//Now check this IP against the ban list
+		//Also check if its been site banned
+		String siteIP = ip.substring(0, ip.lastIndexOf('.') + 1) + "*";
+
+		if (ChatServer.banList().contains(siteIP) || ChatServer.banList().contains(ip)) {
+			Logger.getLogger("global").warning("Attempted login from BANNED IP: " + ip);
+
+			//Just disconnect the socket
+			ctx.channel().close();
 		}
+
 	}
 	
 	
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
+	public void channelRead0(ChannelHandlerContext ctx, String str) {
 		
-		ChannelPipeline pipeline = ctx.getPipeline();
-		
-		String str = (String)e.getMessage();
+		ChannelPipeline pipeline = ctx.pipeline();
 				
 		String[] nameAndIP = null;
 		
@@ -87,7 +83,7 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				return;
 			}
 			
-			ChannelBuffer endOfCommand = ChannelBuffers.buffer(1);
+			ByteBuf endOfCommand = Unpooled.buffer(1);
 			endOfCommand.writeByte(END.commandByte());
 			
 			pipeline.addBefore("protocol", "framer", new DelimiterBasedFrameDecoder(32000, endOfCommand));
@@ -98,13 +94,13 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 				nameAndIP[1] = "Something broke";
 			}
 			
-			Logger.getLogger("global").info(nameAndIP[0] + " connected from " + e.getChannel().getRemoteAddress());
+			Logger.getLogger("global").info(nameAndIP[0] + " connected from " + ctx.channel().remoteAddress());
 			
 			ChatClient client = new ChatClient(nameAndIP[0], nameAndIP[1]);
 
 			pipeline.replace("handshake", "client", client);
 
-			client.setSocket(e.getChannel());
+			client.setSocket(ctx.channel());
 
 			ChatProtocol protocol = new MudMasterProtocol(client);
 
@@ -112,6 +108,8 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 
 			protocol.sendConnectResponse();
 			protocol.sendVersion();
+
+			client.checkAuth();
 			
 		} else {
 			//Use Telnet protocol
@@ -120,11 +118,11 @@ public class ChatHandshake extends SimpleChannelUpstreamHandler {
 	}
 	
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
-		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", e.getCause());
-		e.getChannel().close();
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", cause);
+		ctx.close();
 		
-		e.getCause().printStackTrace();
+		cause.printStackTrace();
 		
 		//disconnect();
 	}

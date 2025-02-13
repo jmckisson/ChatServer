@@ -12,12 +12,13 @@ import java.util.*;
 
 import com.presence.chat.*;
 import com.presence.chat.commands.Command;
+import com.presence.chat.event.NotificationEvent;
 import com.presence.chat.plugin.*;
 
-import com.webobjects.foundation.*;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.json.JsonHierarchicalStreamDriver;
+import io.reactivex.rxjava3.disposables.Disposable;
 
 //http://www.timscripts.com/book/translation-party
 /*
@@ -63,7 +64,9 @@ public class Translation_Party implements ChatPlugin {
 	XStream xs;
 
 	public void register() {
-		ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
+		Disposable subscription = ChatServer.getNotificationCenter().getObservable().subscribe(event -> notificationChatAll(event));
+
+		//ChatServer.getNotificationCenter().addObserver(this, new NSSelector("notificationChatAll", new Class[] {NSNotification.class}), "ChatAll", null);
 	
 		xs = new XStream(new JsonHierarchicalStreamDriver());
 		
@@ -74,8 +77,8 @@ public class Translation_Party implements ChatPlugin {
 		return "Translation Party";
 	}
 	
-	public void notificationChatAll(NSNotification n) {
-		String chatString = (String)n.object();
+	public void notificationChatAll(NotificationEvent n) {
+		String chatString = n.getMessage();
 		String[] chatData = chatString.split(":");
 		
 		System.out.println(chatString);

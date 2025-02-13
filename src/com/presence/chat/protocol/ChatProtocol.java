@@ -7,8 +7,8 @@
 //
 package com.presence.chat.protocol;
 
-import org.jboss.netty.buffer.*;
-import org.jboss.netty.channel.Channel;
+import io.netty.buffer.*;
+import io.netty.channel.Channel;
 
 import java.util.logging.*;
 
@@ -23,7 +23,7 @@ public abstract class ChatProtocol {
 	String content;
 	String version;
 	
-	ChannelBuffer lastBuffer;
+	ByteBuf lastBuffer;
 	
 	static final int MAX_LEN = 3000;
 	
@@ -40,7 +40,7 @@ public abstract class ChatProtocol {
 		return "Generic";
 	}
 	
-	public ChannelBuffer getLastBuffer() {
+	public ByteBuf getLastBuffer() {
 		return lastBuffer;
 	}
 	
@@ -60,13 +60,13 @@ public abstract class ChatProtocol {
 	
 	
 	public void sendToSocket(String str) {
-		sock.write(str);
+		sock.writeAndFlush(str);
 	}
 	
 	private void bufToSocket(byte cmd, String str) {
 		byte[] bytes = str.getBytes();
 		
-		ChannelBuffer buf = ChannelBuffers.buffer(bytes.length + 4);
+		ByteBuf buf = Unpooled.buffer(bytes.length + 4);
 		
 		buf.writeByte(cmd);
 		buf.writeBytes(bytes);
@@ -75,10 +75,10 @@ public abstract class ChatProtocol {
 		if (!sock.isOpen())
 			return;
 			
-		lastBuffer = ChannelBuffers.copiedBuffer(buf);
+		lastBuffer = Unpooled.copiedBuffer(buf);
 			
 		try {
-			sock.write(buf);
+			sock.writeAndFlush(buf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

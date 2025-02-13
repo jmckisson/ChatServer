@@ -7,6 +7,7 @@
 //
 package com.presence.chat.commands;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.presence.chat.*;
 
 public class CMDPassword implements Command {
@@ -28,12 +29,22 @@ public class CMDPassword implements Command {
 		}
 		
 		//Ok set the new password
-		sender.getAccount().setPassword(JCrypt.crypt("", args[1]));
-		
-		//Save
-		AccountManager.saveAccounts();
-		
-		sender.serverChat("Ok, your new password has been set");
+		//sender.getAccount().setPassword(JCrypt.crypt("", args[1]));
+
+		String bcryptHashString = BCrypt.withDefaults().hashToString(12, args[1].toCharArray());
+
+		BCrypt.Result result = BCrypt.verifyer().verify(args[1].toCharArray(), bcryptHashString);
+
+		if (result.verified) {
+			sender.getAccount().setPassword(bcryptHashString);
+
+			//Save
+			AccountManager.saveAccounts();
+
+			sender.serverChat("Ok, your new password has been set");
+		} else {
+			sender.serverChat("Could not verify hash of password");
+		}
 
 		return true;
 	}

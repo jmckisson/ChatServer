@@ -8,13 +8,15 @@
 package com.presence.chat.plugin;
 
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.logging.*;
 
 import com.presence.chat.ChatPrefs;
 
+import com.presence.chat.ChatServer;
+import com.presence.chat.event.NotificationEvent;
 import com.thoughtworks.xstream.*;
-import com.webobjects.foundation.NSNotificationCenter;
 
 public class PluginManager {
 	ClassLoader classLoader;
@@ -107,7 +109,7 @@ public class PluginManager {
 		ClassLoader loader = classLoader;
 		Object thePlugIn = null;
 		try { 
-			thePlugIn = (loader.loadClass(className)).newInstance(); 
+			thePlugIn = (loader.loadClass(className)).getDeclaredConstructor().newInstance();
  			if (thePlugIn instanceof ChatPlugin) {
 				((ChatPlugin)thePlugIn).register();
 			} else
@@ -134,9 +136,13 @@ public class PluginManager {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 			Logger.getLogger("global").warning("Unable to load plugin, possibly because it is not public.");
-		}
+		} catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
 
-		return thePlugIn;
+        return thePlugIn;
 	} 
 	
 	
@@ -167,7 +173,7 @@ public class PluginManager {
 	
 	
 	public void reloadPlugins() {
-		NSNotificationCenter.defaultCenter().postNotification("PluginReload", null);
+		ChatServer.getNotificationCenter().post(new NotificationEvent("PluginReload", null));
 	
 		pluginsTable.clear();
 		

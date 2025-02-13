@@ -9,6 +9,7 @@ package com.presence.chat.commands;
 
 import java.util.logging.*;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
 import com.presence.chat.*;
 
 import static com.presence.chat.ANSIColor.*;
@@ -54,8 +55,17 @@ public class CMDSetPassword implements Command {
 				sender.getName(), sender.getAccount().getLevel(), pwArgs[0], ac.getLevel()));
 			return true;
 		}
-		
-		ac.setPassword(JCrypt.crypt("", pwArgs[1]));
+
+		String bcryptHashString = BCrypt.withDefaults().hashToString(12, pwArgs[1].toCharArray());
+
+		BCrypt.Result result = BCrypt.verifyer().verify(pwArgs[1].toCharArray(), bcryptHashString);
+
+		if (!result.verified) {
+			sender.serverChat("Could not verify hash of password");
+			return true;
+		}
+
+		ac.setPassword(bcryptHashString);
 		
 		ChatServer.echo(String.format("%s[%s%s%s] %s%s%s just changed the password for %s%s%s.",
 			RED, WHT, ChatPrefs.getName(), RED, WHT, sender.getName(), RED, WHT, ac.getName(), RED));

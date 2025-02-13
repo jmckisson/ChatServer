@@ -11,21 +11,18 @@ import java.nio.charset.Charset;
 import java.util.*;
 import java.util.logging.*;
 
-import org.jboss.netty.buffer.ChannelBuffer;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelPipeline;
+import io.netty.buffer.ByteBuf;
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.ByteToMessageDecoder;
+import io.netty.channel.ChannelPipeline;
 //import org.jboss.netty.channel.ChannelHandler.*;
-import org.jboss.netty.handler.codec.frame.DelimiterBasedFrameDecoder;
-import org.jboss.netty.handler.codec.frame.Delimiters;
-import org.jboss.netty.handler.codec.frame.FrameDecoder;
-import org.jboss.netty.handler.codec.oneone.OneToOneDecoder;
+
 
 import com.presence.chat.protocol.ChatCommand;
 
-//@ChannelPipelineCoverage("all")
-//@org.jboss.netty.channel.ChannelHandler.Sharable
-public class ChatProtocolDecoder extends OneToOneDecoder {
+
+public class ChatProtocolDecoder extends ByteToMessageDecoder {
 
 	private final String charsetName;
 	private final Charset charset;
@@ -45,30 +42,36 @@ public class ChatProtocolDecoder extends OneToOneDecoder {
 	}
 
 	@Override
-	protected Object decode(ChannelHandlerContext ctx, Channel channel, Object msg) throws Exception {
-	
-		if (!(msg instanceof ChannelBuffer)) {
-			return msg;
-		}
-		
-		ChannelBuffer buf = (ChannelBuffer)msg;
-		
-		//int bytes = buf.readableBytes();
-		Object[] obj = new Object[3];
-		obj[2] = buf.copy();
+	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
+
+		DecodedMsg decMsg = new DecodedMsg();
+
+		//Grab command byte
+		byte cmd = in.readByte();
+
+		ChatCommand chatCmd = ChatCommand.getCommand(cmd);
+
+		decMsg.setCmd(chatCmd);
+		ByteBuf strBuf = in.readBytes(in.readableBytes() - 1);
+		decMsg.setMessage(strBuf.toString(charset));
+		decMsg.setEndByte(in.readByte());
+
+		// What are we doing here?
+		//Object[] obj = new Object[3];
+		//obj[2] = in.copy();
 				
 		//Grab command byte
-		byte cmd = buf.readByte();
+		//byte cmd = in.readByte();
 		
-		obj[0] = ChatCommand.getCommand(cmd);
+		//obj[0] = ChatCommand.getCommand(cmd);
 		
-		int readable = buf.readableBytes();
+		//int readable = in.readableBytes();
 		
-		obj[1] = buf.toString(buf.readerIndex(), readable/* - 1*/, charset);
+		//obj[1] = in.toString(in.readerIndex(), readable/* - 1*/, charset);
+
+		//Logger.getLogger("global").info(String.format("bytes: %d, decoded cmd: %x, last %x", readable, cmd, in.readByte()));
 		
-		//Logger.getLogger("global").info(String.format("bytes: %d, decoded cmd: %x, last %x", readable, cmd, buf.readByte()));
-		
-		return obj;
+		out.add(decMsg);
 	}
 
 }

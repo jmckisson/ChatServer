@@ -16,9 +16,12 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.Timer;
 
-import com.webobjects.foundation.*;
-import org.jboss.netty.buffer.*;
-import org.jboss.netty.channel.*;
+import at.favre.lib.crypto.bcrypt.BCrypt;
+import com.presence.chat.commands.CommandEntry;
+import com.presence.chat.event.NotificationEvent;
+import com.presence.chat.socket.DecodedMsg;
+import io.netty.buffer.*;
+import io.netty.channel.*;
 
 import com.presence.chat.log.*;
 import com.presence.chat.protocol.*;
@@ -26,7 +29,7 @@ import com.presence.chat.protocol.*;
 import static com.presence.chat.ANSIColor.*;
 import static com.presence.chat.protocol.ChatCommand.*;
 
-public class ChatClient extends SimpleChannelHandler {
+public class ChatClient extends SimpleChannelInboundHandler<DecodedMsg> {
 //public class ChatClient extends SimpleChannelUpstreamHandler {
 	
 	ChatProtocol protocol = null;
@@ -43,8 +46,8 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	Timer authTimer = null;
 	
-	MessageEvent lastEvent = null;
-	ExceptionEvent exception = null;
+	DecodedMsg lastEvent = null;
+	Throwable exception = null;
 	
 	String myName;
 	String address;
@@ -95,30 +98,35 @@ public class ChatClient extends SimpleChannelHandler {
 
 	
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) {
-		lastEvent = e;
+	public void channelRead0(ChannelHandlerContext ctx, DecodedMsg msg) {
+		lastEvent = msg;
 		lastActivity = System.currentTimeMillis();
 		
 		//Grab command byte and message	
-		Object[] obj = (Object[])e.getMessage();	
-		ChatCommand cmd = (ChatCommand)obj[0];
-		String message = (String)obj[1];
+		//Object[] obj = (Object[])e.getMessage();
+		ChatCommand cmd = msg.getCmd();
+		String message = msg.getMessage();
 		
 		switch (cmd) {
 			case TEXT_ONE:
 				//Client needs to be able to chat their password while unauthenticated
-				ChatServer.processCommand(this, message);
-				
-				break;
-				
+				//ChatServer.processCommand(this, message);
+				processCommand(message);
+				return;
+
 			case VERSION:
 				protocol.setVersion(message);
 				//setVersion(message);
-				break;
+				return;
+
 		}
+
+		//Logger.getGlobal().info("channelRead0");
+		//Logger.getGlobal().info(ByteBufUtil.hexDump((ByteBuf)obj[2]));
 		
 		if (!authenticated)
-			checkAuth();
+			//checkAuth();
+			return;
 		
 		switch (cmd) {
 			case TEXT_ALL:
@@ -149,24 +157,24 @@ public class ChatClient extends SimpleChannelHandler {
 	}
 	
 	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) {
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable e) {
 		Logger.getLogger("global").log(Level.WARNING, "Unexpected downstream exception", e.getCause());
 		e.getCause().printStackTrace();
 		exception = e;
 		
-		Object[] obj = (Object[])lastEvent.getMessage();
-		String str = (String)obj[1];
+		DecodedMsg msg = lastEvent;
+		String str = msg.getMessage();
 		System.out.println(str);
-		System.out.println(ChannelBuffers.hexDump((ChannelBuffer)obj[2]));
-		System.out.println("=======");
+		//System.out.println(ByteBufUtil.hexDump((ByteBuf)obj[2]));
+		//System.out.println("=======");
 		
-		System.out.println(ChannelBuffers.hexDump(protocol.getLastBuffer()));
+		System.out.println(ByteBufUtil.hexDump(protocol.getLastBuffer()));
 		System.out.println("=======");
 		ChatServer.getStats().exceptions++;
 	}
 	
 	@Override
-	public void channelClosed(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+	public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 	
 		//Logger.getLogger("global").info(e.toString());
 	
@@ -175,7 +183,7 @@ public class ChatClient extends SimpleChannelHandler {
 			
 		ChatServer.disconnectClient(this);
 		
-		super.channelClosed(ctx, e);
+		super.channelInactive(ctx);
 	}
 
 	
@@ -254,7 +262,7 @@ public class ChatClient extends SimpleChannelHandler {
 		
 		myAccount.updateLastLogin();
 		
-		NSNotificationCenter.defaultCenter().postNotification("ClientConnected", myName);
+		ChatServer.getNotificationCenter().post(new NotificationEvent("ClientConnected", myName));
 		
 		ChatServer.getStats().connects++;
 	}
@@ -274,7 +282,7 @@ public class ChatClient extends SimpleChannelHandler {
 	
 	/**
 	 */
-	void checkAuth() {
+	public void checkAuth() {
 		//If this is the first client connecting, make them a super admin
 		if (AccountManager.numAccounts() == 0) {
 			ChatAccount ac = new ChatAccount(myName, "", 5);
@@ -289,7 +297,7 @@ public class ChatClient extends SimpleChannelHandler {
 				
 				setAuthenticated(true, "Super Admin Auth");
 				
-				serverChat("Grats bro you're the first person to connect! I have made you a super admin... please change your password.");
+				serverChat("Grats you're the first person to connect! I have made you a super admin... please change your password.");
 			} else {
 				Logger.getLogger("global").warning(String.format("Error trying to add initial super admin account for %s", myName));
 			}
@@ -393,7 +401,7 @@ public class ChatClient extends SimpleChannelHandler {
 		
 		Logger.getLogger("global").info(String.format("%s has disconnected", myName));
 		
-		NSNotificationCenter.defaultCenter().postNotification("ClientDisconnected", myName);
+		ChatServer.getNotificationCenter().post(new NotificationEvent("ClientDisconnected", myName));
 	}
 
 	
@@ -418,7 +426,7 @@ public class ChatClient extends SimpleChannelHandler {
 		if (myChannel == null)
 			return "null Channel";
 			
-		SocketAddress addr = myChannel.getRemoteAddress();
+		SocketAddress addr = myChannel.remoteAddress();
 		
 		if (addr == null)
 			return "channel unconnected";
@@ -741,5 +749,77 @@ public class ChatClient extends SimpleChannelHandler {
 	void handlePingRequest(String msg) {
 		Logger.getLogger("global").info(myName + " PING Response");
 		protocol.sendPingResponse(msg);
+	}
+
+	static final Matcher matcherChatPrivate =
+			Pattern.compile("\\s*(.*) chats to you, '(.*)'\\s*", Pattern.DOTALL).matcher("");
+
+	public void processCommand(String content) {
+
+		//String trimmed = content.trim();	//does this trim off escape characters?
+		//matcherChatPrivate.reset(trimmed);
+		matcherChatPrivate.reset(content);
+
+		if (!matcherChatPrivate.find()) {
+			Logger.getLogger("global").info("Invalid private chat syntax from " + getName());
+			System.out.println(content + NRM);
+
+			return;
+		}
+
+		String clientName = ANSIColor.strip(matcherChatPrivate.group(1)).toLowerCase();
+		String myName = ANSIColor.strip(getName()).toLowerCase();
+
+		//Make sure incoming chat name matches the name of the client sending the command
+		if (!myName.equals(clientName)) {
+			Logger.getLogger("global").info(String.format("\tClient names do not match!  %s / %s", myName, clientName));
+			return;
+		}
+
+		//Treat this input as a password if the client is not yet authenticated
+		if (!isAuthenticated()) {
+			//User supplied a password, check if it matches
+
+			ChatAccount account = getAccount();
+
+			//System.out.printf("comparing '%s' to '%s'\n", matcher.group(2), account.getPassword());
+
+			String pwStr = matcherChatPrivate.group(2);
+
+			BCrypt.Result result = BCrypt.verifyer().verify(pwStr.toCharArray(), account.getPassword().toCharArray());
+
+			if (result.verified) {
+				setAuthenticated(true, "Password Auth");
+
+			} else {
+				serverChat("Incorrect Password");
+
+				//Logger.getGlobal().info("account password hash:");
+				//Logger.getGlobal().info(account.getPassword());
+				//Logger.getGlobal().info("hash result:");
+				//Logger.getGlobal().info(bcryptHashString);
+
+				getProtocol().closeSocket();
+			}
+
+			return;
+		}
+
+		//log.info(String.format("CMD from %s: '%s'", matcher.group(1), matcher.group(2)));
+
+		//Split off the actual command and arguments to it
+		String[] args = matcherChatPrivate.group(2).split(" ", 2);
+
+		CommandEntry cmdEntry = ChatServer.getCommand(args[0]);
+
+		if (cmdEntry == null || cmdEntry.level > getAccount().getLevel()) {
+			serverChat(String.format("You idiot!  There is no <%s> command!", args[0]));
+
+		} else {
+			//instance.stats.cmds++;
+			ChatServer.instance.stats.cmds++;
+
+			cmdEntry.cmd.execute(this, args);
+		}
 	}
 }
